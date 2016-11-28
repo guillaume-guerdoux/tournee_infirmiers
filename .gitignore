@@ -1,3 +1,5 @@
 .venv
 /assets/~*
 .idea
+tournee_infirmiers/tournee_infirmiers/__pycache__/*
+*.pyc
