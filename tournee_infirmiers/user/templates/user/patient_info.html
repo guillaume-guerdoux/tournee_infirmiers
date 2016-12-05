@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+	<h2>Informations du patient</h2>
+    <div class="col-sm-3 col-sm-offset-3">
+        <p>Nom</p>
+        <p>Prénom</p>
+        <p>Email</p>
+        <p>Adresse</p>
+        <p>Date de naissance</p>
+        <p>Informations spécifiques</p>
+    </div>
+    <div class="col-sm-3">
+        <p>{{ patient.user.last_name }}</p>
+        <p>{{ patient.user.first_name }}</p>
+        <p>{{ patient.user.email }}</p>
+        <p>{{ patient.address }}</p>
+        <p>{{ patient.birthdate|date }}</p>
+        <p>{{ patient.information }}</p>
+    </div>
+
+{% endblock %}
