@@ -1,0 +1,49 @@
+/* --------------- Home banner image ------------ */
+.home_banner {
+	width: auto;
+	min-height: 550px;
+	margin: 0 auto;
+	border-radius: 0;
+	text-align: center;
+	margin-top : -20px;
+	position: relative;
+	min-width: 300px;
+}
+
+/* --------------- Home box div ------------ */
+.home_form_div{
+	background: #848484;
+	opacity: 0.8;
+    filter: alpha(opacity=80); /* For IE8 and earlier */
+	margin-top: -350px;
+	border-radius: 15px;
+}
+.title_home_form_div{
+	background: #848484;
+	border-radius: 15px;
+}
+.title_home_form_div h1{
+	font-size: 26px;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+
+.button_home {
+	font-size: 1.2em;
+	height: 50px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	padding-left: 20px;
+	padding-right: 20px;
+
+	background-color: white;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #848484;
+    color: #424242;
+}
+
+.button_home:hover {  
+    color: white;
+    background-color: #848484;
+}

@@ -1,0 +1,15 @@
+/* ------------- Button Style --------------- */ 
+
+
+/* ------------- Footer Style --------------- */ 
+footer{
+	background-color : #6E6E6E;
+	color : white;
+}
+
+footer h2{
+	font-size: 18px;
+	font-weight: bold;
+	text-align:center;
+}
+
