@@ -21,20 +21,25 @@
 .title_home_form_div{
 	background: #848484;
 	border-radius: 15px;
+	padding-left: 10px;
+	padding-right: 10px
 }
+
+/* For font size :  http://stackoverflow.com/questions/23560087/is-there-such-a-thing-as-min-font-size-and-max-font-size */
 .title_home_form_div h1{
-	font-size: 26px;
+	font-size: calc(7px + 1.5vw);
 	font-weight: bold;
 	color: #FFFFFF;
 }
 
 .button_home {
-	font-size: 1.2em;
-	height: 50px;
+	font-size: calc(7px + 1vw);
+	height: 3em;
 	margin-top: 10px;
 	margin-bottom: 10px;
 	padding-left: 20px;
 	padding-right: 20px;
+	border-radius: 15px;
 
 	background-color: white;
     border-style: solid;
