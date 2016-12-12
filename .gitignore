@@ -4,3 +4,4 @@
 tournee_infirmiers/tournee_infirmiers/__pycache__/*
 *.pyc
 support
+db.sqlite3
