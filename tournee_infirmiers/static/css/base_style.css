@@ -1,0 +1,35 @@
+/* ------------- Button Style --------------- */ 
+
+
+/* ------------- Footer Style --------------- */ 
+footer{
+	background-color : #6E6E6E;
+	color : white;
+}
+
+footer h2{
+	font-size: 18px;
+	font-weight: bold;
+	text-align:center;
+}
+
+.footer_list{
+    list-style-type:none;
+    margin: 0;
+    padding: 0;
+}
+
+.footer_list li{
+    margin-bottom: 5px;
+}
+
+.footer_list a{
+    color: white;
+    text-decoration: none;
+}
+
+.footer_list a:hover {
+    color: #D8D8D8;
+    text-decoration: none;
+}
+
