@@ -1,3 +1,5 @@
 from django.db import models
 
-# Create your models here.
+
+class Need(models.Model):
+    start_time = models.DateTimeField(auto_now=False, auto_now_add=False)
