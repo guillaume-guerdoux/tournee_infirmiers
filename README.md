@@ -10,3 +10,6 @@ App Availability : Gère la disponibilité des infirmiers
 App Optimizer : Optimize les tournées
 App Home : Gère la page d'accueil et toutes les pages statiques
 
+## Admin user
+Username : admin
+Password : infirmier
