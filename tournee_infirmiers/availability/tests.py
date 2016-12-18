@@ -17,10 +17,10 @@ class AvailabilityModelTests(TestCase):
 		response = UserCreationTests().create_nurse("test@test.fr", 'test', 
 			'test', '1', date.today(), '30 allée des Chardons, Paris, France')
 		nurse = Nurse.objects.get(user__username = "test@test.fr")
-		availability_group = AvailabilityGroup()
+		availability_group = AvailabilityGroup(nurse = nurse, frequency = "U")
 		availability_group.save()
 
-		availability = Availability(nurse = nurse, start_date = datetime(year = 2017,
+		availability = Availability(start_date = datetime(year = 2017,
 			month = 3, day = 20, hour = 9, minute = 30), duration = timedelta(hours = 6), 
 			availability_group = availability_group)
 		availability.save()
@@ -29,7 +29,8 @@ class AvailabilityModelTests(TestCase):
 		nurse = Nurse.objects.get(pk = 1)
 		availability_group = AvailabilityGroup.objects.get(pk = 1)
 
-		self.assertEqual(availability.nurse, nurse)
+		self.assertEqual(availability_group.nurse, nurse)
+		self.assertEqual(availability_group.frequency, "U")
 		self.assertEqual(availability.start_date.replace(tzinfo=None), datetime(year = 2017,
 			month = 3, day = 20, hour = 9, minute = 30))
 		self.assertEqual(availability.duration, timedelta(hours = 6))
@@ -39,13 +40,13 @@ class AvailabilityModelTests(TestCase):
 		response = UserCreationTests().create_nurse("test@test.fr", 'test', 
 			'test', '1', date.today(), '30 allée des Chardons, Paris, France')
 		nurse = Nurse.objects.get(user__username = "test@test.fr")
-		availability_group = AvailabilityGroup()
+		availability_group = AvailabilityGroup(nurse = nurse, frequency = "D")
 		availability_group.save()
 
-		availability = Availability(nurse = nurse, start_date = datetime(year = 2017,
+		availability = Availability(start_date = datetime(year = 2017,
 			month = 3, day = 20, hour = 9, minute = 30), duration = timedelta(hours = 6), 
 			availability_group = availability_group)
-		second_availability = Availability(nurse = nurse, start_date = datetime(year = 2017,
+		second_availability = Availability(start_date = datetime(year = 2017,
 			month = 3, day = 20, hour = 9, minute = 30) + timedelta(days = 1), duration = timedelta(hours = 6), 
 			availability_group = availability_group)
 
@@ -56,7 +57,8 @@ class AvailabilityModelTests(TestCase):
 		availability = Availability.objects.get(pk = 1)
 		nurse = Nurse.objects.get(pk = 1)
 		availability_group = AvailabilityGroup.objects.get(pk = 1)
-		self.assertEqual(availability.nurse, nurse)
+		self.assertEqual(availability_group.nurse, nurse)
+		self.assertEqual(availability_group.frequency, "D")
 		self.assertEqual(availability.start_date.replace(tzinfo=None), datetime(year = 2017,
 			month = 3, day = 20, hour = 9, minute = 30))
 		self.assertEqual(availability.duration, timedelta(hours = 6))
@@ -65,7 +67,8 @@ class AvailabilityModelTests(TestCase):
 		availability = Availability.objects.get(pk = 2)
 		nurse = Nurse.objects.get(pk = 1)
 		availability_group = AvailabilityGroup.objects.get(pk = 1)
-		self.assertEqual(availability.nurse, nurse)
+		self.assertEqual(availability_group.nurse, nurse)
+		self.assertEqual(availability_group.frequency, "D")
 		self.assertEqual(availability.start_date.replace(tzinfo=None), datetime(year = 2017,
 			month = 3, day = 21, hour = 9, minute = 30))
 		self.assertEqual(availability.duration, timedelta(hours = 6))
