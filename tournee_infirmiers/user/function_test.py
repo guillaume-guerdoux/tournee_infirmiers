@@ -3,6 +3,7 @@ from django.test import TestCase, Client
 
 #MODELS
 from django.contrib.auth.models import User
+from user.models import Nurse
 
 class UserCreationTests(TestCase):
 
