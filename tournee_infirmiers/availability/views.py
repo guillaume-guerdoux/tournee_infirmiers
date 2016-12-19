@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.shortcuts import redirect
 
 from availability.models import Availability, AvailabilityGroup
 from django.contrib.auth.models import User
@@ -10,6 +11,8 @@ from availability.forms import AddAvailabilityForm
 from django.db import IntegrityError, transaction
 
 # Create your views here.
+
+# TODO restrict access to nurse
 @transaction.atomic
 def manage_availability(request):
 	user = request.user
@@ -22,10 +25,20 @@ def manage_availability(request):
 
 			try:
 				with transaction.atomic():
+					nurse = user.person.nurse
+					availability_group = AvailabilityGroup(nurse = nurse, frequency = frequency)
+					availability_group.save()
+					if frequency == "U":
+						availability = Availability(start_date = start_date,
+							duration = duration, 
+							availability_group = availability_group)
+						availability.save()
+
 					print(start_date)
-					print(duration)
+					print(duration.days)
+					print(duration.seconds)
 					print(frequency)
-					return redirect("home:home")
+					return redirect("availability:manage_availability")
 			except IntegrityError:
 				return render(request, 'availability/manage_availabilities.html', 
 					{"add_availability_form": add_availability_form})
