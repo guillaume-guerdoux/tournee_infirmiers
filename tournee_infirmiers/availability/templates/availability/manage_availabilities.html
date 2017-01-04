@@ -3,6 +3,63 @@
 {% block availability_content %}
 	<link rel="stylesheet" href="{% static 'availability/css/manage_availability_style.css' %}">
     <div class="container">
+
+	    <div id="fullCalModalRemoveUniqueAvailability" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+						<h4 id="modalTitleRemoveUniqueAvailability" 
+						class="modal-title center">Suppression de la plage de disponibilité</h4>
+					</div>
+					<div id="modalBodyRemoveUniqueAvailability" class="modal-body">
+						<div id="modalBodyRemoveUniqueAvailability"> Voulez-vous supprimer cette plage de disponilité ? </div>
+						<form id= "form_remove_unique_availability"  data-async method="POST">
+							{% csrf_token %}
+							<input  name="remove-unique-availability-id" id="remove-unique-availability-id" />
+						</form>
+						<div class="row" style="margin-top:10px;">
+							<div class= "col-lg-6 center">
+								<button id="button_remove_unique_availability" class="btn bbtn btn-danger">Confirmer la suppression</button>
+							</div>
+							<div class= "col-lg-6 center">
+								<button id="button_not_remove _unique_availability" class="btn bbtn btn-success">Ne pas supprimer</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		 <div id="fullCalModalRemoveRepeatedAvailability" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+						<h4 id="modalTitleEdit" class="modal-title center">Suppression de la plage de disponibilité</h4>
+					</div>
+					<div id="modalBodyEdit" class="modal-body">
+						<div id="modalBodyRemoveRepeatedAvailability"> Attention, cette plage de disponiblité est une plage répétée, voulez-vous supprimer seulement cette plage de disponilité ou aussi toutes celles associées ? </div>
+						<form id= "form_remove_availability_repeated_availability"  data-async method="POST">
+							{% csrf_token %}
+							<input  name="remove-repeated-availability-id" id="remove-repeated-availability-id" />
+						</form>
+						<div class="row" style="margin-top:10px;">
+							<div class= "col-lg-6 center">
+								<button id="button_remove_repeated_availability_only_this_one" 
+								class="btn bbtn btn-danger">Supprimer seulement cette disponiblité</button>
+							</div>
+							<div class= "col-lg-6 center">
+								<button id="button_remove_repeated_availability_all" 
+								class="btn bbtn btn-success">Supprimer toutes les disponiblités associées</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
     	<div class="row basic_div">
     		<div class="col-sm-6 col-sm-offset-3">
     			<form method="post" action="{% url 'availability:manage_availability' %}">
@@ -54,7 +111,13 @@
 	       	 			{{availability}}
 	       	 		</div>
 	       	 		<div class="col-lg-4">
-	       	 			<button class="center-block btn btn-danger">Supprimer </button>
+	       	 			{% if availability.availability_group.frequency == 'U' %}
+	       	 			<button class="center-block btn btn-danger"
+	       	 			onclick='openfullCalModalRemoveUniqueAvailability("{{availability.id}}")'>Supprimer </button>
+	       	 			{% else %}
+	       	 			<button class="center-block btn btn-danger"
+	       	 			onclick='openfullCalModalRemoveRepeatlyAvailability("{{availability.id}}")'>Supprimer </button>
+	       	 			{% endif %}
 	       	 		</div>
 	       	 	</div>
 	       	 	<hr>
@@ -62,5 +125,16 @@
 	       	 {% endfor %}
     	</div>
     </div>
+
+    <script>
+    function openfullCalModalRemoveRepeatlyAvailability(availabilityId){
+    	$('#remove-repeated-availability-id').val(availabilityId);
+		$('#fullCalModalRemoveRepeatedAvailability').modal();
+	}
+	function openfullCalModalRemoveUniqueAvailability(availabilityId){
+    	$('#remove-unique-availability-id').val(availabilityId);
+		$('#fullCalModalRemoveUniqueAvailability').modal();
+	}
+    </script>
 
 {% endblock %}
