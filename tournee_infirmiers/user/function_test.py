@@ -20,6 +20,4 @@ class UserCreationTests(TestCase):
 class UserLoginTests(TestCase):
 
 	def login(self, client, username, password):
-		c = Client()
-		response = c.post('/login/', {'username': 'test@test.fr', 'password': 'test'})
-		print(response)
+		response = client.post('/login/', {'username': 'test@test.fr', 'password': 'test'})

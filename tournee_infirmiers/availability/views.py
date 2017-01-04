@@ -10,6 +10,8 @@ from availability.forms import AddAvailabilityForm
 # Transactions
 from django.db import IntegrityError, transaction
 
+# Date 
+from datetime import datetime, timedelta
 # Create your views here.
 
 # TODO restrict access to nurse
@@ -22,28 +24,38 @@ def manage_availability(request):
 			start_date = add_availability_form.cleaned_data["start_date"]
 			duration = add_availability_form.cleaned_data["duration"]
 			frequency = add_availability_form.cleaned_data["frequency"]
-
-			try:
-				with transaction.atomic():
-					nurse = user.person.nurse
-					availability_group = AvailabilityGroup(nurse = nurse, frequency = frequency)
-					availability_group.save()
-					if frequency == "U":
-						availability = Availability(start_date = start_date,
-							duration = duration, 
-							availability_group = availability_group)
-						availability.save()
-
-					print(start_date)
-					print(duration.days)
-					print(duration.seconds)
-					print(frequency)
-					return redirect("availability:manage_availability")
-			except IntegrityError:
-				return render(request, 'availability/manage_availabilities.html', 
-					{"add_availability_form": add_availability_form})
-			
+			print(frequency)
+			nurse = user.person.nurse
+			availability_group = AvailabilityGroup(nurse = nurse, frequency = frequency)
+			availability_group.save()
+			if frequency == "U":
+				availability = Availability(start_date = start_date,
+					duration = duration, 
+					availability_group = availability_group)
+				availability.save()
+				
+			if frequency == "D":
+				# TODO : Find a way to add every day long time
+				# TODO : Tell user those availabilities are available for one month
+				for k in range (1,31):
+					start_date_one_day =start_date + timedelta(days=k)
+					availability = Availability(start_date = start_date_one_day,
+						duration = duration, 
+						availability_group = availability_group)
+					availability.save()
+			if frequency == "W":
+				# TODO : Find a way to add every day long time
+				# TODO : Tell user those availabilities are available for four month
+				for k in range (1,28):
+					start_date_one_week =start_date + timedelta(weeks=k)
+					availability = Availability(start_date = start_date_one_week,
+						duration = duration, 
+						availability_group = availability_group)
+					availability.save()
+			return redirect("availability:manage_availability")
 	else:
 		add_availability_form = AddAvailabilityForm()
+		availabilities = Availability.objects.filter(availability_group__nurse = user.person.nurse)
 	return render(request, 'availability/manage_availabilities.html', 
-					{"add_availability_form": add_availability_form})
+					{"add_availability_form": add_availability_form, 
+					"availabilities": availabilities})

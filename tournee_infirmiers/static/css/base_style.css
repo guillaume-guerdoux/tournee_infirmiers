@@ -1,3 +1,22 @@
+
+/* ------------- Basic Div --------------- */
+.basic_div{
+    background: #848484;
+    border-radius: 15px;
+}
+
+.basic_title_div{
+    background: #848484;
+    border-radius: 15px;
+    padding-left: 10px;
+    padding-right: 10px
+}
+
+.basic_title_div h1{
+    font-size: calc(7px + 1.5vw);
+    font-weight: bold;
+    color: #FFFFFF;
+}
 /* ------------- Button Style --------------- */ 
 
 
