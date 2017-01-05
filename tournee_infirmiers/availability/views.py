@@ -59,3 +59,26 @@ def manage_availability(request):
 	return render(request, 'availability/manage_availabilities.html', 
 					{"add_availability_form": add_availability_form, 
 					"availabilities": availabilities})
+
+
+def remove_unique_availability(request):
+	if(request.is_ajax()):
+		if request.method == "POST":
+			id_availability = request.POST["remove-unique-availability-id"]
+			availability = Availability.objects.get(id = id_availability)
+			availability_group = availability.availability_group
+			connected_user = request.user
+			user_owner = availability_group.nurse.user
+			if(user_owner == connected_user):
+				if availability_group.frequency == "U":
+					availability_group.delete()
+				else:
+					availability.delete()
+				return HttpResponse("Availability removed")
+			else:
+				return HttpResponse("Not user availability") 
+		else:
+			return HttpResponse("Not Post") 
+			#return render(request, 'service/add_services_register.html')
+	else:
+		return HttpResponse("Not ajax") 

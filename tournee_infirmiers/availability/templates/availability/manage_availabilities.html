@@ -126,15 +126,49 @@
     	</div>
     </div>
 
-    <script>
-    function openfullCalModalRemoveRepeatlyAvailability(availabilityId){
-    	$('#remove-repeated-availability-id').val(availabilityId);
-		$('#fullCalModalRemoveRepeatedAvailability').modal();
-	}
-	function openfullCalModalRemoveUniqueAvailability(availabilityId){
-    	$('#remove-unique-availability-id').val(availabilityId);
-		$('#fullCalModalRemoveUniqueAvailability').modal();
-	}
+  
+    
+
+{% endblock %}
+
+{% block javascript_child %}
+	<script type="text/javascript">
+		function openfullCalModalRemoveRepeatlyAvailability(availabilityId){
+	    	$('#remove-repeated-availability-id').val(availabilityId);
+			$('#fullCalModalRemoveRepeatedAvailability').modal();
+		}
+		function openfullCalModalRemoveUniqueAvailability(availabilityId){
+	    	$('#remove-unique-availability-id').val(availabilityId);
+			$('#fullCalModalRemoveUniqueAvailability').modal();
+		}
     </script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#button_remove_unique_availability').click(function(event) {
+				$('#fullCalModalRemoveUniqueAvailability').modal('hide');
+				var $form = $('#form_remove_unique_availability');
+				$.ajax({
+					type: "POST",
+					url:  "{% url 'availability:remove_unique_availability' %}",
+					data: $form.serialize(),
+					success: function(json) {
+						alert("delete");
+					}
+				});
+			});
+			$('#button_remove_repeated_availability_only_this_one').click(function(event) {
+				$('#fullCalModalRemoveRepeatedAvailability').modal('hide');
+				var $form = $('#form_remove_availability_repeated_availability');
+				$.ajax({
+					type: "POST",
+					url:  "{% url 'availability:remove_unique_availability' %}",
+					data: $form.serialize(),
+					success: function(json) {
+						alert("delete");
+					}
+				});
+			});
+		});
+	</script>
 
 {% endblock %}
