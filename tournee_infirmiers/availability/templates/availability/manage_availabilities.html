@@ -16,7 +16,7 @@
 						<div id="modalBodyRemoveUniqueAvailability"> Voulez-vous supprimer cette plage de disponilité ? </div>
 						<form id= "form_remove_unique_availability"  data-async method="POST">
 							{% csrf_token %}
-							<input  name="remove-unique-availability-id" id="remove-unique-availability-id" />
+							<input  type="hidden" name="remove-unique-availability-id" id="remove-unique-availability-id" />
 						</form>
 						<div class="row" style="margin-top:10px;">
 							<div class= "col-lg-6 center">
@@ -42,16 +42,16 @@
 						<div id="modalBodyRemoveRepeatedAvailability"> Attention, cette plage de disponiblité est une plage répétée, voulez-vous supprimer seulement cette plage de disponilité ou aussi toutes celles associées ? </div>
 						<form id= "form_remove_availability_repeated_availability"  data-async method="POST">
 							{% csrf_token %}
-							<input  name="remove-repeated-availability-id" id="remove-repeated-availability-id" />
+							<input  type="hidden" name="remove-repeated-availability-id" id="remove-repeated-availability-id" />
 						</form>
 						<div class="row" style="margin-top:10px;">
 							<div class= "col-lg-6 center">
 								<button id="button_remove_repeated_availability_only_this_one" 
-								class="btn bbtn btn-danger">Supprimer seulement cette disponiblité</button>
+								class="btn btn-danger">Supprimer seulement cette disponiblité</button>
 							</div>
 							<div class= "col-lg-6 center">
 								<button id="button_remove_repeated_availability_all" 
-								class="btn bbtn btn-success">Supprimer toutes les disponiblités associées</button>
+								class="btn btn-success">Supprimer les disponiblités associées</button>
 							</div>
 						</div>
 					</div>
@@ -152,7 +152,7 @@
 					url:  "{% url 'availability:remove_unique_availability' %}",
 					data: $form.serialize(),
 					success: function(json) {
-						alert("delete");
+						location.reload();
 					}
 				});
 			});
@@ -161,10 +161,22 @@
 				var $form = $('#form_remove_availability_repeated_availability');
 				$.ajax({
 					type: "POST",
-					url:  "{% url 'availability:remove_unique_availability' %}",
+					url:  "{% url 'availability:remove_repeatly_availability_only_this_one' %}",
 					data: $form.serialize(),
 					success: function(json) {
-						alert("delete");
+						location.reload();
+					}
+				});
+			});
+			$('#button_remove_repeated_availability_all').click(function(event) {
+				$('#fullCalModalRemoveRepeatedAvailability').modal('hide');
+				var $form = $('#form_remove_availability_repeated_availability');
+				$.ajax({
+					type: "POST",
+					url:  "{% url 'availability:remove_repeatly_availability_all' %}",
+					data: $form.serialize(),
+					success: function(json) {
+						location.reload();
 					}
 				});
 			});

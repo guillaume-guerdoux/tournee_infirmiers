@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
+from django.http import HttpResponse
 
 from availability.models import Availability, AvailabilityGroup
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+
 from user.models import Nurse
 
 from availability.forms import AddAvailabilityForm
@@ -15,6 +18,8 @@ from datetime import datetime, timedelta
 # Create your views here.
 
 # TODO restrict access to nurse
+
+@login_required
 @transaction.atomic
 def manage_availability(request):
 	user = request.user
@@ -55,7 +60,7 @@ def manage_availability(request):
 			return redirect("availability:manage_availability")
 	else:
 		add_availability_form = AddAvailabilityForm()
-		availabilities = Availability.objects.filter(availability_group__nurse = user.person.nurse)
+		availabilities = Availability.objects.filter(availability_group__nurse = user.person.nurse).order_by('start_date')[:10]
 	return render(request, 'availability/manage_availabilities.html', 
 					{"add_availability_form": add_availability_form, 
 					"availabilities": availabilities})
@@ -70,10 +75,8 @@ def remove_unique_availability(request):
 			connected_user = request.user
 			user_owner = availability_group.nurse.user
 			if(user_owner == connected_user):
-				if availability_group.frequency == "U":
-					availability_group.delete()
-				else:
-					availability.delete()
+				availability_group.delete()
+				print("ok")
 				return HttpResponse("Availability removed")
 			else:
 				return HttpResponse("Not user availability") 
@@ -81,4 +84,42 @@ def remove_unique_availability(request):
 			return HttpResponse("Not Post") 
 			#return render(request, 'service/add_services_register.html')
 	else:
-		return HttpResponse("Not ajax") 
+		return HttpResponse("Not ajax")
+
+def remove_repeatly_availability_only_this_one(request):
+	if(request.is_ajax()):
+		if request.method == "POST":
+			id_availability = request.POST["remove-repeated-availability-id"]
+			availability = Availability.objects.get(id = id_availability)
+			availability_group = availability.availability_group
+			connected_user = request.user
+			user_owner = availability_group.nurse.user
+			if(user_owner == connected_user):
+				availability.delete()
+				return HttpResponse("Availability removed")
+			else:
+				return HttpResponse("Not user availability") 
+		else:
+			return HttpResponse("Not Post") 
+			#return render(request, 'service/add_services_register.html')
+	else:
+		return HttpResponse("Not ajax")
+
+def remove_repeatly_availability_all(request):
+	if(request.is_ajax()):
+		if request.method == "POST":
+			id_availability = request.POST["remove-repeated-availability-id"]
+			availability = Availability.objects.get(id = id_availability)
+			availability_group = availability.availability_group
+			connected_user = request.user
+			user_owner = availability_group.nurse.user
+			if(user_owner == connected_user):
+				availability_group.delete()
+				return HttpResponse("Availability removed")
+			else:
+				return HttpResponse("Not user availability") 
+		else:
+			return HttpResponse("Not Post") 
+			#return render(request, 'service/add_services_register.html')
+	else:
+		return HttpResponse("Not ajax")
