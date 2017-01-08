@@ -37,7 +37,9 @@ def patient_info(request, id_patient):
         patient.user.last_name = 'Durand'
         patient.user.email = 'pdurand@domainname.com'
         patient.sex = '1'
-        patient.address = '2 avenue Sully Prudhomme, 92295 Châtenay-Malabry'
+        patient.address = '2 avenue Sully Prudhomme'
+        patient.postcode = 92295
+        patient.city = 'Châtenay-Malabry'
         patient.profile_type = 'PATIENT'
         patient.birthdate = date(1985, 8, 23)
         patient.information = "Il est gentil."
@@ -57,7 +59,9 @@ def patient_list(request):
         patient.user.last_name = 'Durand'
         patient.user.email = 'pdurand@domainname.com'
         patient.sex = '1'
-        patient.address = '2 avenue Sully Prudhomme, 92295 Châtenay-Malabry'
+        patient.address = '2 avenue Sully Prudhomme'
+        patient.postcode = 92295
+        patient.city = 'Châtenay-Malabry'
         patient.profile_type = 'PATIENT'
         patient.birthdate = date(1985, 8, 23)
         patient.information = "Il est gentil."

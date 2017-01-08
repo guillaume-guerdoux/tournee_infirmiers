@@ -14,6 +14,8 @@ class Person(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)  # One person is linked to one user
 	sex = models.CharField(max_length=1, choices=GENDER_CHOICES)
 	address = models.CharField(max_length=255)
+	postcode = models.IntegerField()
+	city = models.CharField(max_length=255)
 	profile_type = models.CharField(max_length=255, choices=PROFILE_TYPE_CHOICE)
 	birthdate = models.DateField(null = True, blank=True)
 

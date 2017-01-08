@@ -2,11 +2,11 @@
 {% load staticfiles %}
 {% block patient_content %}
 
-    <section>
+    <section class="container-fluid">
     <h1>Liste de mes patients</h1>
-    <ul>
+    <ul class="list-group">
     {% for patient in patients %}
-        <li><a href="/patient/{{ patient.id }}">{{ patient.user.first_name }} {{ patient.user.last_name|upper }}</a></li>
+        <a href="/patient/{{ patient.id }}" class="list-group-item">{{ patient.user.first_name }} {{ patient.user.last_name|upper }}</a>
     {%  endfor %}
     </ul>
     </section>
