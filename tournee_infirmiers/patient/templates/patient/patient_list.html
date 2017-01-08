@@ -1,0 +1,18 @@
+{% extends "patient_layout.html" %}
+{% load staticfiles %}
+{% block patient_content %}
+
+    <section>
+    <h1>Liste de mes patients</h1>
+    <ul>
+    {% for patient in patients %}
+        <li><a href="/patient/">{{ patient.user.first_name }} {{ patient.user.last_name|upper }}</a></li>
+    {%  endfor %}
+    </ul>
+    </section>
+
+{% endblock %}
+
+{% block javascript_child %}
+
+{% endblock %}
