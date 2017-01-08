@@ -6,7 +6,7 @@
     <h1>Liste de mes patients</h1>
     <ul>
     {% for patient in patients %}
-        <li><a href="/patient/">{{ patient.user.first_name }} {{ patient.user.last_name|upper }}</a></li>
+        <li><a href="/patient/{{ patient.id }}">{{ patient.user.first_name }} {{ patient.user.last_name|upper }}</a></li>
     {%  endfor %}
     </ul>
     </section>
