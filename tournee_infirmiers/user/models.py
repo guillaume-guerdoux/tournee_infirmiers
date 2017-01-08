@@ -21,11 +21,6 @@ class Nurse(Person):
 	def __str__(self):
 		return "Nurse profile of {0}".format(self.user.username)
 
-class Patient(Person):
-	information = models.CharField(max_length=255)
-	def __str__(self):
-		return "Patient profile of {0}".format(self.user.username)
-
 class Office(models.Model):
 	address = models.CharField(max_length=255)
 	geographical_area = models.IntegerField(default = 30) # Geographical area where nurse can go / in Km
