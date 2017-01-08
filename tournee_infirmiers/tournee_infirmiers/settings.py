@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'availability',
     'treatment',
     'optimizer',
-    'home'
+    'home',
+    'patient',
 ]
 
 MIDDLEWARE_CLASSES = [
