@@ -29,8 +29,7 @@ def manage_availability(request):
 			start_date = add_availability_form.cleaned_data["start_date"]
 			duration = add_availability_form.cleaned_data["duration"]
 			frequency = add_availability_form.cleaned_data["frequency"]
-			print(frequency)
-			nurse = user.person.nurse
+			nurse = user.nurse
 			availability_group = AvailabilityGroup(nurse = nurse, frequency = frequency)
 			availability_group.save()
 			if frequency == "U":
@@ -60,7 +59,7 @@ def manage_availability(request):
 			return redirect("availability:manage_availability")
 	else:
 		add_availability_form = AddAvailabilityForm()
-		availabilities = Availability.objects.filter(availability_group__nurse = user.person.nurse).order_by('start_date')[:10]
+		availabilities = Availability.objects.filter(availability_group__nurse = user.nurse).order_by('start_date')[:10]
 	return render(request, 'availability/manage_availabilities.html', 
 					{"add_availability_form": add_availability_form, 
 					"availabilities": availabilities})
