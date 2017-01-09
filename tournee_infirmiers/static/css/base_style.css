@@ -1,3 +1,19 @@
+
+/* ------------- Basic Div --------------- */
+.basic_div{
+    border-style: solid;
+}
+
+.basic_title_div{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.basic_title_div h1{
+    font-size: calc(13px + 1.2vw);
+    font-weight: bold;
+
+}
 /* ------------- Button Style --------------- */ 
 
 
