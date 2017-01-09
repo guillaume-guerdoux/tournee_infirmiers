@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
 
+
 class Person(models.Model):
 	GENDER_CHOICES = (
 		('1', 'Homme',),
@@ -11,13 +12,17 @@ class Person(models.Model):
 		('NURSE', 'Nurse',),
 		('PATIENT', 'Patient',)
 	)
-	user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)  # One person is linked to one user
+	first_name = models.CharField(max_length=255)
+	last_name = models.CharField(max_length=255)
 	sex = models.CharField(max_length=1, choices=GENDER_CHOICES)
 	address = models.CharField(max_length=255)
 	postcode = models.IntegerField()
 	city = models.CharField(max_length=255)
+	email = models.EmailField()
+	phone = models.CharField(max_length=255)
 	profile_type = models.CharField(max_length=255, choices=PROFILE_TYPE_CHOICE)
 	birthdate = models.DateField(null = True, blank=True)
+
 
 class Nurse(Person):
 	def __str__(self):

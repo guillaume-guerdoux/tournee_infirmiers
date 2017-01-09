@@ -28,14 +28,13 @@ def patient_info(request, id_patient):
     # Create a patient object to be displayed in the template.
     # Need to fetch in from the database once we have a way of creating it.
     try:
-        patient = models.Patient.objects.get(user_id=id_patient)
+        patient = models.Patient.objects.get(id=id_patient)
     except models.Patient.DoesNotExist:
         # Pour l'instant si le patient n'existe pas on en crée un fictif pour tester la vue
         patient = models.Patient()
-        patient.user = User()
-        patient.user.first_name = 'Pierre'
-        patient.user.last_name = 'Durand'
-        patient.user.email = 'pdurand@domainname.com'
+        patient.first_name = 'Pierre'
+        patient.last_name = 'Durand'
+        patient.email = 'pdurand@domainname.com'
         patient.sex = '1'
         patient.address = '2 avenue Sully Prudhomme'
         patient.postcode = 92295
@@ -54,10 +53,9 @@ def patient_list(request):
     if len(patients_list) == 0:
         # Temporary patient to fill up the list until we create patients in database
         patient = models.Patient()
-        patient.user = User()
-        patient.user.first_name = 'Pierre'
-        patient.user.last_name = 'Durand'
-        patient.user.email = 'pdurand@domainname.com'
+        patient.first_name = 'Pierre'
+        patient.last_name = 'Durand'
+        patient.email = 'pdurand@domainname.com'
         patient.sex = '1'
         patient.address = '2 avenue Sully Prudhomme'
         patient.postcode = 92295

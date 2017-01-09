@@ -6,7 +6,7 @@
     <h1>Liste de mes patients</h1>
     <ul class="list-group">
     {% for patient in patients %}
-        <a href="/patient/{{ patient.id }}" class="list-group-item">{{ patient.user.first_name }} {{ patient.user.last_name|upper }}</a>
+        <a href="/patient/{{ patient.id }}" class="list-group-item">{{ patient.first_name }} {{ patient.last_name|upper }}</a>
     {%  endfor %}
     </ul>
     </section>
