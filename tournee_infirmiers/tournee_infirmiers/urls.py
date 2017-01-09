@@ -23,5 +23,6 @@ urlpatterns = [
 	url(r'^', include('treatment.urls')),
 	url(r'^', include('optimizer.urls')),
 	url(r'^', include('home.urls')),
+	url(r'^', include('patient.urls')),
     url(r'^admin/', admin.site.urls),
 ]
