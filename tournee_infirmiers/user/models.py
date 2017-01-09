@@ -29,4 +29,3 @@ class Patient(Person):
 class Office(models.Model):
 	address = models.CharField(max_length=255)
 	geographical_area = models.IntegerField(default = 30) # Geographical area where nurse can go / in Km
-	

@@ -5,6 +5,10 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 
+def error_login(request):
+    return render(request, 'user/error_login.html')
+
+
 def patient_info(request):
     # Create a patient object to be displayed in the template.
     # Need to fetch in from the database once we have a way of creating it.
