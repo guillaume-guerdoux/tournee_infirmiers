@@ -2,6 +2,7 @@ from django.shortcuts import render
 from . import models
 from datetime import date
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
 
 def patient_info(request):
@@ -19,3 +20,8 @@ def patient_info(request):
     patient.information = "Il est gentil."
 
     return render(request, 'user/patient_info.html', {'patient': patient})
+
+
+@login_required(redirect_field_name='account')
+def account(request):
+    return render(request, 'user/account.html', {'user': request.user})

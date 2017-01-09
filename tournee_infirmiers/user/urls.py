@@ -5,6 +5,7 @@ from user import views as user_views
 app_name = 'user'
 urlpatterns = [
     url(r'^patient/$', user_views.patient_info),
+    url(r'^compte/$', user_views.account, name='account'),
     url(r'^login/$', auth_views.login, {'template_name': 'user/login.html'}, name='login'),
     url(r'^logout/$', auth_views.logout, name='logout'),
 ]
