@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+               	<h2>Mon compte</h2>
+            </div>
+            <div class="col-sm-12">
+                <div class="col-sm-3 col-sm-offset-3">
+                    <p>Nom : {{ user.last_name }}</p>
+                    <p>Prénom : {{ user.first_name }}</p>
+                    <p>Email : {{ user.email }}</p>
+                    <p>Adresse : {{ user.person.address }}</p>
+                    <p>Genre : {{ user.person.sex }}</p>
+                    <p>Type : {{ user.person.profile_type }}</p>
+                    <p>Date de naissance : {{ patient.person.birthdate|date }}</p>
+                    <!-- <p>Informations spécifiques</p> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
