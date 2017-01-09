@@ -1,0 +1,33 @@
+{% extends 'user_layout.html' %}
+
+{% block user_content %}
+  <h2>Se connecter en tant que cabinet</h2>
+
+    {% if form.errors %}
+    <p>Erreur dans la saisie du nom d'utilisateur et du mot de passe.</p>
+    {% endif %}
+
+    {% if request.user.is_authenticated %}
+        <p>Vous êtes déjà connecté sur la plateforme. Pour accéder à la page de gestion de vos infirmiers, cliquez <a href="{% url 'home:dashboard' %}">ici</a>.</p>
+    {% else %}
+        <form method="post">
+        {% csrf_token %}
+        <table>
+        <tr>
+            <td>Nom d'utilisateur</td>
+            <td>{{ form.username }}</td>
+        </tr>
+        <tr>
+            <td>Mot de passe</td>
+            <td>{{ form.password }}</td>
+        </tr>
+        </table>
+
+        <input type="submit" value="Connexion" />
+        <input type="hidden" name="next" value="{{ next }}" />
+        </form>
+    {% endif %}
+
+    <p>Vous êtes un infirmier ? Pour vous connecter et accéder à votre tableau de bord, c'est par <a href="{% url 'user:login' %}">ici</a>.</p>
+
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "home_layout.html" %}
+{% load staticfiles %}
+{% block home_content %}
+		<section>
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <pre>
+                            <p class="text-center">Mes patients</p>
+
+
+
+                        </pre>
+                    </div>
+
+                    <!-- Main block displaying appointments -->
+                    <div class="col-md-6">
+
+                        <p class="text-center">Mes prochains rendez-vous</p>
+
+                        <div class="table-responsive">
+                            <table class="table table-stripped">
+
+                                <!--TODO: Generates patients using database once DB is configured-->
+
+                                <th>
+                                    <td>Nom</td>
+                                    <td>Prénom</td>
+                                    <td>Adresse</td>
+                                </th>
+                                <tr>
+                                    <td>14h00</td>
+                                    <td>Dupont</td>
+                                    <td>Jean</td>
+                                    <td>1, avenue des Champs-Elysées</td>
+                                </tr>
+                                <tr>
+                                    <td>14h45</td>
+                                    <td>Abitbol</td>
+                                    <td>Georges</td>
+                                    <td>3, rue de la Classe</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                    </div>
+                    <div class="col-md-3">
+                        <pre>
+                            <p class="text-center">Mes informations</p>
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+
+		</section>
+{% endblock %}
+
+{% block javascript_child %}
+
+{% endblock %}

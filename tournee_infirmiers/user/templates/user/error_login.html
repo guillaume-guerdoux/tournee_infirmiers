@@ -1,0 +1,8 @@
+{% extends "user_layout.html" %}
+
+{% block user_content %}
+
+<p>Vous avez besoin d'être authentifié pour accéder à cette page.</p>
+<p><a href="{% url 'user:login' %}">Se connecter</a></p>
+
+{% endblock %}
