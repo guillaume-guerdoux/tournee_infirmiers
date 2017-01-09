@@ -1,0 +1,23 @@
+{% extends "patient_layout.html" %}
+{% load staticfiles %}
+{% block patient_content %}
+
+    <div class="page-header">
+        <h1> Ajouter un nouveau patient </h1>
+    </div>
+
+    <div>
+    {%if envoi%}Le nouveau patient est bien enregistré!{%endif%}
+    </div>
+
+    <form action="{% url "new_patient" %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Valider" />
+    </form>
+
+{% endblock %}
+
+{% block javascript_child %}
+
+{% endblock %}

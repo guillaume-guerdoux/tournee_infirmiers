@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'availability',
     'treatment',
     'optimizer',
-    'home'
+    'home',
+    'patient',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -133,4 +134,4 @@ STATICFILES_DIRS = (
 
 LOGIN_REDIRECT_URL = '/dashboard'
 
-LOGIN_URL = '/login/'
+LOGIN_URL = '/error_login/'
