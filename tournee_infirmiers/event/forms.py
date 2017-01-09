@@ -1,7 +1,8 @@
+from django.db import models
 from django import forms
 from .models import Need
 
-class AddNeedForm(forms.ModelForm):
-    class Meta:
-        model = Need
-        fields = '__all__'
+
+class AddNeedForm(forms.Form):
+    start_time = forms.DateTimeField()
+    duration = forms.DurationField()
