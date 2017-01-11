@@ -69,14 +69,36 @@ def mutation(sample):
         second_nurse.append(first_heal)
 
 
+# TODO : To much empty list : solve this
+def cross_over_function(first_parent, second_parent):
+    child = []
+    added_genes = []
+    random.shuffle(first_parent)
+    random.shuffle(second_parent)
+    for gene in range(len(first_parent)):
+        first_parent_gene = first_parent[gene]
+        second_parent_gene = second_parent[gene]
+        combination = list(set(first_parent_gene).union(second_parent_gene))
+        non_redondant_gene = []
+        for allele in combination:
+            if allele not in added_genes:
+                non_redondant_gene.append(allele)
+        child.append(non_redondant_gene)
+        added_genes.extend(non_redondant_gene)
+    return child
+
+
+# TODO : Take into account diffence between fitness function
 def tournament_selection(population, fitness_weight):
     random.shuffle(population)
-    tournament_population = population[:int(len(population)/2)]
-    new_population = copy.deepcopy(population[int(len(population)/2):])
-    for i in range(0, len(tournament_population)-1, 2):  # last one is dead
+    new_population = []
+    #tournament_population = population[:int(len(population)/2)]
+    #new_population = copy.deepcopy(population[int(len(population)/2):])
+    for i in range(0, len(population)-1, 2):  # last one is dead
+        print(i)
         victory = random.random()
-        first_fighter = tournament_population[i]
-        second_fighter = tournament_population[i+1]
+        first_fighter = population[i]
+        second_fighter = population[i+1]
         if fitness_function(first_fighter) >= fitness_function(second_fighter):
             favourite_fighter = first_fighter
             loser_fighter = second_fighter
@@ -89,10 +111,31 @@ def tournament_selection(population, fitness_weight):
             new_population.append(loser_fighter)
     return new_population
 
-initial_population = generate_random_population(4)
-print("Initial population : ", initial_population)
-print("New population : ", tournament_selection(initial_population, 0.7))
-sample = [[1, 2], [3, 5], []]
-print(sample)
-mutation(sample)
-print(sample)
+def population_evolution(population_nb):
+    population = generate_random_population(population_nb)
+    print("Initial population : ", population)
+    while(len(population) != 1):
+        print(len(population))
+        # Tournament
+        population = tournament_selection(population, 0.9)
+        print("Tournament population: ", population)
+        # Mutation : 0.5 probability
+        for sample in population:
+            mutation_probability = random.random()
+            if mutation_probability > 0.5:
+                mutation(sample)
+        random.shuffle(population)
+        for i in range(0, len(population)-1, 2):
+            first_parent = population[i]
+            second_parent = population[i+1]
+            population.append(cross_over_function(first_parent, second_parent))
+
+    print("Finish", population)
+
+if __name__ == "__main__":
+    population_evolution(1000)
+    '''initial_population = generate_random_population(4)
+    print(initial_population[3])
+    print("Initial population : ", initial_population)
+    new_population = tournament_selection(initial_population, 0.7)
+    print("Tournament population: ", new_population)'''
