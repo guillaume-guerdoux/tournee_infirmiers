@@ -7,11 +7,23 @@
 import numpy as np
 import random
 import copy
+from datetime import time
+import itertools
 
 nurse_nb = 3
-heal_nb = 15
-distance_matrix = np.random.rand(heal_nb, heal_nb)
+heal_nb = 10
+no_symetric_distance_matrix = np.random.rand(heal_nb, heal_nb)
+for i in range(heal_nb):
+    no_symetric_distance_matrix[i][i] = 0
 # mandatory_schedules = {0: None, 1: (8, 9), 2: (10, 11) ....}
+distance_matrix = (no_symetric_distance_matrix +
+                   no_symetric_distance_matrix.T)/2
+
+mandatory_schedules = {0: None, 1: (time(8, 0, 0), time(9, 0, 0)),
+                       2: (time(10, 0, 0), time(11, 0, 0)),
+                       3: None, 4: (time(8, 30, 0), time(9, 30, 0)),
+                       5: None, 6: None, 7: (time(10, 30, 0), time(12, 0, 0)),
+                       8: None, 9: (time(19, 0, 0), time(20, 0, 0))}
 
 
 def split_randomly_list(list_to_split, split_parts):
@@ -41,12 +53,34 @@ def generate_random_population(population_nb):
     return population
 
 
+def event_overlaping(first_event, second_event):
+    if first_event is None or second_event is None:
+        return False
+    else:
+        first_event_start_time = first_event[0]
+        first_event_end_time = first_event[1]
+        second_event_start_time = second_event[0]
+        second_event_end_time = second_event[1]
+        if first_event_end_time < second_event_start_time:
+            return False
+        elif first_event_start_time > second_event_end_time:
+            return False
+        else:
+            return True
+
+
 def fitness_function(sample):
+    no_heal_for_a_nurse = 0
+    overlapping_heals_for_a_nurse = 0
     for nurse in sample:
         if nurse:
-            return 1
+            for paire in itertools.combinations(nurse, 2):
+                if event_overlaping(mandatory_schedules[paire[0]],
+                                    mandatory_schedules[paire[1]]):
+                    overlapping_heals_for_a_nurse += 1
         else:
-            return 0
+            no_heal_for_a_nurse += 1
+    return 10*no_heal_for_a_nurse + 5*overlapping_heals_for_a_nurse
 
 
 def mutation(sample):
@@ -92,14 +126,14 @@ def cross_over_function(first_parent, second_parent):
 def tournament_selection(population, fitness_weight):
     random.shuffle(population)
     new_population = []
-    #tournament_population = population[:int(len(population)/2)]
-    #new_population = copy.deepcopy(population[int(len(population)/2):])
+    # tournament_population = population[:int(len(population)/2)]
+    # new_population = copy.deepcopy(population[int(len(population)/2):])
     for i in range(0, len(population)-1, 2):  # last one is dead
         print(i)
         victory = random.random()
         first_fighter = population[i]
         second_fighter = population[i+1]
-        if fitness_function(first_fighter) >= fitness_function(second_fighter):
+        if fitness_function(first_fighter) <= fitness_function(second_fighter):
             favourite_fighter = first_fighter
             loser_fighter = second_fighter
         else:
@@ -110,6 +144,7 @@ def tournament_selection(population, fitness_weight):
         else:
             new_population.append(loser_fighter)
     return new_population
+
 
 def population_evolution(population_nb):
     population = generate_random_population(population_nb)
@@ -133,9 +168,9 @@ def population_evolution(population_nb):
     print("Finish", population)
 
 if __name__ == "__main__":
+    # print(distance_matrix)
     population_evolution(1000)
-    '''initial_population = generate_random_population(4)
-    print(initial_population[3])
+    '''print(initial_population[3])
     print("Initial population : ", initial_population)
     new_population = tournament_selection(initial_population, 0.7)
     print("Tournament population: ", new_population)'''
