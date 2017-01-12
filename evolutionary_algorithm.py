@@ -12,14 +12,18 @@ import itertools
 
 nurse_nb = 3
 heal_nb = 10
+distance_matrix = np.loadtxt('distance_matrix')
+'''
 no_symetric_distance_matrix = np.random.rand(heal_nb, heal_nb)
 for i in range(heal_nb):
     no_symetric_distance_matrix[i][i] = 0
 # mandatory_schedules = {0: None, 1: (8, 9), 2: (10, 11) ....}
 distance_matrix = (no_symetric_distance_matrix +
-                   no_symetric_distance_matrix.T)/2
+                   no_symetric_distance_matrix.T)/2'''
 
-mandatory_schedules = {0: None, 1: (time(8, 0, 0), time(9, 0, 0)),
+
+mandatory_schedules = {0: (time(19, 30, 0), time(20, 30, 0)),
+                       1: (time(8, 0, 0), time(9, 0, 0)),
                        2: (time(10, 0, 0), time(11, 0, 0)),
                        3: None, 4: (time(8, 30, 0), time(9, 30, 0)),
                        5: None, 6: None, 7: (time(10, 30, 0), time(12, 0, 0)),
@@ -72,15 +76,21 @@ def event_overlaping(first_event, second_event):
 def fitness_function(sample):
     no_heal_for_a_nurse = 0
     overlapping_heals_for_a_nurse = 0
+    total_distance_covered = 0
     for nurse in sample:
         if nurse:
             for paire in itertools.combinations(nurse, 2):
                 if event_overlaping(mandatory_schedules[paire[0]],
                                     mandatory_schedules[paire[1]]):
                     overlapping_heals_for_a_nurse += 1
+            for heal_index in range(len(nurse) - 2):
+                total_distance_covered += \
+                distance_matrix[heal_index][heal_index+1]
         else:
             no_heal_for_a_nurse += 1
-    return 10*no_heal_for_a_nurse + 5*overlapping_heals_for_a_nurse
+    return(10*no_heal_for_a_nurse +
+           5*overlapping_heals_for_a_nurse +
+           2*total_distance_covered)
 
 
 def mutation(sample):
@@ -107,11 +117,13 @@ def mutation(sample):
 def cross_over_function(first_parent, second_parent):
     child = []
     added_genes = []
-    random.shuffle(first_parent)
-    random.shuffle(second_parent)
-    for gene in range(len(first_parent)):
-        first_parent_gene = first_parent[gene]
-        second_parent_gene = second_parent[gene]
+    copy_first_parent = copy.deepcopy(first_parent)
+    copy_second_parent = copy.deepcopy(second_parent)
+    random.shuffle(copy_first_parent)
+    random.shuffle(copy_second_parent)
+    for gene in range(len(copy_first_parent)):
+        first_parent_gene = copy_first_parent[gene]
+        second_parent_gene = copy_second_parent[gene]
         combination = list(set(first_parent_gene).union(second_parent_gene))
         non_redondant_gene = []
         for allele in combination:
@@ -122,38 +134,37 @@ def cross_over_function(first_parent, second_parent):
     return child
 
 
-# TODO : Take into account diffence between fitness function
-def tournament_selection(population, fitness_weight):
+def tournament_selection(population):
     random.shuffle(population)
     new_population = []
     # tournament_population = population[:int(len(population)/2)]
     # new_population = copy.deepcopy(population[int(len(population)/2):])
     for i in range(0, len(population)-1, 2):  # last one is dead
-        print(i)
         victory = random.random()
         first_fighter = population[i]
         second_fighter = population[i+1]
-        if fitness_function(first_fighter) <= fitness_function(second_fighter):
-            favourite_fighter = first_fighter
-            loser_fighter = second_fighter
+        try:
+            first_fighter_victory_probability = \
+                fitness_function(second_fighter) / \
+                (fitness_function(first_fighter) +
+                 fitness_function(second_fighter))
+        except ZeroDivisionError:
+            first_fighter_victory_probability = 0.5
+        if victory <= (first_fighter_victory_probability):
+            new_population.append(first_fighter)
         else:
-            favourite_fighter = second_fighter
-            loser_fighter = first_fighter
-        if victory >= (1-fitness_weight):
-            new_population.append(favourite_fighter)
-        else:
-            new_population.append(loser_fighter)
+            new_population.append(second_fighter)
     return new_population
 
 
+# Chance to win is proportionnal to fitness function differences
 def population_evolution(population_nb):
     population = generate_random_population(population_nb)
     print("Initial population : ", population)
     while(len(population) != 1):
-        print(len(population))
         # Tournament
-        population = tournament_selection(population, 0.9)
-        print("Tournament population: ", population)
+        population = tournament_selection(population)
+        # print("Tournament population: ", population)
         # Mutation : 0.5 probability
         for sample in population:
             mutation_probability = random.random()
@@ -169,7 +180,7 @@ def population_evolution(population_nb):
 
 if __name__ == "__main__":
     # print(distance_matrix)
-    population_evolution(1000)
+    population_evolution(4)
     '''print(initial_population[3])
     print("Initial population : ", initial_population)
     new_population = tournament_selection(initial_population, 0.7)
