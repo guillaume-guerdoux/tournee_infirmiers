@@ -85,11 +85,11 @@ def fitness_function(sample):
                     overlapping_heals_for_a_nurse += 1
             for heal_index in range(len(nurse) - 2):
                 total_distance_covered += \
-                distance_matrix[heal_index][heal_index+1]
+                    distance_matrix[heal_index][heal_index+1]
         else:
             no_heal_for_a_nurse += 1
     return(10*no_heal_for_a_nurse +
-           5*overlapping_heals_for_a_nurse +
+           10*overlapping_heals_for_a_nurse +
            2*total_distance_covered)
 
 
@@ -164,7 +164,7 @@ def population_evolution(population_nb):
     while(len(population) != 1):
         # Tournament
         population = tournament_selection(population)
-        # print("Tournament population: ", population)
+        # print("Tournament population: ", population)
         # Mutation : 0.5 probability
         for sample in population:
             mutation_probability = random.random()
@@ -180,7 +180,7 @@ def population_evolution(population_nb):
 
 if __name__ == "__main__":
     # print(distance_matrix)
-    population_evolution(4)
+    population_evolution(1000)
     '''print(initial_population[3])
     print("Initial population : ", initial_population)
     new_population = tournament_selection(initial_population, 0.7)
