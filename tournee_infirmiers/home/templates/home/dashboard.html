@@ -1,60 +1,67 @@
 {% extends "home_layout.html" %}
 {% load staticfiles %}
 {% block home_content %}
-		<section>
+<section>
 
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-3">
-                        <pre>
-                            <p class="text-center">Mes patients</p>
-
-
-
-                        </pre>
-                    </div>
-
-                    <!-- Main block displaying appointments -->
-                    <div class="col-md-6">
-
-                        <p class="text-center">Mes prochains rendez-vous</p>
-
-                        <div class="table-responsive">
-                            <table class="table table-stripped">
-
-                                <!--TODO: Generates patients using database once DB is configured-->
-
-                                <th>
-                                    <td>Nom</td>
-                                    <td>Prénom</td>
-                                    <td>Adresse</td>
-                                </th>
-                                <tr>
-                                    <td>14h00</td>
-                                    <td>Dupont</td>
-                                    <td>Jean</td>
-                                    <td>1, avenue des Champs-Elysées</td>
-                                </tr>
-                                <tr>
-                                    <td>14h45</td>
-                                    <td>Abitbol</td>
-                                    <td>Georges</td>
-                                    <td>3, rue de la Classe</td>
-                                </tr>
-                            </table>
-                        </div>
-
-                    </div>
-                    <div class="col-md-3">
-                        <pre>
-                            <p class="text-center">Mes informations</p>
-                        </pre>
-                    </div>
-                </div>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="nav-home">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="{% url 'home:dashboard' %}">Mon tableau de bord<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li><a href="{% url 'availability:manage_availability' %}">Mes horaires</a></li>
+                    <li><a href="{% url 'patient:patient_list' %}">Mes patients</a></li>
+                    <li><a href="#">Ajouter un besoin</a></li>
+                    <li><a href="{% url 'user:account' %}">Mon compte</a></li>
+                </ul>
             </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+
+            <!-- Main block displaying appointments -->
+            <div class="col-md-6">
+
+                <p class="text-center">Mes prochains rendez-vous</p>
+
+                <div class="table-responsive">
+                    <table class="table table-stripped">
+
+                        <!--TODO: Generates patients using database once DB is configured-->
+
+                        <th>
+                        <td>Nom</td>
+                        <td>Prénom</td>
+                        <td>Adresse</td>
+                        </th>
+                        <tr>
+                            <td>14h00</td>
+                            <td>Dupont</td>
+                            <td>Jean</td>
+                            <td>1, avenue des Champs-Elysées</td>
+                        </tr>
+                        <tr>
+                            <td>14h45</td>
+                            <td>Abitbol</td>
+                            <td>Georges</td>
+                            <td>3, rue de la Classe</td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+            <div class="col-md-6">
+                        <pre>
+                            <p class="text-center">BLOC RESERVE GOOGLE MAPS</p>
+                        </pre>
+            </div>
+        </div>
+    </div>
 
 
-		</section>
+</section>
 {% endblock %}
 
 {% block javascript_child %}
