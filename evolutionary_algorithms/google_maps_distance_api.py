@@ -10,15 +10,16 @@ import pprint
 '''
 
 
-def create_distance_matrix(origins=[], destinations=[]):
-    origins = "Vancouver BC|Seattle"
-    destinations = "San Francisco|Victoria BC"
+def create_distance_matrix(origins=[],
+                           destinations=[]):
+    origins_str = "|".join(origins)
+    destinations_str = "|".join(destinations)
     url = 'http://maps.googleapis.com/maps/api/distancematrix/json?'\
           'origins={0}&'\
           'destinations={1}&'\
           'mode=driving&'\
           'language=en-EN&'\
-          'sensor=false'.format(origins, destinations)
+          'sensor=false'.format(origins_str, destinations_str)
     resp = requests.get(url)
     resp_json = resp.json()
     pprint.pprint(resp_json)
@@ -30,4 +31,6 @@ def create_distance_matrix(origins=[], destinations=[]):
         distance_matrix.append(row)
     return distance_matrix
 if __name__ == "__main__":
-    create_distance_matrix()
+    print(create_distance_matrix(origins=["Vancouver BC", "Seattle"],
+                                 destinations=["San Francisco",
+                                               "Victoria BC"]))
