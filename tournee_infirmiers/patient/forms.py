@@ -14,5 +14,5 @@ class PatientForm(forms.Form):
     postcode = forms.IntegerField(label="Code Postal")
     city = forms.CharField(max_length=255, label="Ville")
     email = forms.CharField(max_length=255, label="Email")
-    phone = forms.IntegerField(label="Numéro de téléphone")
+    phone = forms.CharField(max_length=255, label="Numéro de téléphone")
     comments = forms.CharField(widget=forms.Textarea, label="Remarques")

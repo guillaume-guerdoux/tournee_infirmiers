@@ -2,24 +2,24 @@ from django.shortcuts import render
 from .forms import PatientForm
 from . import models
 from datetime import date
-from django.contrib.auth.models import User
 
 
 def patient(request):
-    form=PatientForm(request.POST or None)
+    form = PatientForm(request.POST or None)
+    new_patient = models.Patient()
     if form.is_valid():
-        sex = form.cleaned_data['sex']
-        lastname = form.cleaned_data['lastname']
-        firstname = form.cleaned_data['firstname']
-        birthdate = form.cleaned_data['birthdate']
-        address = form.cleaned_data['address']
-        postcode = form.cleaned_data['postcode']
-        city = form.cleaned_data['city']
-        email = form.cleaned_data['email']
-        phone = form.cleaned_data['phone']
-        comments = form.cleaned_data['comments']
+        new_patient.sex = form.cleaned_data['sex']
+        new_patient.last_name = form.cleaned_data['lastname']
+        new_patient.first_name = form.cleaned_data['firstname']
+        new_patient.birthdate = form.cleaned_data['birthdate']
+        new_patient.address = form.cleaned_data['address']
+        new_patient.postcode = form.cleaned_data['postcode']
+        new_patient.city = form.cleaned_data['city']
+        new_patient.email = form.cleaned_data['email']
+        new_patient.phone = form.cleaned_data['phone']
+        new_patient.information = form.cleaned_data['comments']
 
-        envoi=True
+        new_patient.save()
 
     return render(request, 'patient/new_patient.html', locals())
 
