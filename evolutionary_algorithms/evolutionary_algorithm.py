@@ -8,20 +8,24 @@ import numpy as np
 import random
 import copy
 from datetime import time
+from datetime import timedelta
+from datetime import datetime
 import itertools
 
 nurse_nb = 3
 heal_nb = 10
-distance_matrix = np.loadtxt('distance_matrix')
+time_distance_matrix = np.loadtxt('time_distance_matrix')
+heal_duration_vector = [timedelta(minutes=30) for i in range(10)]
+
 '''
-no_symetric_distance_matrix = np.random.rand(heal_nb, heal_nb)
+no_symetric_time_distance_matrix = np.random.rand(heal_nb, heal_nb)
 for i in range(heal_nb):
-    no_symetric_distance_matrix[i][i] = 0
+    no_symetric_time_distance_matrix[i][i] = 0
 # mandatory_schedules = {0: None, 1: (8, 9), 2: (10, 11) ....}
-distance_matrix = (no_symetric_distance_matrix +
-                   no_symetric_distance_matrix.T)/2'''
+time_distance_matrix = (no_symetric_time_distance_matrix +
+                   no_symetric_time_distance_matrix.T)/2'''
 
-
+# Nurse has to be there at this time
 mandatory_schedules = {0: (time(19, 30, 0), time(20, 30, 0)),
                        1: (time(8, 0, 0), time(9, 0, 0)),
                        2: (time(10, 0, 0), time(11, 0, 0)),
@@ -57,39 +61,62 @@ def generate_random_population(population_nb):
     return population
 
 
+def time_plus(time, timedelta):
+    start = datetime(
+        2000, 1, 1,
+        hour=time.hour, minute=time.minute, second=time.second)
+    end = start + timedelta
+    return end.time()
+
+
+# Worst case : nurse begin heal at the end of available window
 def event_overlaping(first_event, second_event):
-    if first_event is None or second_event is None:
-        return False
+    first_event_end_time = mandatory_schedules[first_event][1]
+    first_event_duration = heal_duration_vector[first_event]
+    second_event_end_time = mandatory_schedules[second_event][1]
+    time_distance_between_heals = \
+        timedelta(seconds=time_distance_matrix[first_event][second_event])
+
+    first_event_taken_time = time_plus(first_event_end_time,
+                                       first_event_duration +
+                                       time_distance_between_heals)
+
+    if first_event_taken_time > second_event_end_time:
+        return True
     else:
-        first_event_start_time = first_event[0]
-        first_event_end_time = first_event[1]
-        second_event_start_time = second_event[0]
-        second_event_end_time = second_event[1]
-        if first_event_end_time < second_event_start_time:
-            return False
-        elif first_event_start_time > second_event_end_time:
-            return False
-        else:
-            return True
+        return False
+
+
+def schedules_respect(nurse):
+    overlapping_heals = 0
+    heals_with_time_constraint = []
+    for heal in nurse:
+        if mandatory_schedules[heal] is not None:
+            heals_with_time_constraint.append(heal)
+    for paire in itertools.combinations(heals_with_time_constraint, 2):
+        if event_overlaping(paire[0], paire[1]):
+            overlapping_heals += 1
+    return overlapping_heals
 
 
 def fitness_function(sample):
     no_heal_for_a_nurse = 0
-    overlapping_heals_for_a_nurse = 0
     total_distance_covered = 0
+    schedules_respect_nb = 0
     for nurse in sample:
+        # Check if each nurse has heals to do
         if nurse:
-            for paire in itertools.combinations(nurse, 2):
-                if event_overlaping(mandatory_schedules[paire[0]],
-                                    mandatory_schedules[paire[1]]):
-                    overlapping_heals_for_a_nurse += 1
+            # Check overlapping
+            if schedules_respect(nurse):
+                schedules_respect_nb += 1
+            # Check total distance covered by a nurse
             for heal_index in range(len(nurse) - 2):
                 total_distance_covered += \
-                    distance_matrix[heal_index][heal_index+1]
+                    time_distance_matrix[heal_index][heal_index+1]
         else:
             no_heal_for_a_nurse += 1
     return(10*no_heal_for_a_nurse +
-           10*overlapping_heals_for_a_nurse +
+           20*schedules_respect_nb +
            2*total_distance_covered)
 
 
@@ -179,8 +206,8 @@ def population_evolution(population_nb):
     print("Finish", population)
 
 if __name__ == "__main__":
-    # print(distance_matrix)
-    population_evolution(1000)
+    # print(time_distance_matrix)
+    population_evolution(50000)
     '''print(initial_population[3])
     print("Initial population : ", initial_population)
     new_population = tournament_selection(initial_population, 0.7)
