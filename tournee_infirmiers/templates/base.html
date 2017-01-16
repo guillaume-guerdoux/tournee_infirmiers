@@ -38,7 +38,7 @@
 						</ul>
 					</li>
 		        {% else %}
-			        <li><a href="#">Inscription</a></li>
+			        <li><a href="{% url 'user:register' %}">Inscription</a></li>
 			        <li><a href="{% url 'user:login' %}">Connexion</a></li>
 			    {% endif %}
 		        {% comment %} <li class="dropdown">
