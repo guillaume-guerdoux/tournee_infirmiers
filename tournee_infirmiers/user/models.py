@@ -8,10 +8,6 @@ class Person(models.Model):
 		('1', 'Homme',),
 		('2', 'Femme',),
 	)
-	PROFILE_TYPE_CHOICE = (
-		('NURSE', 'Nurse',),
-		('PATIENT', 'Patient',)
-	)
 	first_name = models.CharField(max_length=255)
 	last_name = models.CharField(max_length=255)
 	sex = models.CharField(max_length=1, choices=GENDER_CHOICES)
@@ -20,8 +16,10 @@ class Person(models.Model):
 	city = models.CharField(max_length=255)
 	email = models.EmailField()
 	phone = models.CharField(max_length=255)
-	profile_type = models.CharField(max_length=255, choices=PROFILE_TYPE_CHOICE)
 	birthdate = models.DateField(null = True, blank=True)
+
+	class Meta:
+		abstract = True
 
 
 class Nurse(Person):

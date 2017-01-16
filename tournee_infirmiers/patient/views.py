@@ -1,25 +1,26 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .forms import PatientForm
 from . import models
 from datetime import date
-from django.contrib.auth.models import User
 
 
-def patient(request):
-    form=PatientForm(request.POST or None)
+def new_patient(request):
+    form = PatientForm(request.POST or None)
+    new_patient = models.Patient()
     if form.is_valid():
-        sex = form.cleaned_data['sex']
-        lastname = form.cleaned_data['lastname']
-        firstname = form.cleaned_data['firstname']
-        birthdate = form.cleaned_data['birthdate']
-        address = form.cleaned_data['address']
-        postcode = form.cleaned_data['postcode']
-        city = form.cleaned_data['city']
-        email = form.cleaned_data['email']
-        phone = form.cleaned_data['phone']
-        comments = form.cleaned_data['comments']
+        new_patient.sex = form.cleaned_data['sex']
+        new_patient.last_name = form.cleaned_data['lastname']
+        new_patient.first_name = form.cleaned_data['firstname']
+        new_patient.birthdate = form.cleaned_data['birthdate']
+        new_patient.address = form.cleaned_data['address']
+        new_patient.postcode = form.cleaned_data['postcode']
+        new_patient.city = form.cleaned_data['city']
+        new_patient.email = form.cleaned_data['email']
+        new_patient.phone = form.cleaned_data['phone']
+        new_patient.information = form.cleaned_data['comments']
 
-        envoi=True
+        new_patient.save()
+        success = True
 
     return render(request, 'patient/new_patient.html', locals())
 
@@ -41,7 +42,10 @@ def patient_info(request, id_patient):
         patient.city = 'Châtenay-Malabry'
         patient.profile_type = 'PATIENT'
         patient.birthdate = date(1985, 8, 23)
-        patient.information = "Il est gentil."
+        patient.information = "ATTENTION ! Ce patient est un placeholder" \
+                              " pour vous donner une idée de l'aspect de cette page." \
+                              " Si vous voyez ce patient cela veut dire " \
+                              "qu'il n'y en a aucun d'enregistré dans votre base de données."
 
     return render(request, 'patient/patient_info.html', {'patient': patient})
 
@@ -62,9 +66,23 @@ def patient_list(request):
         patient.city = 'Châtenay-Malabry'
         patient.profile_type = 'PATIENT'
         patient.birthdate = date(1985, 8, 23)
-        patient.information = "Il est gentil."
+        patient.information = "ATTENTION ! Ce patient est un placeholder" \
+                              " pour vous donner une idée de l'aspect de cette page." \
+                              " Si vous voyez ce patient cela veut dire " \
+                              "qu'il n'y en a aucun d'enregistré dans votre base de données."
         patient.id = 0
 
         patients_list.append(patient)
 
     return render(request, 'patient/patient_list.html', {'patients': patients_list})
+
+
+def delete_patient(request, id_patient):
+    # removes a patient from the database
+    try:
+        patient_to_remove = models.Patient.objects.get(id=id_patient)
+        patient_to_remove.delete()
+
+        return redirect('patient:patient_list')
+    except models.Patient.DoesNotExist:
+        return redirect('patient:patient_list')
