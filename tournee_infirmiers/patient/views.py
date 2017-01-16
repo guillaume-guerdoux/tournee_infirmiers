@@ -42,7 +42,10 @@ def patient_info(request, id_patient):
         patient.city = 'Châtenay-Malabry'
         patient.profile_type = 'PATIENT'
         patient.birthdate = date(1985, 8, 23)
-        patient.information = "Il est gentil."
+        patient.information = "ATTENTION ! Ce patient est un placeholder" \
+                              " pour vous donner une idée de l'aspect de cette page." \
+                              " Si vous voyez ce patient cela veut dire " \
+                              "qu'il n'y en a aucun d'enregistré dans votre base de données."
 
     return render(request, 'patient/patient_info.html', {'patient': patient})
 
@@ -63,7 +66,10 @@ def patient_list(request):
         patient.city = 'Châtenay-Malabry'
         patient.profile_type = 'PATIENT'
         patient.birthdate = date(1985, 8, 23)
-        patient.information = "Il est gentil."
+        patient.information = "ATTENTION ! Ce patient est un placeholder" \
+                              " pour vous donner une idée de l'aspect de cette page." \
+                              " Si vous voyez ce patient cela veut dire " \
+                              "qu'il n'y en a aucun d'enregistré dans votre base de données."
         patient.id = 0
 
         patients_list.append(patient)
