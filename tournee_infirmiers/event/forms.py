@@ -4,5 +4,6 @@ from .models import Need
 
 
 class AddNeedForm(forms.Form):
-    start_time = forms.DateTimeField()
-    duration = forms.DurationField()
+    need_string = forms.CharField(min_length=3, max_length=4, label='Indice du traitement')
+    start_time = forms.DateTimeField(label='Date et heure de début')
+    duration = forms.DurationField(label='Durée')
