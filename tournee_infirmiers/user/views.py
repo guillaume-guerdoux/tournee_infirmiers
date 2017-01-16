@@ -1,4 +1,6 @@
 from .forms import *
+from . import models
+from .models import *
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -27,6 +29,26 @@ def register(request):
     form = RegistrationForm()
     variables = RequestContext(request, {'form': form})
     return render_to_response('user/register.html', variables)
+
+
+def nurse(request):
+    form = NurseForm(request.POST or None)
+    new_nurse = models.Nurse()
+    if form.is_valid():
+        new_nurse.sex = form.cleaned_data['sex']
+        new_nurse.last_name = form.cleaned_data['lastname']
+        new_nurse.first_name = form.cleaned_data['firstname']
+        new_nurse.birthdate = form.cleaned_data['birthdate']
+        new_nurse.address = form.cleaned_data['address']
+        new_nurse.postcode = form.cleaned_data['postcode']
+        new_nurse.city = form.cleaned_data['city']
+        new_nurse.email = form.cleaned_data['email']
+        new_nurse.phone = form.cleaned_data['phone']
+
+        new_nurse.save()
+        success = True
+
+    return render(request, 'user/new_nurse.html', locals())
 
 
 def register_success(request):

@@ -6,6 +6,7 @@ from user import views as user_views
 app_name = 'user'
 urlpatterns = [
     url(r'^register/$', register, name='register'),
+    url(r'^register/new_nurse/$', nurse, name='new_nurse'),
     url(r'^register/success/$', register_success),
     url(r'^error_login/', user_views.error_login),
     url(r'^compte/$', user_views.account, name='account'),
