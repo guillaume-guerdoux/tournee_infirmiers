@@ -13,6 +13,7 @@ import itertools
 nurse_nb = 3
 heal_nb = 10
 distance_matrix = np.loadtxt('distance_matrix')
+
 '''
 no_symetric_distance_matrix = np.random.rand(heal_nb, heal_nb)
 for i in range(heal_nb):
@@ -160,7 +161,7 @@ def tournament_selection(population):
 # Chance to win is proportionnal to fitness function differences
 def population_evolution(population_nb):
     population = generate_random_population(population_nb)
-    print("Initial population : ", population)
+    # print("Initial population : ", population)
     while(len(population) != 1):
         # Tournament
         population = tournament_selection(population)
@@ -176,12 +177,32 @@ def population_evolution(population_nb):
             second_parent = population[i+1]
             population.append(cross_over_function(first_parent, second_parent))
 
-    print("Finish", population)
+    return population
+
+def population_satisfies_constraints(population):
+    overlaps = False
+
+    for schedule in population:
+        for i in range(len(schedule) - 1):
+            if event_overlaping(mandatory_schedules[schedule[i]], mandatory_schedules[schedule[i + 1]]):
+                overlaps = True
+                
+    return not overlaps
 
 if __name__ == "__main__":
     # print(distance_matrix)
-    population_evolution(1000)
     '''print(initial_population[3])
     print("Initial population : ", initial_population)
     new_population = tournament_selection(initial_population, 0.7)
     print("Tournament population: ", new_population)'''
+
+
+    i = 0
+    stop = False
+    while not stop and i < 10:
+        print("Iteration #{}".format(i + 1))
+        population = population_evolution(1000)[0]
+        if population_satisfies_constraints(population):
+            stop = True
+        i += 1
+    print(population)

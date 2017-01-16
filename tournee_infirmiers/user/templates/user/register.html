@@ -1,0 +1,13 @@
+{% extends 'user_layout.html' %}
+
+{% block user_content %}
+
+    <form method="post" action=".">
+        <table border="0">
+            {{ form.as_table }}
+        </table>
+        <input type="submit" value="S'inscrire" />
+        {% csrf_token %}
+    </form>
+
+{% endblock %}
