@@ -16,6 +16,12 @@
     </nav>
 
 	<link rel="stylesheet" href="{% static 'availability/css/manage_availability_style.css' %}">
+    {% if exception_raised %}
+        <div class="container">
+            <h1>Une erreur s'est produite.</h1>
+            <p>Votre compte ne doit pas être bien défini, nous n'arrivons pas à récupérer vos horaires. Êtes-vous sûr d'avoir bien rempli votre profil ?</p>
+        </div>
+    {% else %}
     <div class="container">
 
 	    <div id="fullCalModalRemoveUniqueAvailability" class="modal fade">
@@ -139,6 +145,7 @@
 	       	 {% endfor %}
     	</div>
     </div>
+    {% endif %}
 
   
     
