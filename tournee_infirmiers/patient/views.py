@@ -7,6 +7,7 @@ from datetime import date
 def new_patient(request):
     form = PatientForm(request.POST or None)
     new_patient = models.Patient()
+    creation = True
     if form.is_valid():
         new_patient.sex = form.cleaned_data['sex']
         new_patient.last_name = form.cleaned_data['lastname']
@@ -85,4 +86,45 @@ def delete_patient(request, id_patient):
 
         return redirect('patient:patient_list')
     except models.Patient.DoesNotExist:
+        # TODO add flash message
+        return redirect('patient:patient_list')
+
+
+def edit_patient(request, id_patient):
+    try:
+        patient_to_edit = models.Patient.objects.get(id=id_patient)
+
+        form = PatientForm(request.POST or None, initial={
+            'sex': patient_to_edit.sex,
+            'lastname': patient_to_edit.last_name,
+            'firstname': patient_to_edit.first_name,
+            'birthdate': patient_to_edit.birthdate,
+            'address': patient_to_edit.address,
+            'postcode': patient_to_edit.postcode,
+            'city': patient_to_edit.city,
+            'email': patient_to_edit.email,
+            'phone': patient_to_edit.phone,
+            'comments': patient_to_edit.information
+        })
+        edition = True
+
+        if form.is_valid():
+            patient_to_edit.sex = form.cleaned_data['sex']
+            patient_to_edit.last_name = form.cleaned_data['lastname']
+            patient_to_edit.first_name = form.cleaned_data['firstname']
+            patient_to_edit.birthdate = form.cleaned_data['birthdate']
+            patient_to_edit.address = form.cleaned_data['address']
+            patient_to_edit.postcode = form.cleaned_data['postcode']
+            patient_to_edit.city = form.cleaned_data['city']
+            patient_to_edit.email = form.cleaned_data['email']
+            patient_to_edit.phone = form.cleaned_data['phone']
+            patient_to_edit.information = form.cleaned_data['comments']
+
+            patient_to_edit.save()
+            success_edit = True
+
+        return render(request, 'patient/new_patient.html', locals())
+
+    except models.Patient.DoesNotExist:
+        # TODO add flash message
         return redirect('patient:patient_list')
