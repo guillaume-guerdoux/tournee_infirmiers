@@ -20,6 +20,7 @@ def patient(request):
         new_patient.information = form.cleaned_data['comments']
 
         new_patient.save()
+        success = True
 
     return render(request, 'patient/new_patient.html', locals())
 
