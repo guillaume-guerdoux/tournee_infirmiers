@@ -10,6 +10,10 @@
     {%if success %}Le nouveau patient est bien enregistré!{%endif%}
     </div>
 
+    <div>
+    <a href="{% url 'patient:patient_list' %}" class="btn btn-primary btn-lg .center-block" role="button">Retour à la liste</a>
+    </div>
+
     <form action="{% url "patient:new_patient" %}" method="post">
         {% csrf_token %}
         {{ form.as_p }}
