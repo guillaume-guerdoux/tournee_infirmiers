@@ -1,10 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .forms import PatientForm
 from . import models
 from datetime import date
 
 
-def patient(request):
+def new_patient(request):
     form = PatientForm(request.POST or None)
     new_patient = models.Patient()
     if form.is_valid():
@@ -69,3 +69,14 @@ def patient_list(request):
         patients_list.append(patient)
 
     return render(request, 'patient/patient_list.html', {'patients': patients_list})
+
+
+def delete_patient(request, id_patient):
+    # removes a patient from the database
+    try:
+        patient_to_remove = models.Patient.objects.get(id=id_patient)
+        patient_to_remove.delete()
+
+        return redirect('patient:patient_list')
+    except models.Patient.DoesNotExist:
+        return redirect('patient:patient_list')
