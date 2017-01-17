@@ -3,14 +3,30 @@
 {% block patient_content %}
 
     <div class="page-header">
-        <h1> Ajouter un nouveau patient </h1>
+        <h1> {% if creation %}
+            Ajouter un nouveau patient
+            {% elif edition %}
+            Modifier les informations d'un patient
+        {% endif %}</h1>
     </div>
 
     <div>
-    {%if success %}Le nouveau patient est bien enregistré!{%endif%}
+    {%if success %}
+        Le nouveau patient est bien enregistré !
+    {% elif success_edit %}
+        Le patient a bien été modifié !
+    {%endif%}
     </div>
 
-    <form action="{% url "new_patient" %}" method="post">
+    <div>
+    <a href="{% url 'patient:patient_list' %}" class="btn btn-primary btn-lg .center-block" role="button">Retour à la liste</a>
+    </div>
+
+    {% if creation %}
+        <form action="{%  url "patient:new_patient" %}" method="post">
+    {% elif edition %}
+        <form action="{% url 'patient:edit_patient' patient_to_edit.id %}" method="post">
+    {% endif %}
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Valider" />

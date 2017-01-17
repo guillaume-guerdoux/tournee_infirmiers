@@ -9,7 +9,6 @@
                     <li><a href="{% url 'home:dashboard' %}">Mon tableau de bord</a></li>
                     <li><a href="{% url 'availability:manage_availability' %}">Mes horaires</a></li>
                     <li class="active"><a href="{% url 'patient:patient_list' %}">Mes patients<span class="sr-only">(current)</span></a></li>
-                    <li><a href="#">Ajouter un besoin</a></li>
                     <li><a href="{% url 'user:account' %}">Mon compte</a></li>
                 </ul>
             </div>
@@ -18,6 +17,7 @@
 
     <section class="container-fluid">
     <h1>Liste de mes patients</h1>
+        <a href="{% url 'patient:new_patient' %}" class="btn btn-primary btn-lg .center-block" role="button">Ajouter un patient</a>
     <ul class="list-group">
     {% for patient in patients %}
         <a href="/patient/{{ patient.id }}" class="list-group-item">{{ patient.first_name }} {{ patient.last_name|upper }}</a>

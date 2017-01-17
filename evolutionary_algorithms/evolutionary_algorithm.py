@@ -13,6 +13,15 @@ from datetime import datetime
 import itertools
 
 
+'''
+no_symetric_distance_matrix = np.random.rand(heal_nb, heal_nb)
+for i in range(heal_nb):
+    no_symetric_distance_matrix[i][i] = 0
+# mandatory_schedules = {0: None, 1: (8, 9), 2: (10, 11) ....}
+distance_matrix = (no_symetric_distance_matrix +
+                   no_symetric_distance_matrix.T)/2'''
+
+
 class EvolutionaryOptimizer:
 
     def __init__(self, nurse_nb, heal_nb,
@@ -196,6 +205,7 @@ class EvolutionaryOptimizer:
         return population
         # print("Finish", population)
 
+
 if __name__ == "__main__":
     time_distance_matrix = np.loadtxt('time_distance_matrix')
     heal_duration_vector = [timedelta(minutes=30) for i in range(10)]
@@ -212,10 +222,15 @@ if __name__ == "__main__":
                               time_distance_matrix=time_distance_matrix,
                               heal_duration_vector=heal_duration_vector,
                               mandatory_schedules=mandatory_schedules)
-    # print(time_distance_matrix)
-    last_population = evolutionary_optimizer.population_evolution(10000)
-    print("Finish", last_population)
-    '''print(initial_population[3])
-    print("Initial population : ", initial_population)
-    new_population = tournament_selection(initial_population, 0.7)
-    print("Tournament population: ", new_population)'''
+    i = 0
+    stop = False
+    while not stop and i < 10:
+        print("Iteration #{}".format(i + 1))
+        population = evolutionary_optimizer.population_evolution(10000)[0]
+        # print(population)
+        stop = True
+        for nurse in population:
+            if evolutionary_optimizer.schedules_respect(nurse) != 0:
+                stop = False
+        i += 1
+    print("Finish", population)
