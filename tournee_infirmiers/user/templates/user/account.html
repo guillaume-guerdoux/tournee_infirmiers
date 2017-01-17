@@ -9,7 +9,6 @@
                     <li><a href="{% url 'home:dashboard' %}">Mon tableau de bord</a></li>
                     <li><a href="{% url 'availability:manage_availability' %}">Mes horaires</a></li>
                     <li><a href="{% url 'patient:patient_list' %}">Mes patients</a></li>
-                    <li><a href="#">Ajouter un besoin</a></li>
                     <li class="active"><a href="{% url 'user:account' %}">Mon compte</a><span class="sr-only">(current)</span></li>
                 </ul>
             </div>
@@ -18,19 +17,42 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-6 col-sm-offset-3">
                	<h2>Mon compte</h2>
             </div>
             <div class="col-sm-12">
-                <div class="col-sm-3 col-sm-offset-3">
-                    <p>Nom : {{ user.last_name }}</p>
-                    <p>Prénom : {{ user.first_name }}</p>
-                    <p>Email : {{ user.email }}</p>
-                    <p>Adresse : {{ user.person.address }}</p>
-                    <p>Genre : {{ user.person.sex }}</p>
-                    <p>Type : {{ user.person.profile_type }}</p>
-                    <p>Date de naissance : {{ patient.person.birthdate|date }}</p>
-                    <!-- <p>Informations spécifiques</p> -->
+                <div class="col-sm-6 col-sm-offset-3">
+                    <table class="table table-striped">
+                        <tr>
+                            <td>Nom</td>
+                            <td>{{ user.nurse.last_name|upper }}</td>
+                        </tr>
+                        <tr>
+                            <td>Prénom</td>
+                            <td>{{ user.nurse.first_name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td>{{ user.nurse.email }}</td>
+                        </tr>
+                        <tr>
+                            <td>Adresse</td>
+                            <td>{{ user.nurse.address }}</td>
+                        </tr>
+                        <tr>
+                            <td>Code postal</td>
+                            <td>{{ user.nurse.postcode }}</td>
+                        </tr>
+                        <tr>
+                            <td>Ville</td>
+                            <td>{{ user.nurse.city|upper }}</td>
+                        </tr>
+                        <tr>
+                            <td>Date de naissance</td>
+                            <td>{{ user.nurse.birthdate|date }}</td>
+                        </tr>
+                    </table>
+                    <a href="{% url 'user:edit_self_info' %}" class="btn btn-warning btn-lg" role="button">Modifier les informations</a>
                 </div>
             </div>
         </div>

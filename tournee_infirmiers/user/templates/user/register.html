@@ -2,12 +2,36 @@
 
 {% block user_content %}
 
-    <form method="post" action=".">
-        <table border="0">
-            {{ form.as_table }}
-        </table>
-        <input type="submit" value="S'inscrire" />
+<div class="container">
+
+    <h1>Inscrivez-vous sur la plateforme</h1>
+    <br/>
+
+    <form method="post">
         {% csrf_token %}
+        <div class="form-group">
+            <label>Nom d'utilisateur</label>
+            <input type="text" class="form-control" placeholder="Nom d'utilisateur" autofocus="" id="id_username"
+                   maxlength="254" name="username" required>
+        </div>
+        <div class="form-group">
+            <label>Adresse mail</label>
+            <input type="email" class="form-control" placeholder="Mot de passe" id="id_email" name="email"
+                   required>
+        </div>
+        <div class="form-group">
+            <label>Mot de passe</label>
+            <input type="password" class="form-control" placeholder="Mot de passe" id="id_password1" name="password1"
+                   required>
+        </div>
+        <div class="form-group">
+            <label>Mot de passe (vérification)</label>
+            <input type="password" class="form-control" placeholder="Mot de passe" id="id_password2" name="password2"
+                   required>
+        </div>
+        <input class="btn btn-default" type="submit" value="S'inscrire"/>
+        <input type="hidden" name="next" value="{{ next }}"/>
     </form>
+</div>
 
 {% endblock %}

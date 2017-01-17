@@ -2,8 +2,7 @@
 {% load staticfiles %}
 {% block home_content %}
       	<link rel="stylesheet" href="{% static 'home/css/home_style.css' %}">
-		<div style="background: url('{% static 'home/images/nurse_home_background.jpg' %}') no-repeat;
-					background-size: cover; background-position: 50% 20%;"
+		<div style="background-size: cover;"
 					 class="home_banner">
 
 
@@ -13,7 +12,7 @@
         		<div class="title_home_form_div row">
           			<h1 class= "text-center">Votre tournée n'aura jamais été aussi rapide</h1>
         		</div>
-      			<button class= "center-block button_home"> Inscrivez-vous </button>
+      			<a href="{% url 'user:register' %}"><button class= "center-block button_home"> Inscrivez-vous </button></a>
 		  	</div>
 		 </div>
 {% endblock %}
