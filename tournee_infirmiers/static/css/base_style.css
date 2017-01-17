@@ -20,7 +20,7 @@
 /* ------------- Footer Style --------------- */ 
 footer{
     position: fixed;
-    height: 60px;
+    height: 0px;
     bottom: 0;
     width: 100%;
 	background-color : #b2b2ff;
