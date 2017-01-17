@@ -107,7 +107,7 @@ class EvolutionaryOptimizer:
             else:
                 no_heal_for_a_nurse += 1
         cost = 5*(no_heal_for_a_nurse/self.nurse_nb) + \
-            10*schedules_respect_nb/self.possible_combinations + \
+            100*schedules_respect_nb/self.possible_combinations + \
             1*total_distance_covered/self.total_distance
         return(float(cost.__round__(2)))
 
@@ -141,7 +141,8 @@ class EvolutionaryOptimizer:
         for gene in range(len(copy_first_parent)):
             first_parent_gene = copy_first_parent[gene]
             second_parent_gene = copy_second_parent[gene]
-            combination = list(set(first_parent_gene).union(second_parent_gene))
+            combination = \
+                list(set(first_parent_gene).union(second_parent_gene))
             non_redondant_gene = []
             for allele in combination:
                 if allele not in added_genes:
@@ -159,23 +160,23 @@ class EvolutionaryOptimizer:
             victory = random.random()
             first_fighter = population[i]
             second_fighter = population[i+1]
-            try:
-                first_fighter_victory_probability = \
-                    self.fitness_function(second_fighter) / \
-                    (self.fitness_function(first_fighter) +
-                     self.fitness_function(second_fighter))
-            except ZeroDivisionError:
-                first_fighter_victory_probability = 0.5
-            if victory <= (first_fighter_victory_probability):
-                new_population.append(first_fighter)
+            if self.fitness_function(first_fighter) <= \
+                    self.fitness_function(second_fighter):
+                favourite = first_fighter
+                loser = second_fighter
             else:
-                new_population.append(second_fighter)
+                favourite = second_fighter
+                loser = first_fighter
+            if victory >= 0.9:
+                new_population.append(loser)
+            else:
+                new_population.append(favourite)
         return new_population
 
     # Chance to win is proportionnal to fitness function differences
     def population_evolution(self, population_nb):
         population = self.generate_random_population(population_nb)
-        print("Initial population : ", population)
+        # print("Initial population : ", population)
         while(len(population) >= 3):
             # Tournament
             population = self.tournament_selection(population)
@@ -183,7 +184,7 @@ class EvolutionaryOptimizer:
             # Mutation : 0.5 probability
             for sample in population:
                 mutation_probability = random.random()
-                if mutation_probability > 0.5:
+                if mutation_probability > 0.8:
                     self.mutation(sample)
             random.shuffle(population)
             for i in range(0, len(population)-1, 2):
@@ -192,7 +193,8 @@ class EvolutionaryOptimizer:
                 population.append(self.cross_over_function(first_parent,
                                                            second_parent))
 
-        print("Finish", population)
+        return population
+        # print("Finish", population)
 
 if __name__ == "__main__":
     time_distance_matrix = np.loadtxt('time_distance_matrix')
@@ -211,7 +213,8 @@ if __name__ == "__main__":
                               heal_duration_vector=heal_duration_vector,
                               mandatory_schedules=mandatory_schedules)
     # print(time_distance_matrix)
-    evolutionary_optimizer.population_evolution(5000)
+    last_population = evolutionary_optimizer.population_evolution(10000)
+    print("Finish", last_population)
     '''print(initial_population[3])
     print("Initial population : ", initial_population)
     new_population = tournament_selection(initial_population, 0.7)
