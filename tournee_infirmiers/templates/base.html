@@ -7,7 +7,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>{% block title %}Tournee infirmier{% endblock %}</title>
 		{% block stylesheets %}
-			<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+			<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
 			<link rel="stylesheet" type="text/css" href="{% static 'css/base_style.css' %}">
 		{% endblock %}
 	</head>
@@ -56,58 +56,13 @@
 		{% endblock %}
 
 		<!-- Footer -->
-		<footer>
-			<div class="container-fluid">
-				<div class = "row">
-					<div class = "col-xs-4">
-						<h2> Infos pratiques</h2>
-						<ul class="text-center footer_list">
-							<li>
-								<a href="#">Comment ça marche</a>
-							</li>
-							<li>
-								<a href="#">Confiance et sécurité</a>
-							</li>
-							<li>
-								<a href="#">Conseil et présentation</a>
-							</li>
-							<li>
-								<a href="mailto:contact@tourneeinfirmiers.fr">Nous contacter</a>
-							</li>
-						</ul>
-					</div>
-					<div class = "col-xs-4">
-						<h2> A propos</h2>
-						<ul class="text-center footer_list">
-							<li>
-								<a href="#">Qui sommes-nous ?</a>
-							</li>
-							<li>
-								<a href="#">Nos partenaires</a>
-							</li>
-							<li>
-								<a href="#">Charte de bonne conduite</a>
-							</li>
-						</ul>
-					</div>
-					<div class = "col-xs-4">
-						<h2> Mentions légales</h2>
-						<ul class="text-center footer_list">
-							<li>
-								<a href="#">Conditions générales et politiques de confidentialité</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-12">
-						<p style = "text-align : right;"> @ Copyright TourneeInfirmiers </p>
-					</div>
-				</div>
-			</div>
-		</footer>
-		
-		
+        <footer class="footer">
+          <div class="container">
+            <h2>Optimisez votre tournée avec notre application web !</h2>
+          </div>
+        </footer>
+
+
 
 		{% block javascripts %}
 			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>

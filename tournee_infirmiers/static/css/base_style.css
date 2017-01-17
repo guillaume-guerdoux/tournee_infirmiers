@@ -19,7 +19,11 @@
 
 /* ------------- Footer Style --------------- */ 
 footer{
-	background-color : #6E6E6E;
+    position: fixed;
+    height: 60px;
+    bottom: 0;
+    width: 100%;
+	background-color : #b2b2ff;
 	color : white;
 }
 
