@@ -118,3 +118,27 @@ def create_office(request):
         success = True
 
     return render(request, 'user/new_office.html', locals())
+
+
+def edit_office_info(request):
+    office_to_edit = request.user.office
+    edit = True
+    form = OfficeForm(request.POST or None, initial={
+        'address' : office_to_edit.address,
+        'postcode': office_to_edit.postcode,
+        'city': office_to_edit.city,
+        'geographical_area': office_to_edit.geographical_area
+    })
+
+    if form.is_valid():
+        office_to_edit.address = form.cleaned_data['address']
+        office_to_edit.postcode = form.cleaned_data['postcode']
+        office_to_edit.city = form.cleaned_data['city']
+        office_to_edit.geographical_area = form.cleaned_data['geographical_area']
+
+        office_to_edit.user = request.user
+
+        office_to_edit.save()
+        success = True
+
+    return render(request, 'user/new_office.html', locals())
