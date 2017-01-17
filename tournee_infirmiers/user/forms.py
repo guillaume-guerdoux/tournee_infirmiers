@@ -2,8 +2,7 @@ import re
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from django.utils.translation import ugettext_lazy as _
-
+from django.core.validators import RegexValidator
 
 class RegistrationForm(forms.Form):
     username = forms.CharField(label="Nom d'utilisateur", max_length=30)
@@ -38,12 +37,15 @@ class NurseForm(forms.Form):
         ('2', 'Femme',)
     )
 
-    sex = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=GENDER_CHOICES, label="Genre")
+    sex = forms.ChoiceField(widget=forms.RadioSelect, choices=GENDER_CHOICES, label="Genre")
     lastname = forms.CharField(max_length=255, label="Nom")
     firstname = forms.CharField(max_length=255, label="Prénom")
     birthdate = forms.DateField(widget=forms.DateInput, label="Date de naissance")
     address = forms.CharField(max_length=255, label="Adresse")
-    postcode = forms.IntegerField(label="Code Postal")
+    postcode = forms.CharField(label="Code Postal",
+                               validators=[RegexValidator(r'^[0-9]{5}$', 'Entrez un code postal valide')])
     city = forms.CharField(max_length=255, label="Ville")
-    email = forms.CharField(max_length=255, label="Email")
-    phone = forms.CharField(max_length=255, label="Numéro de téléphone")
+    email = forms.CharField(widget=forms.EmailInput, max_length=255, label="Email")
+    phone = forms.CharField(max_length=255, label="Numéro de téléphone",
+                            validators=[RegexValidator(r'^0[0-9]([ .-]?[0-9]{2}){4}$',
+                                                       'Entrez un numéro de téléphone valide (et commençant par 0).')])
