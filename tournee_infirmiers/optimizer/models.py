@@ -1,5 +1,4 @@
 from django.db import models
-import numpy as np
 import random
 import copy
 from datetime import time
@@ -200,7 +199,7 @@ class EvolutionaryOptimizer:
             # print(population)
             stop = True
             for nurse in population:
-                if self..schedules_respect(nurse) != 0:
+                if self.schedules_respect(nurse) != 0:
                     stop = False
             i += 1
         return population
