@@ -33,7 +33,7 @@ def register(request):
 
 def nurse(request):
     form = NurseForm(request.POST or None)
-    new_nurse = models.Nurse()
+    new_nurse = Nurse()
     if form.is_valid():
         new_nurse.sex = form.cleaned_data['sex']
         new_nurse.last_name = form.cleaned_data['lastname']
@@ -44,6 +44,8 @@ def nurse(request):
         new_nurse.city = form.cleaned_data['city']
         new_nurse.email = form.cleaned_data['email']
         new_nurse.phone = form.cleaned_data['phone']
+
+        new_nurse.user = request.user
 
         new_nurse.save()
         success = True
