@@ -23,6 +23,13 @@ class EvolutionaryOptimizer:
         self.time_distance_matrix = time_distance_matrix
         self.heal_duration_vector = heal_duration_vector
         self.mandatory_schedules = mandatory_schedules
+        self.total_distance = 0
+        self.possible_combinations = 0
+        heal_values = range(self.heal_nb)
+        for paire_heal in itertools.combinations(heal_values, 2):
+            self.total_distance += \
+                self.time_distance_matrix[paire_heal[0]][paire_heal[1]]
+            self.possible_combinations += 1
 
     def split_randomly_list(self, list_to_split, split_parts):
         new_list = []
@@ -92,17 +99,17 @@ class EvolutionaryOptimizer:
             # Check if each nurse has heals to do
             if nurse:
                 # Check overlapping
-                if self.schedules_respect(nurse):
-                    schedules_respect_nb += 1
+                schedules_respect_nb += self.schedules_respect(nurse)
                 # Check total distance covered by a nurse
-                for heal_index in range(len(nurse) - 2):
+                for paire in itertools.combinations(nurse, 2):
                     total_distance_covered += \
-                        self.time_distance_matrix[heal_index][heal_index+1]
+                        self.time_distance_matrix[paire[0]][paire[1]]
             else:
                 no_heal_for_a_nurse += 1
-        return(10*no_heal_for_a_nurse +
-               20*schedules_respect_nb +
-               2*total_distance_covered)
+        cost = 5*(no_heal_for_a_nurse/self.nurse_nb) + \
+            10*schedules_respect_nb/self.possible_combinations + \
+            1*total_distance_covered/self.total_distance
+        return(float(cost.__round__(2)))
 
     def mutation(self, sample):
         first_nurse = sample[random.randint(0, self.nurse_nb-1)]
@@ -169,7 +176,7 @@ class EvolutionaryOptimizer:
     def population_evolution(self, population_nb):
         population = self.generate_random_population(population_nb)
         print("Initial population : ", population)
-        while(len(population) >= 10):
+        while(len(population) >= 3):
             # Tournament
             population = self.tournament_selection(population)
             # print("Tournament population: ", population)
@@ -195,9 +202,9 @@ if __name__ == "__main__":
                            1: (time(8, 0, 0), time(9, 0, 0)),
                            2: (time(10, 0, 0), time(11, 0, 0)),
                            3: None, 4: (time(8, 30, 0), time(9, 30, 0)),
-                           5: None, 6: None,
-                           7: (time(10, 30, 0), time(12, 0, 0)),
-                           8: None, 9: (time(19, 0, 0), time(20, 0, 0))}
+                           5: None, 6: (time(9, 45, 0), time(10, 0, 0)),
+                           7: (time(10, 30, 0), time(11, 30, 0)),
+                           8: None, 9: (time(19, 0, 0), time(20, 30, 0))}
     evolutionary_optimizer = \
         EvolutionaryOptimizer(nurse_nb=3, heal_nb=10,
                               time_distance_matrix=time_distance_matrix,

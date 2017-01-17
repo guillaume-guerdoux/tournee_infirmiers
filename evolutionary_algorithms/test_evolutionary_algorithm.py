@@ -15,9 +15,9 @@ class EvolutionaryOptimizerTests(unittest.TestCase):
                                1: (time(8, 0, 0), time(9, 0, 0)),
                                2: (time(10, 0, 0), time(11, 0, 0)),
                                3: None, 4: (time(8, 30, 0), time(9, 30, 0)),
-                               5: None, 6: None,
-                               7: (time(10, 30, 0), time(12, 0, 0)),
-                               8: None, 9: (time(19, 0, 0), time(20, 0, 0))}
+                               5: None, 6: (time(9, 45, 0), time(10, 0, 0)),
+                               7: (time(10, 30, 0), time(11, 30, 0)),
+                               8: None, 9: (time(19, 0, 0), time(20, 30, 0))}
         self.evolutionary_optimizer = \
             EvolutionaryOptimizer(nurse_nb=3, heal_nb=10,
                                   time_distance_matrix=time_distance_matrix,
@@ -69,6 +69,14 @@ class EvolutionaryOptimizerTests(unittest.TestCase):
         is_overlapping = self.evolutionary_optimizer.event_overlaping(0, 9)
         self.assertEqual(is_overlapping, True)
 
+    def test_evolutionary_optimizer_event_overlaping_overlapping_27(self):
+        is_overlapping = self.evolutionary_optimizer.event_overlaping(2, 7)
+        self.assertEqual(is_overlapping, True)
+
+    def test_evolutionary_optimizer_event_overlaping_overlapping_72(self):
+        is_overlapping = self.evolutionary_optimizer.event_overlaping(7, 2)
+        self.assertEqual(is_overlapping, True)
+
     def test_evolutionary_optimizer_event_overlaping_overlapping_90(self):
         is_overlapping = self.evolutionary_optimizer.event_overlaping(9, 0)
         self.assertEqual(is_overlapping, True)
@@ -79,8 +87,62 @@ class EvolutionaryOptimizerTests(unittest.TestCase):
             self.evolutionary_optimizer.schedules_respect(nurse)
         self.assertEqual(overlapping_heals, 0)
 
-    def test_evolutionary_optimizer_schedules_respect_no_respects(self):
+    def test_evolutionary_optimizer_schedules_respect_no_respects_09(self):
         nurse = [0, 1, 9]
         overlapping_heals = \
             self.evolutionary_optimizer.schedules_respect(nurse)
         self.assertEqual(overlapping_heals, 1)
+
+    def test_evolutionary_optimizer_schedules_respect_respect_1295(self):
+        nurse = [1, 2, 9, 5]
+        overlapping_heals = \
+            self.evolutionary_optimizer.schedules_respect(nurse)
+        self.assertEqual(overlapping_heals, 0)
+
+    def test_evolutionary_optimizer_schedules_respect_no_respect_046(self):
+        nurse = [0, 4, 6]
+        overlapping_heals = \
+            self.evolutionary_optimizer.schedules_respect(nurse)
+        self.assertEqual(overlapping_heals, 1)
+
+    def test_evolutionary_optimizer_schedules_respect_only_none(self):
+        nurse = [3, 5, 8]
+        overlapping_heals = \
+            self.evolutionary_optimizer.schedules_respect(nurse)
+        self.assertEqual(overlapping_heals, 0)
+
+    def test_evolutionary_optimizer_schedules_respect_two_no_respect(self):
+        nurse = [0, 4, 6, 9]
+        overlapping_heals = \
+            self.evolutionary_optimizer.schedules_respect(nurse)
+        self.assertEqual(overlapping_heals, 2)
+
+    def test_fitness_function_no_heal(self):
+        sample = [[], [], []]
+        self.assertEqual(self.evolutionary_optimizer.fitness_function(sample),
+                         5)
+
+    def test_fitness_function_total_distance_covered(self):
+        sample = [[0, 1, 2], [3, 4, 5], [6, 7, 8, 9]]
+        self.assertEqual(self.evolutionary_optimizer.fitness_function(sample),
+                         0.27)
+
+    def test_fitness_function_total_distance_covered_max(self):
+        sample = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [], []]
+        self.assertEqual(self.evolutionary_optimizer.fitness_function(sample),
+                         5.22)
+
+    def test_fitness_function_overlapping_one_overlapping(self):
+        sample = [[0, 1, 4], [3, 2, 5], [6, 7, 8, 9]]
+        self.assertEqual(self.evolutionary_optimizer.fitness_function(sample),
+                         0.49)
+
+    def test_fitness_function_overlapping_two_overlapping(self):
+        sample = [[0, 1, 4, 9], [3, 2, 5], [6, 7, 8]]
+        self.assertEqual(self.evolutionary_optimizer.fitness_function(sample),
+                         0.71)
+
+    def test_fitness_function_overlapping_three_overlapping(self):
+        sample = [[0, 1, 4, 9], [3, 2, 7], [6, 5, 8]]
+        self.assertEqual(self.evolutionary_optimizer.fitness_function(sample),
+                         0.93)
