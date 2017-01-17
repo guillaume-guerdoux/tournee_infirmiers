@@ -1,12 +1,12 @@
 from .forms import *
 from .models import *
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render_to_response
-from django.http import HttpResponseRedirect
 from django.template import RequestContext
+from django.contrib.auth import authenticate, login
 
 
 def error_login(request):
@@ -20,18 +20,30 @@ def account(request):
 
 @csrf_exempt
 def register(request):
-    if request.method == 'POST':
-        form = RegistrationForm(request.POST)
-        if form.is_valid():
-            user = User.objects.create_user(username=form.cleaned_data['username'],password=form.cleaned_data['password1'],email=form.cleaned_data['email'])
-            return HttpResponseRedirect('success/')
-    form = RegistrationForm()
-    variables = RequestContext(request, {'form': form})
+    invalid_form = False
+    user_form = RegistrationForm(request.POST or None)
+    if user_form.is_valid():
+        user = User.objects.create_user(username=user_form.cleaned_data['username'],
+                                            password=user_form.cleaned_data['password1'],
+                                            email=user_form.cleaned_data['email'])
+        user.save()
+
+        user = authenticate(username=user_form.cleaned_data['username'],
+                                    password=user_form.cleaned_data['password1'])
+        login(request, user)
+        if user_form.cleaned_data['user_type'] == '1':
+            return redirect('user:new_nurse')
+        else:
+            return redirect('user:account')
+    elif request.method == 'POST':
+        invalid_form = True
+
+    variables = RequestContext(request, {'form': user_form, 'invalid_form': invalid_form})
     return render_to_response('user/register.html', variables)
 
 
 def nurse(request):
-    form = NurseForm(request.POST or None)
+    form = NurseForm(request.POST or None, initial={'email': request.user.email})
     new_nurse = Nurse()
     if form.is_valid():
         new_nurse.sex = form.cleaned_data['sex']
