@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import RegexValidator
 
+
 class RegistrationForm(forms.Form):
     username = forms.CharField(label="Nom d'utilisateur", max_length=30)
     email = forms.EmailField(label='Email')
@@ -11,6 +12,11 @@ class RegistrationForm(forms.Form):
                           widget=forms.PasswordInput())
     password2 = forms.CharField(label='Mot de passe (vérification)',
                         widget=forms.PasswordInput())
+    USER_CHOICES = (
+        ('1', 'Infirmier',),
+        ('2', 'Cabinet',)
+    )
+    user_type = forms.ChoiceField(widget=forms.RadioSelect, choices=USER_CHOICES, label="Type d'utilisateur")
 
     def clean_password2(self):
         if 'password1' in self.cleaned_data:

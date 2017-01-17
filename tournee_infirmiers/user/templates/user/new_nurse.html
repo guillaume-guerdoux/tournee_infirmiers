@@ -19,9 +19,9 @@
     </div>
 
     {% if edit %}
-        <form action="{% url 'user:new_nurse' %}" method="post">
-    {% else %}
         <form action="{% url 'user:edit_self_info' %}" method="post">
+    {% else %}
+        <form action="{% url 'user:new_nurse' %}" method="post">
     {% endif %}
         {% csrf_token %}
         {{ form.as_p }}
