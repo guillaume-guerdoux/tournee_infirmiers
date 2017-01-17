@@ -3,18 +3,30 @@
 {% block user_content %}
 
     <div class="page-header">
+    {% if edit %}
+        <h1> Modifier mes informations </h1>
+    {% else %}
         <h1> Veuillez compléter vos informations </h1>
+    {% endif %}
     </div>
 
     <div>
     {%if success %}Vos informations ont bien été enregistrées !{%endif%}
     </div>
 
-    <form action="{% url 'user:new_nurse' %}" method="post">
+    <div>
+    <a href="{% url 'user:account' %}" class="btn btn-primary btn-lg .center-block" role="button">Retour</a>
+    </div>
+
+    {% if edit %}
+        <form action="{% url 'user:new_nurse' %}" method="post">
+    {% else %}
+        <form action="{% url 'user:edit_self_info' %}" method="post">
+    {% endif %}
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" value="Valider" />
-    </form>
+            <input type="submit" value="Valider" />
+        </form>
 
 {% endblock %}
 

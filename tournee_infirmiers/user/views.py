@@ -1,5 +1,4 @@
 from .forms import *
-from . import models
 from .models import *
 from django.shortcuts import render
 from django.contrib.auth.models import User
@@ -58,3 +57,35 @@ def register_success(request):
         'user/success.html',
         context=RequestContext(request)
     )
+
+
+def edit_self_info(request):
+    nurse_to_edit = request.user.nurse
+    edit = True
+    form = NurseForm(request.POST or None, initial={
+            'sex': nurse_to_edit.sex,
+            'lastname': nurse_to_edit.last_name,
+            'firstname': nurse_to_edit.first_name,
+            'birthdate': nurse_to_edit.birthdate,
+            'address': nurse_to_edit.address,
+            'postcode': nurse_to_edit.postcode,
+            'city': nurse_to_edit.city,
+            'email': nurse_to_edit.email,
+            'phone': nurse_to_edit.phone,
+        })
+
+    if form.is_valid():
+        nurse_to_edit.sex = form.cleaned_data['sex']
+        nurse_to_edit.last_name = form.cleaned_data['lastname']
+        nurse_to_edit.first_name = form.cleaned_data['firstname']
+        nurse_to_edit.birthdate = form.cleaned_data['birthdate']
+        nurse_to_edit.address = form.cleaned_data['address']
+        nurse_to_edit.postcode = form.cleaned_data['postcode']
+        nurse_to_edit.city = form.cleaned_data['city']
+        nurse_to_edit.email = form.cleaned_data['email']
+        nurse_to_edit.phone = form.cleaned_data['phone']
+
+        nurse_to_edit.save()
+        success = True
+
+    return render(request, 'user/new_nurse.html', locals())
