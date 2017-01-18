@@ -18,8 +18,8 @@
 	<link rel="stylesheet" href="{% static 'availability/css/manage_availability_style.css' %}">
     {% if exception_raised %}
         <div class="container">
-            <h1>Une erreur s'est produite.</h1>
-            <p>Votre compte ne doit pas être bien défini, nous n'arrivons pas à récupérer vos horaires. Êtes-vous sûr d'avoir bien rempli votre profil ?</p>
+            <h3>Aucun(e) infirmier/infirmière enregistré</h3>
+            <p>Avant de pouvoir ajouter des horaires, vous devez renseigner les infirmiers et infirmières pour qui vous voulez les renseigner !</p>
         </div>
     {% else %}
     <div class="container">

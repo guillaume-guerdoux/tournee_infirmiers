@@ -63,7 +63,7 @@ def manage_availability(request):
         add_availability_form = AddAvailabilityForm()
         try:
             availabilities = Availability.objects.filter(availability_group__nurse=user.nurse).order_by('start_date')[:10]
-        except (Nurse.DoesNotExist, Availability.DoesNotExist, User.DoesNotExist):
+        except Nurse.DoesNotExist:
             # TODO : display error message in a better way
             return render(request, 'availability/manage_availabilities.html',
                           {"exception_raised": True}
