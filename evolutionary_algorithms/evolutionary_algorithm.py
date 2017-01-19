@@ -56,6 +56,7 @@ class EvolutionaryOptimizer:
                     new_list.append([])
         return new_list
 
+    # Generate a random population
     def generate_random_population(self, population_nb):
         population = []
         heal_values = range(self.heal_nb)
@@ -66,6 +67,7 @@ class EvolutionaryOptimizer:
             population.append(sample_list)
         return population
 
+    # Add a timedelta to a time
     def time_plus(self, time, timedelta):
         start = datetime(
             2000, 1, 1,
@@ -73,6 +75,7 @@ class EvolutionaryOptimizer:
         end = start + timedelta
         return end.time()
 
+    # For two events, return if they are overlapping
     # Worst case : nurse begin heal at the end of available window
     def event_overlaping(self, first_event, second_event):
         first_event_end_time = self.mandatory_schedules[first_event][1]
@@ -88,6 +91,7 @@ class EvolutionaryOptimizer:
         else:
             return False
 
+    # Return how many heals are overlapping for one nurse
     def schedules_respect(self, nurse):
         overlapping_heals = 0
         heals_with_time_constraint = []
@@ -100,6 +104,7 @@ class EvolutionaryOptimizer:
                 overlapping_heals += 1
         return overlapping_heals
 
+    # Fitness function : Algorithm goal is to minimize it
     def fitness_function(self, sample):
         no_heal_for_a_nurse = 0
         total_distance_covered = 0
@@ -120,6 +125,7 @@ class EvolutionaryOptimizer:
             1*total_distance_covered/self.total_distance
         return(float(cost.__round__(2)))
 
+    # Mutation for a sample
     def mutation(self, sample):
         first_nurse = sample[random.randint(0, self.nurse_nb-1)]
         second_nurse = sample[random.randint(0, self.nurse_nb-1)]
@@ -139,6 +145,7 @@ class EvolutionaryOptimizer:
             second_nurse.remove(second_heal)
             second_nurse.append(first_heal)
 
+    # Cross over function : one child created for two samples
     # TODO : To much empty list : solve this
     def cross_over_function(self, first_parent, second_parent):
         child = []
@@ -160,6 +167,7 @@ class EvolutionaryOptimizer:
             added_genes.extend(non_redondant_gene)
         return child
 
+    # Kill half of the population by tournament
     def tournament_selection(self, population):
         random.shuffle(population)
         new_population = []
@@ -182,7 +190,7 @@ class EvolutionaryOptimizer:
                 new_population.append(favourite)
         return new_population
 
-    # Chance to win is proportionnal to fitness function differences
+    # Main function to call
     def population_evolution(self, population_nb):
         population = self.generate_random_population(population_nb)
         # print("Initial population : ", population)
@@ -203,13 +211,16 @@ class EvolutionaryOptimizer:
                                                            second_parent))
 
         return population
-        # print("Finish", population)
 
 
 if __name__ == "__main__":
+    # Matrix with time taken (in car) between each point : Referent : ALICE
     time_distance_matrix = np.loadtxt('time_distance_matrix')
+
+    # Vector with each heal duration
     heal_duration_vector = [timedelta(minutes=30) for i in range(10)]
-    # Nurse has to be there at this time
+
+    # Time window when nurse has to arrive at client's home
     mandatory_schedules = {0: (time(19, 30, 0), time(20, 30, 0)),
                            1: (time(8, 0, 0), time(9, 0, 0)),
                            2: (time(10, 0, 0), time(11, 0, 0)),
@@ -222,6 +233,8 @@ if __name__ == "__main__":
                               time_distance_matrix=time_distance_matrix,
                               heal_duration_vector=heal_duration_vector,
                               mandatory_schedules=mandatory_schedules)
+
+    # Algorithm runs until it find a good candidate
     i = 0
     stop = False
     while not stop and i < 10:

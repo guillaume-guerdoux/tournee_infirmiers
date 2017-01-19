@@ -5,12 +5,13 @@ from datetime import time
 # models
 from optimizer.models import EvolutionaryOptimizer
 
+
 class EvolutionaryOptimizerTests(TestCase):
 
     def test_evolutionary_optimizer_creation(self):
-        identity =  np.identity(14)
+        identity = np.identity(14)
         ones = np.ones(14)
-        time_distance_matrix = ones -identity
+        time_distance_matrix = ones - identity
         heal_duration_vector = [timedelta(minutes=30) for i in range(10)]
         # Nurse has to be there at this time
         mandatory_schedules = {0: (time(19, 30, 0), time(20, 30, 0)),
@@ -27,9 +28,9 @@ class EvolutionaryOptimizerTests(TestCase):
                                   mandatory_schedules=mandatory_schedules)
 
     def test_evolutionary_optimizer_get_optimize_population(self):
-        identity =  np.identity(14)
+        identity = np.identity(14)
         ones = np.ones(14)
-        time_distance_matrix = ones -identity
+        time_distance_matrix = ones - identity
         heal_duration_vector = [timedelta(minutes=30) for i in range(10)]
         # Nurse has to be there at this time
         mandatory_schedules = {0: (time(19, 30, 0), time(20, 30, 0)),

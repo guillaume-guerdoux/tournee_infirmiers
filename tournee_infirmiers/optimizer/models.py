@@ -6,6 +6,10 @@ from datetime import timedelta
 from datetime import datetime
 import itertools
 # Create your models here.
+''' Explanation :
+To use the EvolutionaryOptimizer, refer to tests.py to find implementation and
+utilisation of it. Use same data formats.
+If you want more precision : go to folder evolutionary_algorithm at root '''
 
 
 class EvolutionaryOptimizer:
