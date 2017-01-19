@@ -91,6 +91,10 @@ You may access the page related to your patients, view the list of them and if n
 
 The optimization problem will be tackled later on (cf Timeline) and is not addressed yet.
 
+### Database part
+
+In order to test our project, fill in the database with our fixtures by running `python3 manage.py loaddata initial_data`
+
 ## Timeline
 
 The project will be carried out in Agile methodology. Here is a summary of the progress so far.

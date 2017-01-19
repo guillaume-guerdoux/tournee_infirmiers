@@ -1,0 +1,62 @@
+[
+  {
+    "model": "patient.Patient",
+    "pk": 1,
+    "fields": {
+      "first_name": "Marc",
+      "last_name": "Duchamp",
+      "sex": "1",
+	  "address": "140 avenue jean jaurès",
+	  "postcode": "92290",
+	  "city": "Chatenay Malabry",
+	  "email": "marc.duchamp@gmail.com",
+	  "phone": "0698765432",
+      "information": "Marc lives alone."
+    }
+  },
+  {
+    "model": "patient.Patient",
+    "pk": 2,
+    "fields": {
+      "first_name": "Jean",
+      "last_name": "Dumoulin",
+      "sex": "1",
+	  "address": "14 rue du Docteur le Savoureux",
+	  "postcode": "92290",
+	  "city": "Chatenay Malabry",
+	  "email": "jean.dumoulin@gmail.com",
+	  "phone": "0612345678",
+      "information": ""
+    }
+  },
+  {
+    "model": "patient.Patient",
+    "pk": 3,
+    "fields": {
+      "first_name": "Anne",
+      "last_name": "Millet",
+      "sex": "2",
+	  "address": "22 rue de Saclay",
+	  "postcode": "92290",
+	  "city": "Chatenay Malabry",
+	  "email": "anne.millet@gmail.com",
+	  "phone": "0612345543",
+      "information": "Anne a eu les oreillons à 4 ans."
+    }
+  },
+  {
+    "model": "patient.Patient",
+    "pk": 4,
+    "fields": {
+      "first_name": "Gérard",
+      "last_name": "Sacot",
+      "sex": "1",
+	  "address": "31 rue Yvonne",
+	  "postcode": "92330",
+	  "city": "Bourg-la-Reine",
+	  "email": "gerard.sacot@gmail.com",
+	  "phone": "0613445678",
+      "information": ""
+    }
+  }
+]
