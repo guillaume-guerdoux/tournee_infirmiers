@@ -22,6 +22,7 @@
             </div>
             <div class="col-sm-12">
                 <div class="col-sm-6 col-sm-offset-3">
+                    {% if user.nurse %}
                     <table class="table table-striped">
                         <tr>
                             <td>Nom</td>
@@ -53,6 +54,35 @@
                         </tr>
                     </table>
                     <a href="{% url 'user:edit_self_info' %}" class="btn btn-warning btn-lg" role="button">Modifier les informations</a>
+                    {% elif user.office %}
+                        <table class="table table-striped">
+                        <tr>
+                            <td>Nom d'utilisateur</td>
+                            <td>{{ user.username }}</td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td>{{ user.email }}</td>
+                        </tr>
+                        <tr>
+                            <td>Adresse</td>
+                            <td>{{ user.office.address }}</td>
+                        </tr>
+                        <tr>
+                            <td>Code postal</td>
+                            <td>{{ user.office.postcode }}</td>
+                        </tr>
+                        <tr>
+                            <td>Ville</td>
+                            <td>{{ user.office.city|upper }}</td>
+                        </tr>
+                        <tr>
+                            <td>Distance couverte (km)</td>
+                            <td>{{ user.office.geographical_area }}</td>
+                        </tr>
+                    </table>
+                    <a href="{% url 'user:edit_office_info' %}" class="btn btn-warning btn-lg" role="button">Modifier les informations</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
