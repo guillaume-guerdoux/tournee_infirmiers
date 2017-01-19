@@ -55,3 +55,11 @@ class NurseForm(forms.Form):
     phone = forms.CharField(max_length=255, label="Numéro de téléphone",
                             validators=[RegexValidator(r'^0[0-9]([ .-]?[0-9]{2}){4}$',
                                                        'Entrez un numéro de téléphone valide (et commençant par 0).')])
+
+
+class OfficeForm(forms.Form):
+    address = forms.CharField(max_length=255, label="Adresse")
+    postcode = forms.CharField(label="Code Postal",
+                               validators=[RegexValidator(r'^[0-9]{5}$', 'Entrez un code postal valide')])
+    city = forms.CharField(max_length=255, label="Ville")
+    geographical_area = forms.IntegerField()

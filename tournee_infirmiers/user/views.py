@@ -34,7 +34,7 @@ def register(request):
         if user_form.cleaned_data['user_type'] == '1':
             return redirect('user:new_nurse')
         else:
-            return redirect('user:account')
+            return redirect('user:create_office')
     elif request.method == 'POST':
         invalid_form = True
 
@@ -101,3 +101,44 @@ def edit_self_info(request):
         success = True
 
     return render(request, 'user/new_nurse.html', locals())
+
+
+def create_office(request):
+    form = OfficeForm(request.POST or None)
+    office = Office()
+    if form.is_valid():
+        office.address = form.cleaned_data['address']
+        office.postcode = form.cleaned_data['postcode']
+        office.city = form.cleaned_data['city']
+        office.geographical_area = form.cleaned_data['geographical_area']
+
+        office.user = request.user
+
+        office.save()
+        success = True
+
+    return render(request, 'user/new_office.html', locals())
+
+
+def edit_office_info(request):
+    office_to_edit = request.user.office
+    edit = True
+    form = OfficeForm(request.POST or None, initial={
+        'address' : office_to_edit.address,
+        'postcode': office_to_edit.postcode,
+        'city': office_to_edit.city,
+        'geographical_area': office_to_edit.geographical_area
+    })
+
+    if form.is_valid():
+        office_to_edit.address = form.cleaned_data['address']
+        office_to_edit.postcode = form.cleaned_data['postcode']
+        office_to_edit.city = form.cleaned_data['city']
+        office_to_edit.geographical_area = form.cleaned_data['geographical_area']
+
+        office_to_edit.user = request.user
+
+        office_to_edit.save()
+        success = True
+
+    return render(request, 'user/new_office.html', locals())
