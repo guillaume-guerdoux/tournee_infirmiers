@@ -18,7 +18,9 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-6 col-sm-offset-3">
+                {% if not nurse %}
                	<h2>Mon compte</h2>
+                {% endif %}
             </div>
             <div class="col-sm-12">
                 <div class="col-sm-6 col-sm-offset-3">
@@ -53,7 +55,44 @@
                             <td>{{ user.nurse.birthdate|date }}</td>
                         </tr>
                     </table>
-                    <a href="{% url 'user:edit_self_info' %}" class="btn btn-warning btn-lg" role="button">Modifier les informations</a>
+                    <a href="{% url 'user:edit_nurse_info' 0 %}" class="btn btn-warning btn-lg" role="button">Modifier les informations</a>
+
+                    {% elif nurse %}
+
+                    <table class="table table-striped">
+                        <tr>
+                            <td>Nom</td>
+                            <td>{{ nurse.last_name|upper }}</td>
+                        </tr>
+                        <tr>
+                            <td>Prénom</td>
+                            <td>{{ nurse.first_name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td>{{ nurse.email }}</td>
+                        </tr>
+                        <tr>
+                            <td>Adresse</td>
+                            <td>{{ nurse.address }}</td>
+                        </tr>
+                        <tr>
+                            <td>Code postal</td>
+                            <td>{{ nurse.postcode }}</td>
+                        </tr>
+                        <tr>
+                            <td>Ville</td>
+                            <td>{{ nurse.city|upper }}</td>
+                        </tr>
+                        <tr>
+                            <td>Date de naissance</td>
+                            <td>{{ nurse.birthdate|date }}</td>
+                        </tr>
+                    </table>
+                    <a href="{% url 'user:edit_nurse_info' nurse.id %}" class="btn btn-warning btn-lg" role="button">Modifier les informations</a>
+                    <a href="{% url 'user:account' %}" class="btn btn-info btn-lg" role="button">Retour à mon compte</a>
+
+
                     {% elif user.office %}
                         <table class="table table-striped">
                         <tr>
@@ -81,7 +120,16 @@
                             <td>{{ user.office.geographical_area }}</td>
                         </tr>
                     </table>
-                    <a href="{% url 'user:edit_office_info' %}" class="btn btn-warning btn-lg" role="button">Modifier les informations</a>
+
+                        <h3>Les infirmiers de mon cabinet</h3>
+                        <ul class="list-group">
+                        {% for nurse in user.office.nurse_set.all %}
+                            <a href="{% url 'user:nurse_info' nurse.id %}" class="list-group-item">{{ nurse.first_name }} {{ nurse.last_name|upper }}</a>
+                        {%  endfor %}
+                        </ul>
+
+                        <a href="{% url 'user:edit_office_info' %}" class="btn btn-warning btn-lg" role="button">Modifier les informations</a>
+                        <a href="{% url 'user:new_nurse' %}" class="btn btn-default btn-lg" role="button">Ajouter un infirmier</a>
                     {% endif %}
                 </div>
             </div>

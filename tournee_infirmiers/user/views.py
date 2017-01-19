@@ -56,7 +56,10 @@ def nurse(request):
         new_nurse.email = form.cleaned_data['email']
         new_nurse.phone = form.cleaned_data['phone']
 
-        new_nurse.user = request.user
+        try:
+            new_nurse.office = request.user.office
+        except Office.DoesNotExist:
+            new_nurse.user = request.user
 
         new_nurse.save()
         success = True
@@ -71,8 +74,8 @@ def register_success(request):
     )
 
 
-def edit_self_info(request):
-    nurse_to_edit = request.user.nurse
+def edit_nurse_info(request, id_nurse):
+    nurse_to_edit = request.user.nurse if id_nurse == 0 else Nurse.objects.get(id=id_nurse)
     edit = True
     form = NurseForm(request.POST or None, initial={
             'sex': nurse_to_edit.sex,
@@ -142,3 +145,12 @@ def edit_office_info(request):
         success = True
 
     return render(request, 'user/new_office.html', locals())
+
+
+def nurse_info(request, id_nurse):
+    try:
+        nurse_to_show = Nurse.objects.get(id=id_nurse)
+        return render(request, 'user/account.html', {'nurse': nurse_to_show})
+    except Nurse.DoesNotExist:
+        # TODO properly handle exception
+        pass

@@ -4,7 +4,7 @@
 
     <div class="page-header">
     {% if edit %}
-        <h1> Modifier mes informations </h1>
+        <h1> Modifier les informations </h1>
     {% else %}
         <h1> Veuillez compléter vos informations </h1>
     {% endif %}
@@ -19,7 +19,7 @@
     </div>
 
     {% if edit %}
-        <form action="{% url 'user:edit_self_info' %}" method="post">
+        <form action="{% url 'user:edit_nurse_info' id_nurse %}" method="post">
     {% else %}
         <form action="{% url 'user:new_nurse' %}" method="post">
     {% endif %}
