@@ -11,6 +11,7 @@
 	  "city": "Chatenay Malabry",
 	  "email": "marc.duchamp@gmail.com",
 	  "phone": "0698765432",
+      "birthdate": "1965-10-23",
       "information": "Marc lives alone."
     }
   },
@@ -26,6 +27,7 @@
 	  "city": "Chatenay Malabry",
 	  "email": "jean.dumoulin@gmail.com",
 	  "phone": "0612345678",
+      "birthdate": "1987-11-03",
       "information": ""
     }
   },
@@ -41,6 +43,7 @@
 	  "city": "Chatenay Malabry",
 	  "email": "anne.millet@gmail.com",
 	  "phone": "0612345543",
+      "birthdate": "1950-02-21",
       "information": "Anne a eu les oreillons à 4 ans."
     }
   },
@@ -56,6 +59,7 @@
 	  "city": "Bourg-la-Reine",
 	  "email": "gerard.sacot@gmail.com",
 	  "phone": "0613445678",
+      "birthdate": "1970-11-13",
       "information": ""
     }
   }
