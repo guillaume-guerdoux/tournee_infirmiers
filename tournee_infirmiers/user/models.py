@@ -24,13 +24,6 @@ class Person(models.Model):
         abstract = True
 
 
-class Nurse(Person):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-
-    def __str__(self):
-        return "Nurse profile of {0}".format(self.user.username)
-
-
 class Office(models.Model):
     address = models.CharField(max_length=255)
     postcode = models.IntegerField()
@@ -40,3 +33,11 @@ class Office(models.Model):
 
     def __str__(self):
         return "Office profile of {0}".format(self.user.username)
+
+
+class Nurse(Person):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    office = models.ForeignKey(Office, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return "Nurse profile of {0}".format(self.user.username)
