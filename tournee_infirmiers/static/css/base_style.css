@@ -19,7 +19,11 @@
 
 /* ------------- Footer Style --------------- */ 
 footer{
-	background-color : #6E6E6E;
+    position: fixed;
+    height: 0px;
+    bottom: 0;
+    width: 100%;
+	background-color : #b2b2ff;
 	color : white;
 }
 
@@ -49,3 +53,9 @@ footer h2{
     text-decoration: none;
 }
 
+/* ------------------- Removing dots in li ------------------------*/
+
+ul
+{
+list-style-type: none;
+}

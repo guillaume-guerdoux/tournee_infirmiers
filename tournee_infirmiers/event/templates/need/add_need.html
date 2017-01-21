@@ -1,0 +1,15 @@
+{% extends "event_layout.html" %}
+
+{% block body %}
+
+<h2>Ajouter une demande de traitement pour ce patient</h2>
+
+{% if isValid %}Your request has been submitted!{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit" />
+</form>
+
+{% endblock %}
