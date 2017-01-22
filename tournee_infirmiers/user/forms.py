@@ -6,12 +6,17 @@ from django.core.validators import RegexValidator
 
 
 class RegistrationForm(forms.Form):
-    username = forms.CharField(label="Nom d'utilisateur", max_length=30)
-    email = forms.EmailField(label='Email')
+    username = forms.CharField(label="Nom d'utilisateur", max_length=30,
+                               widget=forms.TextInput(
+                                   attrs={'class': 'form-control', 'placeholder': 'Nom d\'utilisateur'}))
+    email = forms.EmailField(label='Email',
+                             widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}))
     password1 = forms.CharField(label='Mot de passe',
-                          widget=forms.PasswordInput())
+                                widget=forms.PasswordInput(
+                                    attrs={'class': 'form-control', 'placeholder': 'Mot de passe'}))
     password2 = forms.CharField(label='Mot de passe (vérification)',
-                        widget=forms.PasswordInput())
+                                widget=forms.PasswordInput(
+                                    attrs={'class': 'form-control', 'placeholder': 'Mot de passe'}))
     USER_CHOICES = (
         ('1', 'Infirmier',),
         ('2', 'Cabinet',)
@@ -29,7 +34,8 @@ class RegistrationForm(forms.Form):
     def clean_username(self):
         username = self.cleaned_data['username']
         if not re.search(r'^\w+$', username):
-            raise forms.ValidationError("Le nom d'utilisateur ne peut contenir que des caractères alphanumériques et underscore")
+            raise forms.ValidationError(
+                "Le nom d'utilisateur ne peut contenir que des caractères alphanumériques et underscore")
         try:
             User.objects.get(username=username)
         except ObjectDoesNotExist:
