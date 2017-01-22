@@ -2,14 +2,41 @@
 
 {% block body %}
 
-<h2>Ajouter une demande de traitement pour ce patient</h2>
+    <div class="container">
 
-{% if isValid %}Your request has been submitted!{% endif %}
+    <div class="page-header">
+        <h1>Ajouter une demande de traitement pour ce patient</h1>
+    </div>
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit" />
-</form>
+
+    {%if success %}La demande de traitement a bien été enregistrée !{%endif%}
+
+    <div>
+    <a href="{% url 'patient:patient_list' %}" class="btn btn-primary btn-lg .center-block" role="button">Retour</a>
+    </div>
+
+    <form method="post">
+    {%csrf_token%}
+        {% for error in form.non_field_errors %}
+        <div class="form-group has-errors text-danger small">
+            {{error}}
+        </div>
+        {% endfor %}
+        {% for field in form %}
+        <div class="form-group has-errors text-danger small">
+            {{field.errors}}
+        </div>
+        <div class="form-group has-errors text-danger small">
+        </div>
+        <div class="form-group">
+            {{field.label}}
+            {{field}}
+        </div>
+        {% endfor %}
+        <input class="btn btn-default" type="submit" value="Valider"/>
+        <input type="hidden" name="next" value="{{ next }}"/>
+    </form>
+
+    </div>
 
 {% endblock %}
