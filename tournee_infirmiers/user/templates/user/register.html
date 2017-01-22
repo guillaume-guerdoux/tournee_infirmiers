@@ -4,10 +4,9 @@
 
 <div class="container">
 
+<div class="page-header">
     <h1>Inscrivez-vous sur la plateforme</h1>
-    <br/>
-
-    {% if invalid_form %}<h4>Le formulaire est invalide. {{ form.errors }} {{ form.non_field_errors }}</h4>{% endif %}
+</div>
 
     <form action="{%  url 'user:register' %}" method="post">
 
