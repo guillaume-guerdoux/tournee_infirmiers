@@ -73,8 +73,11 @@ class NurseForm(forms.Form):
 
 
 class OfficeForm(forms.Form):
-    address = forms.CharField(max_length=255, label="Adresse")
+    address = forms.CharField(max_length=255, label="Adresse",
+                              widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Adresse'}))
     postcode = forms.CharField(label="Code Postal",
-                               validators=[RegexValidator(r'^[0-9]{5}$', 'Entrez un code postal valide')])
-    city = forms.CharField(max_length=255, label="Ville")
-    geographical_area = forms.IntegerField()
+                               validators=[RegexValidator(r'^[0-9]{5}$', 'Entrez un code postal valide')],
+                               widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Code Postal'}))
+    city = forms.CharField(max_length=255, label="Ville",
+                           widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ville'}))
+    geographical_area = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Rayon géographique (en km)'}))

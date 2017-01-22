@@ -2,6 +2,8 @@
 {% load staticfiles %}
 {% block user_content %}
 
+    <div class="container">
+
     <div class="page-header">
     {% if edit %}
         <h1> Modifier mes informations </h1>
@@ -23,10 +25,28 @@
     {% else %}
         <form action="{% url 'user:create_office' %}" method="post">
     {% endif %}
-        {% csrf_token %}
-        {{ form.as_p }}
-            <input type="submit" value="Valider" />
+        {%csrf_token%}
+            {% for error in form.non_field_errors %}
+            <div class="form-group has-errors text-danger small">
+                {{error}}
+            </div>
+            {% endfor %}
+            {% for field in form %}
+            <div class="form-group has-errors text-danger small">
+                {{field.errors}}
+            </div>
+            <div class="form-group has-errors text-danger small">
+            </div>
+            <div class="form-group">
+                {{field.label}}
+                {{field}}
+            </div>
+            {% endfor %}
+            <input class="btn btn-default" type="submit" value="Valider"/>
+            <input type="hidden" name="next" value="{{ next }}"/>
         </form>
+
+    </div>
 
 {% endblock %}
 
