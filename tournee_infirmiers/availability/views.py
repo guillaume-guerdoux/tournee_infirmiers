@@ -72,8 +72,13 @@ def manage_availabilities(request):
         for nurse in office.nurse_set.all():
             availabilities_sets[nurse] = Availability.objects.filter(
                     availability_group__nurse=nurse).order_by('start_date')[:10]
-            return render(request, 'availability/manage_availabilities.html',
-                          {"office": True, "availabilities_sets": availabilities_sets})
+        if len(availabilities_sets) == 0:
+            return render(request, 'availability/manage_availabilities.html', {"office": True,
+                                                                            "availabilities_sets": availabilities_sets,
+                                                                            "exception_raised": True})
+        else:
+            return render(request, 'availability/manage_availabilities.html', {"office": True,
+                                                                               "availabilities_sets": availabilities_sets})
     except Office.DoesNotExist:
         availabilities = Availability.objects.filter(availability_group__nurse=request.user.nurse).order_by(
             'start_date')[:10]
