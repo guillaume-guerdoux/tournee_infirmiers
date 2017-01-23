@@ -6,7 +6,8 @@
       "need_string": "XXX",
       "start_time": "2017-02-13 08:00:00",
       "duration": "08:00:00",
-	  "patient": "1"
+	  "patient": "1",
+      "duration_heal": "00:30:00"
     }
   },
   {
@@ -16,7 +17,8 @@
       "need_string": "XXX",
       "start_time": "2017-02-13 08:00:00",
       "duration": "01:30:00",
-	  "patient": "2"
+	  "patient": "2",
+      "duration_heal": "01:00:00"
     }
   },
   {
@@ -26,7 +28,8 @@
       "need_string": "XXX",
       "start_time": "2017-02-13 08:00:00",
       "duration": "08:00:00",
-	  "patient": "3"
+	  "patient": "3",
+      "duration_heal": "01:00:00"
     }
   },
   {
@@ -36,7 +39,8 @@
       "need_string": "XXX",
       "start_time": "2017-02-13 12:00:00",
       "duration": "03:00:00",
-	  "patient": "4"
+	  "patient": "4",
+      "duration_heal": "00:45:00"
     }
   }
 ]
