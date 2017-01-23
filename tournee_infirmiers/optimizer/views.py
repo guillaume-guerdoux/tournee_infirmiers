@@ -9,6 +9,7 @@ from django.core import serializers
 from datetime import time, datetime, timedelta
 from optimizer.models import EvolutionaryOptimizer
 import numpy as np
+import os
 
 # Create your views here.
 
@@ -52,7 +53,7 @@ def generate_schedule_file(year, month, day):
 
 
 	with open(get_schedule_file_path(year, month, day), 'w') as outfile:
-	    json.dump(schedules, outfile)
+		json.dump(schedules, outfile)
 
 
 def get_data_from_db(year, month, day): 
@@ -87,6 +88,25 @@ def get_data_from_db(year, month, day):
 		data['needs'][i] = need
 
 	return data
+
+
+def get_schedule_for_nurse(nurse_id, year, month, day):
+	file_path = get_schedule_file_path(year, month, day)
+	if not os.path.isfile(file_path):
+		generate_schedule_file(year, month, day)
+
+	with open(get_schedule_file_path(year, month, day), 'r') as outfile:
+		schedules = json.load(outfile)
+
+	schedule_list = None
+	for s in schedules:
+		# print(s, type(s['nurse_id']), int(nurse_id), s['nurse_id'] == int(nurse_id))
+		if s['nurse_id'] == nurse_id:
+			schedule_list = s
+
+	# print(schedule_list)
+	# print([id_need for id_need in schedule_list['ordered_need_ids']])
+	return [Need.objects.get(id=id_need) for id_need in schedule_list['ordered_need_ids']] if schedule_list is not None else []
 
 
 def get_time_distance_matrix_from_adresses(addresses):
