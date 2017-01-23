@@ -55,7 +55,7 @@ class NurseForm(forms.Form):
     firstname = forms.CharField(max_length=255, label="Prénom",
                                 widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Prénom'}))
     birthdate = forms.DateField(label="Date de naissance",
-                                widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'Date de naissance'}))
+                                widget=forms.DateInput(attrs={'id': 'datetimepicker12','class': 'form-control', 'placeholder': 'Date de naissance'}))
     address = forms.CharField(max_length=255, label="Adresse",
                               widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Adresse'}))
     postcode = forms.CharField(label="Code Postal",

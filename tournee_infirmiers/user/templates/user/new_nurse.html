@@ -36,10 +36,22 @@
             </div>
             <div class="form-group has-errors text-danger small">
             </div>
-            <div class="form-group">
-                {{field.label}}
-                {{field}}
-            </div>
+            {% if field.label == 'Date de naissance' %}
+                <div class="form-group">
+                  <div class='input-group date' id='datetimepicker12'>
+                      <input type='text' class="form-control" />
+                    {{ form.date }}
+                    <span class="input-group-addon">
+                      <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                  </div>
+                </div>
+            {% else %}
+                <div class="form-group">
+                    {{field.label}}
+                    {{field}}
+                </div>
+            {% endif %}
             {% endfor %}
             <input class="btn btn-default" type="submit" value="Valider"/>
             <input type="hidden" name="next" value="{{ next }}"/>
@@ -50,5 +62,11 @@
 {% endblock %}
 
 {% block javascript_child %}
+
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker12').datetimepicker();
+    });
+</script>
 
 {% endblock %}
