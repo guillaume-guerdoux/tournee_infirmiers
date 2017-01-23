@@ -38,6 +38,7 @@
             </div>
             {% if field.label == 'Date de naissance' %}
                 <div class="form-group">
+                    {{ field.label }}
                   <div class='input-group date' id='datetimepicker12'>
                       <input type='text' class="form-control" />
                     {{ form.date }}
@@ -65,7 +66,10 @@
 
 <script type="text/javascript">
     $(function () {
-        $('#datetimepicker12').datetimepicker();
+        $('#datetimepicker12').datetimepicker({
+            viewMode: 'years',
+            format: 'DD/MM/YYYY'
+        });
     });
 </script>
 
