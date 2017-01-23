@@ -25,11 +25,6 @@ def generate_schedule_file(year, month, day):
 	heal_duration_vector = [timedelta(minutes=30) for i in range(data['nb_needs'])]
 	time_distance_matrix = get_time_distance_matrix_from_adresses(data['addresses'])
 
-	identity = np.identity(data['nb_needs'])
-	ones = np.ones(data['nb_needs'])
-	time_distance_matrix = ones - identity
-
-
 	try:
 		evolutionary_optimizer = EvolutionaryOptimizer(
 										nurse_nb = data['nb_nurses'],
