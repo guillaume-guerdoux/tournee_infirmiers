@@ -6,7 +6,7 @@ from availability.models import Availability, AvailabilityGroup
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
-from user.models import Nurse
+from user.models import Nurse, Office
 
 from availability.forms import AddAvailabilityForm
 
@@ -62,8 +62,14 @@ def manage_availability(request):
     else:
         add_availability_form = AddAvailabilityForm()
         try:
-            availabilities = Availability.objects.filter(availability_group__nurse=user.nurse).order_by('start_date')[:10]
-        except Nurse.DoesNotExist:
+            if user.office:
+                availabilities = []
+                for nurse in user.office.nurse_set.all():
+                    availabilities.append(
+                        Availability.objects.filter(availability_group__nurse=nurse).order_by('start_date')[:10])
+            else:
+                availabilities = Availability.objects.filter(availability_group__nurse=user.nurse).order_by('start_date')[:10]
+        except (Nurse.DoesNotExist, Office.DoesNotExist):
             # TODO : display error message in a better way
             return render(request, 'availability/manage_availabilities.html',
                           {"exception_raised": True}
@@ -75,14 +81,14 @@ def manage_availability(request):
 
 
 def remove_unique_availability(request):
-    if (request.is_ajax()):
+    if request.is_ajax():
         if request.method == "POST":
             id_availability = request.POST["remove-unique-availability-id"]
             availability = Availability.objects.get(id=id_availability)
             availability_group = availability.availability_group
             connected_user = request.user
             user_owner = availability_group.nurse.user
-            if (user_owner == connected_user):
+            if user_owner == connected_user:
                 availability_group.delete()
                 print("ok")
                 return HttpResponse("Availability removed")
@@ -96,14 +102,14 @@ def remove_unique_availability(request):
 
 
 def remove_repeatly_availability_only_this_one(request):
-    if (request.is_ajax()):
+    if request.is_ajax():
         if request.method == "POST":
             id_availability = request.POST["remove-repeated-availability-id"]
             availability = Availability.objects.get(id=id_availability)
             availability_group = availability.availability_group
             connected_user = request.user
             user_owner = availability_group.nurse.user
-            if (user_owner == connected_user):
+            if user_owner == connected_user:
                 availability.delete()
                 return HttpResponse("Availability removed")
             else:
@@ -116,14 +122,14 @@ def remove_repeatly_availability_only_this_one(request):
 
 
 def remove_repeatly_availability_all(request):
-    if (request.is_ajax()):
+    if request.is_ajax():
         if request.method == "POST":
             id_availability = request.POST["remove-repeated-availability-id"]
             availability = Availability.objects.get(id=id_availability)
             availability_group = availability.availability_group
             connected_user = request.user
             user_owner = availability_group.nurse.user
-            if (user_owner == connected_user):
+            if user_owner == connected_user:
                 availability_group.delete()
                 return HttpResponse("Availability removed")
             else:
