@@ -23,7 +23,7 @@ def get_schedule_file_path(year, month, day):
 def generate_schedule_file(year, month, day):
 	data = get_data_from_db(year, month, day)
 
-	heal_duration_vector = [timedelta(minutes=30) for i in range(data['nb_needs'])]
+	heal_duration_vector = [data['needs'][i].duration_heal for i in range(data['nb_needs'])]#[timedelta(minutes=30) for i in range(data['nb_needs'])]
 	time_distance_matrix = get_time_distance_matrix_from_adresses(data['addresses'])
 
 	identity = np.identity(data['nb_needs'])

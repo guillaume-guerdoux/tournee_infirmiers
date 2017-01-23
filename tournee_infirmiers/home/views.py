@@ -26,5 +26,5 @@ def dashboard(request, year=None, month=None, day=None, user_id=None):
 	  print("EXCEPTION : {}".format(e))
 	  schedule = []
 
-	# print(year, month, day, nurse_id, schedule)
+	print(year, month, day, nurse_id, schedule)
 	return render(request, 'home/dashboard.html')
