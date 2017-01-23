@@ -40,8 +40,7 @@
                 <div class="form-group">
                     {{ field.label }}
                   <div class='input-group date' id='datetimepicker12'>
-                      <input type='text' class="form-control" />
-                    {{ form.date }}
+                    {{ field }}
                     <span class="input-group-addon">
                       <span class="glyphicon glyphicon-calendar"></span>
                     </span>
@@ -68,7 +67,7 @@
     $(function () {
         $('#datetimepicker12').datetimepicker({
             viewMode: 'years',
-            format: 'DD/MM/YYYY'
+            format: 'DD-MM-YYYY'
         });
     });
 </script>
