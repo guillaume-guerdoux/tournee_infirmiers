@@ -43,7 +43,7 @@
 								<button id="button_remove_unique_availability" class="btn bbtn btn-danger">Confirmer la suppression</button>
 							</div>
 							<div class= "col-lg-6 center">
-								<button id="button_not_remove _unique_availability" class="btn bbtn btn-success">Ne pas supprimer</button>
+								<button id="button_not_remove_unique_availability" class="btn bbtn btn-success">Ne pas supprimer</button>
 							</div>
 						</div>
 					</div>
@@ -167,6 +167,9 @@
 						location.reload();
 					}
 				});
+			});
+            $('#button_not_remove_unique_availability').click(function(event) {
+				$('#fullCalModalRemoveUniqueAvailability').modal('hide');
 			});
 			$('#button_remove_repeated_availability_only_this_one').click(function(event) {
 				$('#fullCalModalRemoveRepeatedAvailability').modal('hide');

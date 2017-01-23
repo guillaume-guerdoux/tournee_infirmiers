@@ -65,6 +65,7 @@ def add_availability(request, id_nurse):
                    'nurse': nurse})
 
 
+@login_required
 def manage_availabilities(request):
     try:
         office = request.user.office
@@ -97,14 +98,10 @@ def remove_unique_availability(request):
             id_availability = request.POST["remove-unique-availability-id"]
             availability = Availability.objects.get(id=id_availability)
             availability_group = availability.availability_group
-            connected_user = request.user
-            user_owner = availability_group.nurse.user if connected_user.nurse else availability_group.nurse.office.user
-            if user_owner == connected_user:
-                availability_group.delete()
-                print("ok")
-                return HttpResponse("Availability removed")
-            else:
-                return HttpResponse("Not user availability")
+
+            availability_group.delete()
+            print("ok")
+            return HttpResponse("Availability removed")
         else:
             return HttpResponse("Not Post")
         # return render(request, 'service/add_services_register.html')
@@ -117,14 +114,9 @@ def remove_repeatly_availability_only_this_one(request):
         if request.method == "POST":
             id_availability = request.POST["remove-repeated-availability-id"]
             availability = Availability.objects.get(id=id_availability)
-            availability_group = availability.availability_group
-            connected_user = request.user
-            user_owner = availability_group.nurse.user if connected_user.nurse else availability_group.nurse.office.user
-            if user_owner == connected_user:
-                availability.delete()
-                return HttpResponse("Availability removed")
-            else:
-                return HttpResponse("Not user availability")
+
+            availability.delete()
+            return HttpResponse("Availability removed")
         else:
             return HttpResponse("Not Post")
         # return render(request, 'service/add_services_register.html')
@@ -138,13 +130,8 @@ def remove_repeatly_availability_all(request):
             id_availability = request.POST["remove-repeated-availability-id"]
             availability = Availability.objects.get(id=id_availability)
             availability_group = availability.availability_group
-            connected_user = request.user
-            user_owner = availability_group.nurse.user if connected_user.nurse else availability_group.nurse.office.user
-            if user_owner == connected_user:
-                availability_group.delete()
-                return HttpResponse("Availability removed")
-            else:
-                return HttpResponse("Not user availability")
+            availability_group.delete()
+            return HttpResponse("Availability removed")
         else:
             return HttpResponse("Not Post")
         # return render(request, 'service/add_services_register.html')
