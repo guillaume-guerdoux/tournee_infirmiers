@@ -3,9 +3,11 @@
 {% block user_content %}
 
 <div class="container">
-    <h1>Vous avez bien été déconnecté !</h1>
 
-    <br/>
+    <div class="page-header">
+    <h1>Vous avez bien été déconnecté !</h1>
+    </div>
+
     <p class="lead"><a href="{% url 'user:login' %}">Se reconnecter</a> de nouveau.</p>
     <p>Accéder à <a href="{% url 'home:home' %}">l'accueil</a>.</p>
 </div>
