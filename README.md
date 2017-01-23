@@ -13,6 +13,7 @@ We are using Python 3.5.2 with Django 1.9.9. We are building our interface with 
 ### Installation 
 
 To run the project as it is currently developed, you first have to install Python 3.5. The next step is to install Django 1.9.9 using pip by entering the command `pip install django==1.9.9` 
+pip install numpy
 
 ### Running the program
 
