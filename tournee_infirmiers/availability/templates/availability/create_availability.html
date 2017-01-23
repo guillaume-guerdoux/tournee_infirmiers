@@ -1,0 +1,124 @@
+{% extends "availability_layout.html" %}
+{% load staticfiles %}
+{% block availability_content %}
+
+	<nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="nav-availability">
+                <ul class="nav navbar-nav">
+                    <li><a href="{% url 'home:dashboard' %}">Mon tableau de bord</a></li>
+                    <li class="active"><a href="{% url 'availability:manage_availability' %}">Mes horaires</a><span class="sr-only">(current)</span></li>
+                    <li><a href="{% url 'patient:patient_list' %}">Mes patients</a></li>
+                    <li><a href="{% url 'user:account' %}">Mon compte</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+	<link rel="stylesheet" href="{% static 'availability/css/manage_availability_style.css' %}">
+    {% if exception_raised %}
+        <div class="container">
+            <h3>Aucun(e) infirmier/infirmière enregistré</h3>
+            <p>Avant de pouvoir ajouter des horaires, vous devez renseigner les infirmiers et infirmières pour qui vous voulez les renseigner !</p>
+        </div>
+    {% else %}
+    <div class="container">
+
+	    <div class="row basic_div">
+    		<div class="col-sm-6 col-sm-offset-3">
+    			<form method="post" action="{% url 'availability:add_availability' nurse_id %}">
+				    {% csrf_token %}
+				    <div class="basic_title_div row" >
+	                	<h1 class="text-center">Ajouter une disponibilité à {{ nurse.first_name }} {{ nurse.last_name|upper }} </h1>
+	           	 	</div>
+				    <div class="form-group">
+						<div class="">
+							{{ add_availability_form.start_date.errors }}
+							{{ add_availability_form.start_date }}
+							
+						</div>
+					</div>
+					 <div class="form-group">
+						<div class="">
+							{{ add_availability_form.duration.errors }}
+							{{ add_availability_form.duration }}
+							
+						</div>
+					</div>
+					 <div class="form-group">
+						<div class="">
+							{{ add_availability_form.frequency.errors }}
+							{{ add_availability_form.frequency }}
+							
+						</div>
+					</div>
+				   	<div class="form-group">
+						<div class="col-lg-10 col-lg-offset-1">
+				    		<input id ="register_submit_button"
+				    		class="center-block btn btn-lg btn-primary " 
+				    		type="submit" value="Ajouter" />
+				    	</div>
+				    </div>
+				</form>
+    		</div>
+    	</div>
+    {% endif %}
+
+  
+    
+
+{% endblock %}
+
+{% block javascript_child %}
+	<script type="text/javascript">
+		function openfullCalModalRemoveRepeatlyAvailability(availabilityId){
+	    	$('#remove-repeated-availability-id').val(availabilityId);
+			$('#fullCalModalRemoveRepeatedAvailability').modal();
+		}
+		function openfullCalModalRemoveUniqueAvailability(availabilityId){
+	    	$('#remove-unique-availability-id').val(availabilityId);
+			$('#fullCalModalRemoveUniqueAvailability').modal();
+		}
+    </script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#button_remove_unique_availability').click(function(event) {
+				$('#fullCalModalRemoveUniqueAvailability').modal('hide');
+				var $form = $('#form_remove_unique_availability');
+				$.ajax({
+					type: "POST",
+					url:  "{% url 'availability:remove_unique_availability' %}",
+					data: $form.serialize(),
+					success: function(json) {
+						location.reload();
+					}
+				});
+			});
+			$('#button_remove_repeated_availability_only_this_one').click(function(event) {
+				$('#fullCalModalRemoveRepeatedAvailability').modal('hide');
+				var $form = $('#form_remove_availability_repeated_availability');
+				$.ajax({
+					type: "POST",
+					url:  "{% url 'availability:remove_repeatly_availability_only_this_one' %}",
+					data: $form.serialize(),
+					success: function(json) {
+						location.reload();
+					}
+				});
+			});
+			$('#button_remove_repeated_availability_all').click(function(event) {
+				$('#fullCalModalRemoveRepeatedAvailability').modal('hide');
+				var $form = $('#form_remove_availability_repeated_availability');
+				$.ajax({
+					type: "POST",
+					url:  "{% url 'availability:remove_repeatly_availability_all' %}",
+					data: $form.serialize(),
+					success: function(json) {
+						location.reload();
+					}
+				});
+			});
+		});
+	</script>
+
+{% endblock %}

@@ -17,21 +17,18 @@ from django.db import IntegrityError, transaction
 from datetime import datetime, timedelta
 
 
-# Create your views here.
-
 # TODO restrict access to nurse
 
 @login_required
 @transaction.atomic
-def manage_availability(request):
-    user = request.user
+def add_availability(request, id_nurse):
+    nurse = Nurse.objects.get(id=id_nurse)
     if request.method == "POST":
         add_availability_form = AddAvailabilityForm(request.POST)
         if add_availability_form.is_valid():
             start_date = add_availability_form.cleaned_data["start_date"]
             duration = add_availability_form.cleaned_data["duration"]
             frequency = add_availability_form.cleaned_data["frequency"]
-            nurse = user.nurse
             availability_group = AvailabilityGroup(nurse=nurse, frequency=frequency)
             availability_group.save()
             if frequency == "U":
@@ -61,23 +58,32 @@ def manage_availability(request):
             return redirect("availability:manage_availability")
     else:
         add_availability_form = AddAvailabilityForm()
-        try:
-            if user.office:
-                availabilities = []
-                for nurse in user.office.nurse_set.all():
-                    availabilities.append(
-                        Availability.objects.filter(availability_group__nurse=nurse).order_by('start_date')[:10])
-            else:
-                availabilities = Availability.objects.filter(availability_group__nurse=user.nurse).order_by('start_date')[:10]
-        except (Nurse.DoesNotExist, Office.DoesNotExist):
-            # TODO : display error message in a better way
-            return render(request, 'availability/manage_availabilities.html',
-                          {"exception_raised": True}
-                          )
 
-    return render(request, 'availability/manage_availabilities.html',
+    return render(request, 'availability/create_availability.html',
                   {"add_availability_form": add_availability_form,
-                   "availabilities": availabilities})
+                   'nurse_id': id_nurse,
+                   'nurse': nurse})
+
+
+def manage_availabilities(request):
+    try:
+        if request.user.office:
+            availabilities_sets = {}
+            for nurse in request.user.office.nurse_set.all():
+                availabilities_sets[nurse] = Availability.objects.filter(
+                    availability_group__nurse=nurse).order_by('start_date')[:10]
+            return render(request, 'availability/manage_availabilities.html',
+                          {"office": True, "availabilities_sets": availabilities_sets})
+        else:
+            availabilities = Availability.objects.filter(availability_group__nurse=request.user.nurse).order_by(
+                'start_date')[:10]
+            return render(request, 'availability/manage_availabilities.html',
+                          {"office" : False, "availabilities": availabilities})
+    except (Nurse.DoesNotExist, Office.DoesNotExist):
+        # TODO : display error message in a better way
+        return render(request, 'availability/manage_availabilities.html',
+                      {"exception_raised": True}
+                      )
 
 
 def remove_unique_availability(request):
@@ -87,7 +93,7 @@ def remove_unique_availability(request):
             availability = Availability.objects.get(id=id_availability)
             availability_group = availability.availability_group
             connected_user = request.user
-            user_owner = availability_group.nurse.user
+            user_owner = availability_group.nurse.user if connected_user.nurse else availability_group.nurse.office.user
             if user_owner == connected_user:
                 availability_group.delete()
                 print("ok")
@@ -108,7 +114,7 @@ def remove_repeatly_availability_only_this_one(request):
             availability = Availability.objects.get(id=id_availability)
             availability_group = availability.availability_group
             connected_user = request.user
-            user_owner = availability_group.nurse.user
+            user_owner = availability_group.nurse.user if connected_user.nurse else availability_group.nurse.office.user
             if user_owner == connected_user:
                 availability.delete()
                 return HttpResponse("Availability removed")
@@ -128,7 +134,7 @@ def remove_repeatly_availability_all(request):
             availability = Availability.objects.get(id=id_availability)
             availability_group = availability.availability_group
             connected_user = request.user
-            user_owner = availability_group.nurse.user
+            user_owner = availability_group.nurse.user if connected_user.nurse else availability_group.nurse.office.user
             if user_owner == connected_user:
                 availability_group.delete()
                 return HttpResponse("Availability removed")
@@ -139,3 +145,11 @@ def remove_repeatly_availability_all(request):
         # return render(request, 'service/add_services_register.html')
     else:
         return HttpResponse("Not ajax")
+
+
+def choose_nurse(request):
+    if request.user.office:
+        nurses = request.user.office.nurse_set.all()
+        return render(request, 'availability/nurse_choice.html', {'nurses': nurses})
+    else:
+        return redirect("availability:manage_availability", id_nurse=0)

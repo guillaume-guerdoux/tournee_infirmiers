@@ -79,70 +79,59 @@
 			</div>
 		</div>
 
-
-    	<div class="row basic_div">
-    		<div class="col-sm-6 col-sm-offset-3">
-    			<form method="post" action="{% url 'availability:manage_availability' %}">
-				    {% csrf_token %}
-				    <div class="basic_title_div row" >
-	                	<h1 class="text-center">Ajouter une disponibilité à {{ request.user.username}} </h1>
-	           	 	</div>
-				    <div class="form-group">
-						<div class="">
-							{{ add_availability_form.start_date.errors }}
-							{{ add_availability_form.start_date }}
-							
-						</div>
-					</div>
-					 <div class="form-group">
-						<div class="">
-							{{ add_availability_form.duration.errors }}
-							{{ add_availability_form.duration }}
-							
-						</div>
-					</div>
-					 <div class="form-group">
-						<div class="">
-							{{ add_availability_form.frequency.errors }}
-							{{ add_availability_form.frequency }}
-							
-						</div>
-					</div>
-				   	<div class="form-group">
-						<div class="col-lg-10 col-lg-offset-1">
-				    		<input id ="register_submit_button"
-				    		class="center-block btn btn-lg btn-primary " 
-				    		type="submit" value="S'inscrire" />
-				    	</div>
-				    </div>
-				</form>
-    		</div>
-    	</div>
-    	<hr>
-    	<div class="row basic_div">
+    	<div class="row">
 	    	<div class = "col-lg-12">
 	    		<div class="basic_title_div row" >
 	            	<h1 class="text-center">Liste de vos disponibilités</h1>
 	       	 	</div>
 	       	 </div>
-	       	 {% for availability in availabilities %}
-	       	 	<div class="row availability_div">
-	       	 		<div class="text-center col-lg-8">
-	       	 			{{availability}}
-	       	 		</div>
-	       	 		<div class="col-lg-4">
-	       	 			{% if availability.availability_group.frequency == 'U' %}
-	       	 			<button class="center-block btn btn-danger"
-	       	 			onclick='openfullCalModalRemoveUniqueAvailability("{{availability.id}}")'>Supprimer </button>
-	       	 			{% else %}
-	       	 			<button class="center-block btn btn-danger"
-	       	 			onclick='openfullCalModalRemoveRepeatlyAvailability("{{availability.id}}")'>Supprimer </button>
-	       	 			{% endif %}
-	       	 		</div>
-	       	 	</div>
-	       	 	<hr>
-	       	 	
-	       	 {% endfor %}
+            {% if not office %}
+                 {% for availability in availabilities %}
+                    <div class="row availability_div">
+                        <div class="text-center col-lg-8">
+                            {{ availability }}
+                        </div>
+                        <div class="col-lg-4">
+                            {% if availability.availability_group.frequency == 'U' %}
+                            <button class="center-block btn btn-danger"
+                            onclick='openfullCalModalRemoveUniqueAvailability("{{availability.id}}")'>Supprimer </button>
+                            {% else %}
+                            <button class="center-block btn btn-danger"
+                            onclick='openfullCalModalRemoveRepeatlyAvailability("{{availability.id}}")'>Supprimer </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <hr>
+
+                 {% endfor %}
+            {% else  %}
+                {% for nurse, availabilities in availabilities_sets.items %}
+                    <div class="row availability_div">
+                    <div class="nurse-div">
+                        <p>{{ nurse.first_name }} {{ nurse.last_name|upper }}
+                            <a href="{% url "availability:add_availability" nurse.id %}"
+                               class="btn btn-primary btn-lg .center-block" role="button">Ajouter</a> </p>
+
+                        {% for availability in availabilities %}
+                        <div class="text-center col-lg-8">
+                            {{ availability }}
+                        </div>
+                        <div class="col-lg-4">
+                            {% if availability.availability_group.frequency == 'U' %}
+                            <button class="center-block btn btn-danger"
+                            onclick='openfullCalModalRemoveUniqueAvailability("{{availability.id}}")'>Supprimer </button>
+                            {% else %}
+                            <button class="center-block btn btn-danger"
+                            onclick='openfullCalModalRemoveRepeatlyAvailability("{{availability.id}}")'>Supprimer </button>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    </div>
+                    <hr>
+
+                 {% endfor %}
+            {% endif %}
     	</div>
     </div>
     {% endif %}
