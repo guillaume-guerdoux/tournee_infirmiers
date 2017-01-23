@@ -17,11 +17,14 @@
 /* ------------- Button Style --------------- */ 
 
 
-/* ------------- Footer Style --------------- */ 
+/* ------------- Footer Style --------------- */
+
 footer{
-    position: fixed;
-    height: 0px;
+    position: absolute;
+    height: 60px;
     bottom: 0;
+    left: 0;
+    right: 0;
     width: 100%;
 	background-color : #b2b2ff;
 	color : white;
@@ -32,27 +35,6 @@ footer h2{
 	font-weight: bold;
 	text-align:center;
 }
-
-.footer_list{
-    list-style-type:none;
-    margin: 0;
-    padding: 0;
-}
-
-.footer_list li{
-    margin-bottom: 5px;
-}
-
-.footer_list a{
-    color: white;
-    text-decoration: none;
-}
-
-.footer_list a:hover {
-    color: #D8D8D8;
-    text-decoration: none;
-}
-
 /* ------------------- Removing dots in li ------------------------*/
 
 ul
