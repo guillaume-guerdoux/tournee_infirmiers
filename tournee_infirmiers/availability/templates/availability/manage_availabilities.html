@@ -86,6 +86,8 @@
 	       	 	</div>
 	       	 </div>
             {% if not office %}
+                <p><a href="{% url "availability:add_availability" nurse.id %}"
+                               class="btn btn-primary btn-lg .center-block" role="button">Ajouter</a> </p></p>
                  {% for availability in availabilities %}
                     <div class="row availability_div">
                         <div class="text-center col-lg-8">

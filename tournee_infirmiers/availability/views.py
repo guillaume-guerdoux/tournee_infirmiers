@@ -67,19 +67,19 @@ def add_availability(request, id_nurse):
 
 def manage_availabilities(request):
     try:
-        if request.user.office:
-            availabilities_sets = {}
-            for nurse in request.user.office.nurse_set.all():
-                availabilities_sets[nurse] = Availability.objects.filter(
+        office = request.user.office
+        availabilities_sets = {}
+        for nurse in office.nurse_set.all():
+            availabilities_sets[nurse] = Availability.objects.filter(
                     availability_group__nurse=nurse).order_by('start_date')[:10]
             return render(request, 'availability/manage_availabilities.html',
                           {"office": True, "availabilities_sets": availabilities_sets})
-        else:
-            availabilities = Availability.objects.filter(availability_group__nurse=request.user.nurse).order_by(
-                'start_date')[:10]
-            return render(request, 'availability/manage_availabilities.html',
-                          {"office" : False, "availabilities": availabilities})
-    except (Nurse.DoesNotExist, Office.DoesNotExist):
+    except Office.DoesNotExist:
+        availabilities = Availability.objects.filter(availability_group__nurse=request.user.nurse).order_by(
+            'start_date')[:10]
+        return render(request, 'availability/manage_availabilities.html',
+                      {"office": False, "availabilities": availabilities, "nurse": request.user.nurse})
+    except Nurse.DoesNotExist:
         # TODO : display error message in a better way
         return render(request, 'availability/manage_availabilities.html',
                       {"exception_raised": True}
