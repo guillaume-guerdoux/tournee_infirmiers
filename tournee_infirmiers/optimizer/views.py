@@ -13,18 +13,19 @@ import numpy as np
 # Create your views here.
 
 def optimize(request, year, month, day):
-	generate_schedule_file(year, month, day)
-	return HttpResponse("Done")
+    generate_schedule_file(year, month, day)
+    return HttpResponse("Done")
 
 def get_schedule_file_path(year, month, day):
-	return 'optimizer/schedules/{}_{}_{}'.format(year, month, day)
+    return 'optimizer/schedules/{}_{}_{}'.format(year, month, day)
 
 def generate_schedule_file(year, month, day):
-	data = get_data_from_db(year, month, day)
+    data = get_data_from_db(year, month, day)
 
-	heal_duration_vector = [timedelta(minutes=30) for i in range(data['nb_needs'])]
-	time_distance_matrix = get_time_distance_matrix_from_adresses(data['addresses'])
+    heal_duration_vector = [timedelta(minutes=30) for i in range(data['nb_needs'])]
+    time_distance_matrix = get_time_distance_matrix_from_adresses(data['addresses'])
 
+<<<<<<< Updated upstream
 	identity = np.identity(data['nb_needs'])
 	ones = np.ones(data['nb_needs'])
 	time_distance_matrix = ones - identity
@@ -38,56 +39,97 @@ def generate_schedule_file(year, month, day):
 										heal_duration_vector = heal_duration_vector,
 										mandatory_schedules = data['mandatory_schedules'])
 		optimize_output = evolutionary_optimizer.get_optimize_population()
+=======
+    try:
+        evolutionary_optimizer = EvolutionaryOptimizer(
+                                        nurse_nb = data['nb_nurses'],
+                                        heal_nb = data['nb_needs'],
+                                        time_distance_matrix = time_distance_matrix,
+                                        heal_duration_vector = heal_duration_vector,
+                                        mandatory_schedules = data['mandatory_schedules'])
+        optimize_output = evolutionary_optimizer.get_optimize_population()
+>>>>>>> Stashed changes
 
-		schedules = []
-		for i in range(len(optimize_output)):
-			schedule = {
-				'nurse_id': data['nurses'][i].id,
-				'ordered_need_ids': [data['needs'][n].id for n in optimize_output[i]]
-			}
-			schedules.append(schedule)
-	except: 
-		print("Error")
-		schedules = [{'error': True, 'nurse_id': data['nurses'][i].id, 'ordered_need_ids': []} for i in range(data['nb_nurses'])]
+        schedules = []
+        for i in range(len(optimize_output)):
+            schedule = {
+                'nurse_id': data['nurses'][i].id,
+                'ordered_need_ids': [data['needs'][n].id for n in optimize_output[i]]
+            }
+            schedules.append(schedule)
+    except:
+        print("Error")
+        schedules = [{'error': True, 'nurse_id': data['nurses'][i].id, 'ordered_need_ids': []} for i in range(data['nb_nurses'])]
 
 
-	with open(get_schedule_file_path(year, month, day), 'w') as outfile:
-	    json.dump(schedules, outfile)
+    with open(get_schedule_file_path(year, month, day), 'w') as outfile:
+        json.dump(schedules, outfile)
 
 
 def get_data_from_db(year, month, day): 
-	data = {
-		'date': datetime(int(year), int(month), int(day)),
-		'workday': 8 * 60 * 60,
-		'startday': time(8),
-		'addresses': {},
-		'nurses': {},
-		# 'durations': {},
-		'mandatory_schedules': {},
-		'needs': {},
-	}
+    data = {
+        'date': datetime(int(year), int(month), int(day)),
+        'workday': 8 * 60 * 60,
+        'startday': time(8),
+        'addresses': {},
+        'nurses': {},
+        # 'durations': {},
+        'mandatory_schedules': {},
+        'needs': {},
+    }
 
-	needs = Need.objects.all().filter(start_time__year=year,
-									  start_time__month=month, 
-									  start_time__day=day)
-	nurses = Nurse.objects.all()
+    needs = Need.objects.all().filter(start_time__year=year,
+                                      start_time__month=month,
+                                      start_time__day=day)
+    nurses = Nurse.objects.all()
 
-	data['nb_nurses'] = len(nurses)
-	for i in range(len(nurses)): 
-		data['nurses'][i] = nurses[i]
-	data['nb_patients'] = len(set([need.patient for need in needs]))
-	data['nb_needs'] = len(needs)
+    data['nb_nurses'] = len(nurses)
+    for i in range(len(nurses)):
+        data['nurses'][i] = nurses[i]
+    data['nb_patients'] = len(set([need.patient for need in needs]))
+    data['nb_needs'] = len(needs)
 
-	# print("{}, {}".format(nb_nurses, nb_patients))
-	for i in range(len(needs)):
-		need = needs[i]
-		data['addresses'][i] = "{} {} {}".format(need.patient.address, need.patient.postcode, need.patient.city)
-		# data['durations'][i] = need.duration
-		data['mandatory_schedules'][i] = (need.start_time.time(), (need.start_time + need.duration).time()) if need.start_time.time() != time() else None
-		data['needs'][i] = need
+    # print("{}, {}".format(nb_nurses, nb_patients))
+    for i in range(len(needs)):
+        need = needs[i]
+        data['addresses'][i] = "{} {} {}".format(need.patient.address, need.patient.postcode, need.patient.city)
+        # data['durations'][i] = need.duration
+        data['mandatory_schedules'][i] = (need.start_time.time(), (need.start_time + need.duration).time()) if need.start_time.time() != time() else None
+        data['needs'][i] = need
 
-	return data
+    return data
 
 
 def get_time_distance_matrix_from_adresses(addresses):
-	pass
+    with open('all_addresses_matrix', 'rb') as test:
+        depickler_test = pickle.Unpickler(test)
+        all_addresses_matrix = depickler_test.load()
+
+    all_addresses = ['140 avenue jean jaurès 92290 Chatenay Malabry', '14 rue du Docteur le Savoureux 92290 Chatenay Malabry',
+               '22 rue de Saclay 92290 Chatenay Malabry', '31 rue Yvonne 92330 Bourg-la-Reine',
+               '147 rue de Chalais 94240 L\'Hay-les-Roses', '6 rue de l\'Abbaye 92160 Antony',
+               '120 avenue François Molé 92160 Antony', '44 rue Maurice Ténine 94260 Fresnes',
+               '15 avenue du 8 mai 1945 94260 Fresnes', '10 avenue de la Gare 92330 Sceaux',
+               '4 boulevard du marechal juin 91370 Verrières-le-buisson',
+               '19 allée georges brassens 92290 Chatenay-Malabry', '93 rue du colonel fabien 92160 Antony',
+               '3 rue léo delibes 92330 Sceaux', '20 rue de l\'eglise 91370 verrièes-le-buisson',
+               '29 place des ailantes 92330 Sceaux', '67 boulevard pasteur 94260 Fresnes',
+               '16 rue Eistein 92160 Antony', '5 avenue Sully Prud\'homme 92290 Chatenay Malabry',
+               '18 rue Achille Garnon 92330 Sceaux', '36 rue des grands chênes 91370 Verrières-le-buisson',
+               '4 rue prosper legouté 92160 Antony' '212 avenue du président kennedy 92160 antony',
+               '10 rue boucicaut 92260 Fontenay-aux-roses', '55 rue vincent fayo 92290 Chatenay Malabry',
+               '8 rue jean louis sinet 92330 Sceaux', '21 rue des blagis 92340 Bourg-la-reine',
+               '63 rue de l\'yser 92330 Sceaux', '1 rue le bouvier 92340 Bourg-la-reine',
+               '31 rue delabergerie 92340 Bourg-la-reine', "27 rue de la chrétienté 92330 Sceaux"]
+
+    nb_addresses=len(addresses)
+    matrix=[]
+    for i in range(nb_addresses):
+        index_i = all_addresses.index(addresses[i])
+        line=[]
+        for j in range(nb_addresses):
+            index_j = all_addresses.index(addresses[j])
+            line.append(all_addresses_matrix[index_i][index_j])
+        matrix.append(line)
+
+    return matrix
