@@ -172,7 +172,17 @@
       "start_time": "2017-02-13 08:00:00",
       "duration": "08:00:00",
 	  "patient": "16",
-      "duration_heal": "00:45:00"
+      "duration_heal": "00:45:00",
+      "appointment": "1"
+    }
+  },
+  {
+    "model": "event.Appointment",
+    "pk": 1,
+    "fields": {
+      "start_time": "2017-02-13 08:00:00",
+      "nurse": "1",
+      "duration": "08:00:00"
     }
   }
 ]

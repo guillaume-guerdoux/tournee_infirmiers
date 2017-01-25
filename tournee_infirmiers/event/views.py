@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from patient.models import Patient
-from .models import Need
+from .models import Need, Appointment
 from .forms import AddNeedForm
 
 
@@ -16,3 +16,13 @@ def add_need(request, patient_number):
         need.save()
         success = True
     return render(request, 'need/add_need.html', locals())
+
+
+def appointment_detail(request, id_appointment):
+    try:
+        appointment = Appointment.objects.get(id=id_appointment)
+        needs = appointment.need_set.all()
+        patient = needs[0].patient
+    except Appointment.DoesNotExist:
+        exception_raised = True
+    return render(request, 'event/appointment_detail.html', locals())
