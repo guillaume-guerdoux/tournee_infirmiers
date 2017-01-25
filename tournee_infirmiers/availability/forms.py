@@ -10,14 +10,16 @@ MONTHS = {1: ('Janvier'), 2: ('Février'), 3: ('Mars'), 4: ('Avril'),
 
 # TODO : Red border for input when error
 class AddAvailabilityForm(forms.Form):
-    start_date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'], widget=DateTimeInput)
-    duration = forms.DurationField()
-    frequency = forms.ChoiceField(widget=forms.RadioSelect, choices=FREQUENCY_CHOICES)
+    start_date = forms.DateTimeField(label='A partir de quand êtes-vous disponible ?',
+                                     input_formats=['%d/%m/%Y %H:%M'], widget=DateTimeInput)
+    duration = forms.DurationField(label='Combien de temps êtes-vous disponible ? (format HH:mm:ss)')
+    frequency = forms.ChoiceField(label='Quelle est la fréquence de cette disponibilité ?',
+                                  widget=forms.RadioSelect, choices=FREQUENCY_CHOICES)
 
     def __init__(self, *args, **kwargs):
         super(AddAvailabilityForm, self).__init__(*args, **kwargs)
         self.fields['start_date'].widget.attrs['class'] = 'form-control input-lg'
-        self.fields['start_date'].widget.attrs['placeholder'] = 'JJ/MM/YYYY HH:MM'
+        self.fields['start_date'].widget.attrs['placeholder'] = 'Début de la disponibilité'
         self.fields['duration'].widget.attrs['class'] = 'form-control input-lg'
-        self.fields['duration'].widget.attrs['placeholder'] = "HH:MM:SS"
+        self.fields['duration'].widget.attrs['placeholder'] = "Durée (HH:mm:ss)"
 
