@@ -39,7 +39,7 @@
             {% if field.label == 'Date de naissance' %}
                 <div class="form-group">
                     {{ field.label }}
-                  <div class='input-group date' id='datetimepicker12'>
+                  <div class='input-group' id='datetimepicker12'>
                     {{ field }}
                     <span class="input-group-addon">
                       <span class="glyphicon glyphicon-calendar"></span>
@@ -67,7 +67,7 @@
     $(function () {
         $('#datetimepicker12').datetimepicker({
             viewMode: 'years',
-            format: 'DD-MM-YYYY'
+            format: 'DD/MM/YYYY'
         });
     });
 </script>
