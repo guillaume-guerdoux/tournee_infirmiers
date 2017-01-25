@@ -54,7 +54,7 @@ class NurseForm(forms.Form):
                                widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nom'}))
     firstname = forms.CharField(max_length=255, label="Prénom",
                                 widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Prénom'}))
-    birthdate = forms.DateField(label="Date de naissance",
+    birthdate = forms.DateField(label="Date de naissance", input_formats=['%d/%m/%Y'],
                                 widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'Date de naissance'}))
     address = forms.CharField(max_length=255, label="Adresse",
                               widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Adresse'}))
