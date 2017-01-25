@@ -14,7 +14,7 @@ from django.core.exceptions import ValidationError
 class Appointment(models.Model):
     start_time = models.DateTimeField(auto_now=False, auto_now_add=False)
     duration = models.DurationField()
-    nurse = models.OneToOneField(Nurse, on_delete=models.CASCADE)
+    nurse = models.ForeignKey(Nurse, on_delete=models.CASCADE)
 
     def __str__(self):
         return "Appointment"
