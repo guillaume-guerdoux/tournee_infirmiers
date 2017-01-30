@@ -2,7 +2,12 @@
 
 {% block user_content %}
 
-<p>Vous avez besoin d'être authentifié pour accéder à cette page.</p>
-<p><a href="{% url 'user:login' %}">Se connecter</a></p>
+<div class="container">
+    <div class="page-header">
+    <h1>Vous avez besoin d'être authentifié pour accéder à cette page.</h1>
+    <</div>
 
+    <p class="lead"><a href="{% url 'user:login' %}">Se connecter</a></p>
+
+</div>
 {% endblock %}

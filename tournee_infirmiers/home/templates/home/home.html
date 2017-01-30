@@ -1,21 +1,29 @@
 {% extends "home_layout.html" %}
 {% load staticfiles %}
 {% block home_content %}
-      	<link rel="stylesheet" href="{% static 'home/css/home_style.css' %}">
-		<div style="background: url('{% static 'home/images/nurse_home_background.jpg' %}') no-repeat;
-					background-size: cover; background-position: 50% 20%;"
-					 class="home_banner">
+<link rel="stylesheet" href="{% static 'home/css/home_style.css' %}">
+<div style="background-size: cover;"
+     class="home_banner">
 
 
-		</div>
-		<div class="container-fluid">
-			<div class="col-xs-6 col-xs-offset-3 home_form_div">
-        		<div class="title_home_form_div row">
-          			<h1 class= "text-center">Votre tournée n'aura jamais été aussi rapide</h1>
-        		</div>
-      			<button class= "center-block button_home"> Inscrivez-vous </button>
-		  	</div>
-		 </div>
+</div>
+<div class="container-fluid">
+    <div class="col-xs-6 col-xs-offset-3 home_form_div">
+        <div class="title_home_form_div row">
+            <h1 class="text-center">Votre tournée n'aura jamais été aussi rapide</h1>
+        </div>
+        <a href="{% url 'user:register' %}">
+            <button class="center-block button_home"> Inscrivez-vous</button>
+        </a>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <h2>Optimisez votre tournée avec notre application web !</h2>
+    </div>
+</footer>
 {% endblock %}
 
 {% block javascript_child %}

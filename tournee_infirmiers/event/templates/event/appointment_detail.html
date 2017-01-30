@@ -1,0 +1,31 @@
+{% extends "event_layout.html" %}
+
+{% block content %}
+
+    <div class="container-fluid">
+        {% if exception_raised %}
+            <h2>Une erreur s'est produite.</h2>
+            <p>Nous n'avons pas réussi à trouver le rendez-vous que vous cherchez. Vous pouvez peut-être réessayer.</p>
+        {% else %}
+        <h2 class="col-xs-6 col-xs-offset-3">Détail du rendez-vous</h2>
+        <div class="col-xs-6 col-xs-offset-3">
+            <table class="table table-striped">
+                <tr>
+                    <td>Patient</td>
+                    <td>{{ patient.first_name }} {{ patient.last_name|upper }}</td>
+                </tr>
+                <tr>
+                    <td>Infirmier</td>
+                    <td>{{ appointment.nurse.first_name }} {{ appointment.nurse.last_name|upper }}</td>
+                </tr>
+                <tr>
+                    <td>Date et heure</td>
+                    <td>{{ appointment.start_time|date:"D  d-m-y  à  G:i" }}</td>
+                </tr>
+            </table>
+            <a href="{% url 'home:dashboard' %}" class="btn btn-primary btn-lg" role="button">Retour à l'accueil</a>
+        </div>
+        {% endif %}
+    </div>
+
+{% endblock %}

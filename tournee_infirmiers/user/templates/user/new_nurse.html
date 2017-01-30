@@ -1,0 +1,75 @@
+{% extends "user_layout.html" %}
+{% load staticfiles %}
+{% block user_content %}
+
+    <div class="container">
+    <div class="page-header">
+    {% if edit %}
+        <h1> Modifier les informations </h1>
+    {% else %}
+        <h1> Veuillez compléter vos informations </h1>
+    {% endif %}
+    </div>
+
+    <div>
+    {%if success %}Vos informations ont bien été enregistrées !{%endif%}
+    </div>
+
+    <div>
+    <a href="{% url 'user:account' %}" class="btn btn-primary btn-lg .center-block" role="button">Retour</a>
+    </div>
+
+    {% if edit %}
+        <form action="{% url 'user:edit_nurse_info' id_nurse %}" method="post">
+    {% else %}
+        <form action="{% url 'user:new_nurse' %}" method="post">
+    {% endif %}
+        {%csrf_token%}
+            {% for error in form.non_field_errors %}
+            <div class="form-group has-errors text-danger small">
+                {{error}}
+            </div>
+            {% endfor %}
+            {% for field in form %}
+            <div class="form-group has-errors text-danger small">
+                {{field.errors}}
+            </div>
+            <div class="form-group has-errors text-danger small">
+            </div>
+            {% if field.label == 'Date de naissance' %}
+                <div class="form-group">
+                    {{ field.label }}
+                  <div class='input-group' id='datetimepicker12'>
+                    {{ field }}
+                    <span class="input-group-addon">
+                      <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                  </div>
+                </div>
+            {% else %}
+                <div class="form-group">
+                    {{field.label}}
+                    {{field}}
+                </div>
+            {% endif %}
+            {% endfor %}
+            <input class="btn btn-default" type="submit" value="Valider"/>
+            <input type="hidden" name="next" value="{{ next }}"/>
+        </form>
+
+    </div>
+
+{% endblock %}
+
+{% block javascript_child %}
+
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker12').datetimepicker({
+            viewMode: 'years',
+            format: 'DD/MM/YYYY'
+        });
+    });
+</script>
+
+{% endblock %}

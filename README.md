@@ -13,6 +13,7 @@ We are using Python 3.5.2 with Django 1.9.9. We are building our interface with 
 ### Installation 
 
 To run the project as it is currently developed, you first have to install Python 3.5. The next step is to install Django 1.9.9 using pip by entering the command `pip install django==1.9.9` 
+pip install numpy
 
 ### Running the program
 
@@ -90,6 +91,10 @@ You may access the page related to your patients, view the list of them and if n
 ### Algorithm part
 
 The optimization problem will be tackled later on (cf Timeline) and is not addressed yet.
+
+### Database part
+
+In order to test our project, fill in the database with our fixtures by running `python3 manage.py loaddata initial_data`
 
 ## Timeline
 

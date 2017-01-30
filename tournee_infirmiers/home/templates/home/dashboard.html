@@ -1,34 +1,47 @@
 {% extends "home_layout.html" %}
 {% load staticfiles %}
 {% block home_content %}
-		<section>
+    <section>
 
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-3">
-                        <pre>
-                            <p class="text-center">Mes patients</p>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse" id="nav-home">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="{% url 'home:dashboard' %}">Mon tableau de bord<span
+                                class="sr-only">(current)</span></a>
+                        </li>
+                        <li><a href="{% url 'availability:manage_availability' %}">Mes horaires</a></li>
+                        <li><a href="{% url 'patient:patient_list' %}">Mes patients</a></li>
+                        <li><a href="{% url 'user:account' %}">Mon compte</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
 
+        <div class="container">
+            <div class="row">
 
+                <!-- Main block displaying appointments -->
+                <div class="col-md-6">
 
-                        </pre>
-                    </div>
+                    <p class="text-center">Mes prochains rendez-vous</p>
 
-                    <!-- Main block displaying appointments -->
-                    <div class="col-md-6">
-
-                        <p class="text-center">Mes prochains rendez-vous</p>
-
-                        <div class="table-responsive">
-                            <table class="table table-stripped">
-
-                                <!--TODO: Generates patients using database once DB is configured-->
-
-                                <th>
-                                    <td>Nom</td>
-                                    <td>Prénom</td>
-                                    <td>Adresse</td>
-                                </th>
+                    <div class="table-responsive">
+                        <table class="table table-stripped">
+                            <th>
+                            <td>Nom</td>
+                            <td>Prénom</td>
+                            <td>Adresse</td>
+                            </th>
+                            {% for appointment, patient in appointments %}
+                                <tr class="clickable-row" data-href="{% url 'event:appointment_detail' appointment.id %}">
+                                    <td>{{ appointment.start_time|date:"D  d-m-y  à  G:i" }}</td>
+                                    <td>{{ patient.last_name|upper }}</td>
+                                    <td>{{ patient.first_name }}</td>
+                                    <td>{{ patient.address }} <br> {{ patient.postcode }} {{ patient.city }}</td>
+                                </tr>
+                            {% empty %}
+                                <!-- Fake data for design purposes-->
                                 <tr>
                                     <td>14h00</td>
                                     <td>Dupont</td>
@@ -41,22 +54,32 @@
                                     <td>Georges</td>
                                     <td>3, rue de la Classe</td>
                                 </tr>
-                            </table>
-                        </div>
+                            {% endfor %}
+                        </table>
+                    </div>
 
-                    </div>
-                    <div class="col-md-3">
+                </div>
+                <div class="col-md-6">
                         <pre>
-                            <p class="text-center">Mes informations</p>
+                            <p class="text-center">BLOC RESERVE GOOGLE MAPS</p>
                         </pre>
-                    </div>
                 </div>
             </div>
+        </div>
 
 
-		</section>
+    </section>
 {% endblock %}
 
 {% block javascript_child %}
-
+    <script>
+        jQuery(document).ready(function($) {
+            $(".clickable-row").hover(function() {
+                $(this).css("background-color", "#f9f9f9").css("cursor", "pointer");
+            });
+            $(".clickable-row").click(function() {
+                window.document.location = $(this).data("href");
+            });
+        });
+    </script>
 {% endblock %}

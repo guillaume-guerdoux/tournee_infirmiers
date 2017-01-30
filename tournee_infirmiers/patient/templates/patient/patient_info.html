@@ -39,7 +39,36 @@
                     <td>{{ patient.information }}</td>
                 </tr>
             </table>
+            <a href="{% url 'patient:patient_list' %}" class="btn btn-primary btn-lg" role="button">Retour à la liste</a>
+            <a href="{% url 'patient:edit_patient' patient.id %}" class="btn btn-warning btn-lg" role="button">Modifier les informations</a>
+            <a class="btn btn-danger btn-lg .center-block"
+               role="button" data-toggle="modal" data-target="#deletionWarningModal">
+                Supprimer le patient
+            </a>
+            <a href="{{ patient.id }}/add_need" class="btn btn-success btn-lg .center-block" role="button">Ajouter un besoin</a>
         </div>
+    </div>
+
+    <!-- Deletion warning modal -->
+    <div id="deletionWarningModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Attention !</h4>
+          </div>
+          <div class="modal-body">
+            <p>Êtes-vous sûr de vouloir supprimer le patient {{ patient.first_name }} {{ patient.last_name }} ?</p>
+              <a href="{% url 'patient:delete_patient' patient.id %}" class="btn btn-danger btn-lg .center-block" role="button">Supprimer</a>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+          </div>
+        </div>
+
+      </div>
     </div>
 
 {% endblock %}
