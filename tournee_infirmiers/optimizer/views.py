@@ -63,9 +63,6 @@ def generate_schedule_file(year, month, day):
 
 def get_data_from_db(year, month, day):
     data = {
-        'date': datetime(int(year), int(month), int(day)),
-        'workday': 8 * 60 * 60,
-        'startday': time(8),
         'addresses': {},
         'nurses': {},
         # 'durations': {},
@@ -73,9 +70,9 @@ def get_data_from_db(year, month, day):
         'needs': {},
     }
 
-    needs = Need.objects.all().filter(start_time__year=year,
-                                      start_time__month=month,
-                                      start_time__day=day)
+    needs = Need.objects.all().filter(date__year=year,
+                                      date__month=month,
+                                      date__day=day)
     nurses = Nurse.objects.all()
 
     data['nb_nurses'] = len(nurses)
@@ -90,8 +87,13 @@ def get_data_from_db(year, month, day):
         data['addresses'][i] = "{} {} {}".format(
             need.patient.address, need.patient.postcode, need.patient.city)
         # data['durations'][i] = need.duration
-        data['mandatory_schedules'][i] = (need.start_time.time(
-        ), (need.start_time + need.duration).time()) if need.start_time.time() != time() else None
+        # data['mandatory_schedules'][i] = (need.start_time.time(
+        # ), (need.start_time + need.duration).time()) if need.start_time.time() != time() else None
+        if need.start is None or need.end is None:
+            data['mandatory_schedules'][i] = None
+            print("ok")
+        else:
+            data['mandatory_schedules'][i] = (need.start, need.end)
         data['needs'][i] = need
 
     return data
