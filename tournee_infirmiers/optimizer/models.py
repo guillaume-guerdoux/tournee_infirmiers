@@ -87,6 +87,7 @@ class EvolutionaryOptimizer:
         for paire in itertools.combinations(heals_with_time_constraint, 2):
             if self.event_overlaping(paire[0], paire[1]) and \
                self.event_overlaping(paire[1], paire[0]):
+                print(paire)
                 overlapping_heals += 1
         return overlapping_heals
 
@@ -199,7 +200,9 @@ class EvolutionaryOptimizer:
         i = 0
         stop = False
         while not stop and i < 10:
+            print(i)
             population = self.population_evolution(10000)[0]
+            print(population)
             # print(population)
             stop = True
             for nurse in population:

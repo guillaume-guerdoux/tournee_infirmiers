@@ -40,4 +40,4 @@ class Nurse(Person):
     office = models.ForeignKey(Office, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return "Nurse profile of {0}".format(self.user.username)
+        return "Nurse profile of {0}".format(self.first_name)
