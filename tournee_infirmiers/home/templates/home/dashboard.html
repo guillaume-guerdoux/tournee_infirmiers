@@ -28,11 +28,11 @@
 
                     <div class="table-responsive">
                         <table class="table table-stripped">
-                            <th>
-                            <td>Nom</td>
-                            <td>Prénom</td>
-                            <td>Adresse</td>
-                            </th>
+                            <tr>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th colspan="2">Adresse</th>
+                            </tr>
                             {% for appointment, patient in appointments %}
                                 <tr class="clickable-row" data-href="{% url 'event:appointment_detail' appointment.id %}">
                                     <td>{{ appointment.start_time|date:"D  d-m-y  à  G:i" }}</td>
@@ -65,7 +65,33 @@
                         </pre>
                 </div>
             </div>
-        </div>
+            <div class="row">
+                    <div class="col-md-6 top-spaced">
+                        <p class="text-center">Les soins à faire cette semaine</p>
+
+                            <div class="table-responsive">
+                                <table class="table table-stripped">
+                                    <tr>
+                                        <th>Patient</th>
+                                        <th>Soin</th>
+                                        <th>À faire le</th>
+                                    </tr>
+                                    {% for need in needs %}
+                                        <tr class="clickable-row" data-href="{% url 'patient:patient_info' need.patient.id %}">
+                                            <td>{{ need.patient.first_name }} {{ patient.last_name|upper }}</td>
+                                            <td>{{ need.need_string }}</td>
+                                            <td>{{ need.start_time|date:"D  d-m-Y  à  G:i" }}</td>
+                                        </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td colspan="3">Pas de soin requis cette semaine !</td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                    </div>
+            </div>
+            </div>
 
 
     </section>
