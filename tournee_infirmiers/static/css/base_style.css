@@ -41,3 +41,8 @@ ul
 {
 list-style-type: none;
 }
+
+/* ------------------- Simple top spacing -------------- */
+.top-spaced {
+	margin-top: 50px;
+}

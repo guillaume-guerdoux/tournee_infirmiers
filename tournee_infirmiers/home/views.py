@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import optimizer.views as opt
-from datetime import datetime
+from datetime import datetime, timedelta
 from user.models import Office, Nurse
+from event.models import Need
 
 
 # Create your views here.
@@ -30,8 +31,12 @@ def dashboard(request, year=None, month=None, day=None, user_id=None):
 
     appointments = get_next_appointments(request)
 
+    # Filter most urgent needs : displays all needs needed between today and a week from today.
+    most_urgent_needs = Need.objects.filter(
+        start_time__gte=datetime.today()).exclude(start_time__gte=datetime.today() + timedelta(days=7))
+
     # print(year, month, day, nurse_id, schedule)
-    return render(request, 'home/dashboard.html', {"appointments": appointments})
+    return render(request, 'home/dashboard.html', {"appointments": appointments, "needs": most_urgent_needs})
 
 
 # Get the next appointments to display on the dashboards
