@@ -8,10 +8,8 @@ class AddNeedForm(forms.Form):
                                   widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Indice du traitement'}))
     start_time = forms.DateTimeField(label='Date et heure de début',
                                      widget=forms.DateTimeInput(attrs={'class': 'form-control', 'placeholder': 'Date et heure de début'}))
-    duration_heal = forms.DurationField(label='Durée du soin',
-                                   widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Durée requise'}))
-    duration = forms.DurationField(label='Durée disponible',
-                                        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Durée disponible'}))
+    duration_heal = forms.DurationField(label='Durée du soin')
+    duration = forms.DurationField(label='Durée de la disponibilité')
 
     def clean(self):
         cleaned_data = super(AddNeedForm, self).clean()
