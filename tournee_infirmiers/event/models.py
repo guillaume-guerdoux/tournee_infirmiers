@@ -22,8 +22,9 @@ class Appointment(models.Model):
 
 class Need(models.Model):
     need_string = models.CharField(max_length=4)
-    start_time = models.DateTimeField(auto_now=False, auto_now_add=False)
-    duration = models.DurationField()
+    date = models.DateField(auto_now=False, auto_now_add=False)
+    start = models.TimeField(null=True)
+    end = models.TimeField(null=True)
     patient = models.ForeignKey('patient.Patient', on_delete=models.CASCADE)
     duration_heal=models.DurationField()
     appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, null=True, blank=True)

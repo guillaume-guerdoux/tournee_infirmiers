@@ -9,8 +9,9 @@ def add_need(request, patient_number):
     current_patient = Patient.objects.get(id=patient_number)
     if form.is_valid():
         need = Need(need_string=form.cleaned_data['need_string'],
-                    start_time=form.cleaned_data['start_time'],
-                    duration=form.cleaned_data['duration'],
+                    date=form.cleaned_data['date'],
+                    start=form.cleaned_data['start'],
+                    end=form.cleaned_data['end'],
                     duration_heal=form.cleaned_data['duration_heal'],
                     patient=current_patient)
         need.save()
