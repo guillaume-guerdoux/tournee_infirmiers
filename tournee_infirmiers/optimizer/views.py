@@ -14,7 +14,6 @@ import pickle
 
 # Create your views here.
 
-
 def optimize(request, year, month, day):
     generate_schedule_file(year, month, day)
     return HttpResponse("Done")
@@ -29,12 +28,7 @@ def generate_schedule_file(year, month, day):
 
     heal_duration_vector = [timedelta(minutes=30)
                             for i in range(data['nb_needs'])]
-    time_distance_matrix = get_time_distance_matrix_from_adresses(data[
-                                                                  'addresses'])
-
-    identity = np.identity(data['nb_needs'])
-    ones = np.ones(data['nb_needs'])
-    time_distance_matrix = ones - identity
+    time_distance_matrix = get_time_distance_matrix_from_adresses(data['addresses'])
 
     try:
         evolutionary_optimizer = EvolutionaryOptimizer(
@@ -116,7 +110,6 @@ def get_schedule_for_nurse(nurse_id, year, month, day):
     # print([id_need for id_need in schedule_list['ordered_need_ids']])
     return [Need.objects.get(id=id_need) for id_need in schedule_list['ordered_need_ids']] if schedule_list is not None else []
 
-
 def get_time_distance_matrix_from_adresses(addresses):
     with open('all_addresses_matrix', 'rb') as test:
         depickler_test = pickle.Unpickler(test)
@@ -151,12 +144,3 @@ def get_time_distance_matrix_from_adresses(addresses):
         matrix.append(line)
 
     return matrix
-
-
-test_addresses = ['140 avenue jean jaurès 92290 Chatenay Malabry',
-                  '14 rue du Docteur le Savoureux 92290 Chatenay Malabry', '22 rue de Saclay 92290 Chatenay Malabry',
-                  '120 avenue François Molé 92160 Antony', '44 rue Maurice Ténine 94260 Fresnes',
-                  '15 avenue du 8 mai 1945 94260 Fresnes', '10 avenue de la Gare 92330 Sceaux',
-                  '4 boulevard du marechal juin 91370 Verrières-le-buisson']
-
-print(get_time_distance_matrix_from_adresses(test_addresses))
