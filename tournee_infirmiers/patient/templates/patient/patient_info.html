@@ -39,6 +39,30 @@
                     <td>{{ patient.information }}</td>
                 </tr>
             </table>
+
+            <h2>Besoins du patient</h2>
+            <table class="table table-striped">
+                <tr>
+                    <th>Intitulé du soin</th>
+                    <th>Début</th>
+                    <th>Durée du soin</th>
+                    <th>Durée de disponibilité du patient</th>
+                </tr>
+                {% for need in needs %}
+                    <tr>
+                        <td>{{ need.need_string }}</td>
+                        <td>{{ need.start_time|date:"D  d-m-y  à  G:i" }}</td>
+                        <td>{{ need.duration_heal }}</td>
+                        <td>{{ need.duration }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                    <td colspan="4">Pas de besoin renseigné pour ce patient !</td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+
             <a href="{% url 'patient:patient_list' %}" class="btn btn-primary btn-lg" role="button">Retour à la liste</a>
             <a href="{% url 'patient:edit_patient' patient.id %}" class="btn btn-warning btn-lg" role="button">Modifier les informations</a>
             <a class="btn btn-danger btn-lg .center-block"
