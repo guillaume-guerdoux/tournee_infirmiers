@@ -4,7 +4,7 @@
 
 <div class="container">
     <div class="page-header">
-    <h2>Se connecter en tant qu'infirmier</h2>
+    <h2>Se connecter</h2>
     </div>
 
     {% if form.errors %}
@@ -32,10 +32,6 @@
         <input type="hidden" name="next" value="{{ next }}"/>
     </form>
     {% endif %}
-
-    <br/>
-    <p>Vous êtes un cabinet ? Pour vous connecter et gérer vos infirmiers, c'est par <a
-            href="{% url 'user:office_login' %}">ici</a>.</p>
 
 </div>
 

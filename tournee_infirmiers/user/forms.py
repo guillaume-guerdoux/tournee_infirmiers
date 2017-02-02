@@ -80,4 +80,8 @@ class OfficeForm(forms.Form):
                                widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Code Postal'}))
     city = forms.CharField(max_length=255, label="Ville",
                            widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ville'}))
-    geographical_area = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Rayon géographique (en km)'}))
+    geographical_area = forms.IntegerField(label="Rayon géographique couvert",
+                                           widget=forms.NumberInput(attrs={
+                                               'class': 'form-control',
+                                               'placeholder': 'Rayon géographique (en km)'
+                                           }))
