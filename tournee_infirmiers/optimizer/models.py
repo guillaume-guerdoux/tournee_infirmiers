@@ -18,10 +18,15 @@ class EvolutionaryOptimizer:
                  time_distance_matrix, heal_duration_vector,
                  mandatory_schedules):
         self.nurse_nb = nurse_nb
+        print(self.nurse_nb)
         self.heal_nb = heal_nb
+        print(self.heal_nb)
         self.time_distance_matrix = time_distance_matrix
+        print(self.time_distance_matrix)
         self.heal_duration_vector = heal_duration_vector
+        print(self.heal_duration_vector)
         self.mandatory_schedules = mandatory_schedules
+        print(self.mandatory_schedules)
         self.total_distance = 0
         self.possible_combinations = 0
         heal_values = range(self.heal_nb)
@@ -87,7 +92,6 @@ class EvolutionaryOptimizer:
         for paire in itertools.combinations(heals_with_time_constraint, 2):
             if self.event_overlaping(paire[0], paire[1]) and \
                self.event_overlaping(paire[1], paire[0]):
-                print(paire)
                 overlapping_heals += 1
         return overlapping_heals
 
