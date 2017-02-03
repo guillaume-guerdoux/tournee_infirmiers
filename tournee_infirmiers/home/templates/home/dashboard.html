@@ -23,12 +23,14 @@
             <div class = "container">
                 <div class="row">
                     <div class="col-xs-6 col-xs-offset-3 dashboard_div">
-                        {% url 'optimizer:optimize' year=2017 month=2 day=13 as the_url %}
-                        <a href="{% url 'optimizer:optimize' year=2017 month=2 day=13 %}">
-                            <button type="button" class="btn btn-primary btn-block"><h4>Optimiser ma tournée</h4></button>
-                        </a>
+                        <button type="button" class="btn btn-primary btn-block" autocomplete="off"
+                                data-loading-text="Optimisation en cours..." id="button-optimize">
+                            <h4>Optimiser ma tournée</h4>
+                        </button>
+                        <h4>
+                            <div id ="success-optimize"></div>
+                        </h4>
                     </div>
-                </div>
             </div>
 
             <br/>
@@ -103,6 +105,18 @@
 {% endblock %}
 
 {% block javascript_child %}
+    <script>
+        $('#button-optimize').on('click', function () {
+            var $btn = $(this).button('loading');
+            $.ajax({
+                url: "{% url 'optimizer:optimize' year=2017 month=2 day=13 %}",
+                success: function(){
+                    $('#success-optimize').text("L'optimisation a bien été effectuée !")
+                }
+            });
+            $btn.button('reset');
+        });
+    </script>
     <script>
         jQuery(document).ready(function($) {
             $(".clickable-row").hover(function() {
