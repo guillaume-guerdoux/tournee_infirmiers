@@ -58,13 +58,17 @@
                 <tr>
                     <th>Intitulé du soin</th>
                     <th>Début</th>
+                    <th>Entre</th>
                     <th>Durée du soin</th>
                     <th>Durée de disponibilité du patient</th>
                 </tr>
                 {% for need in needs %}
                     <tr>
                         <td>{{ need.need_string }}</td>
-                        <td>{{ need.start_time|date:"D  d-m-y  à  G:i" }}</td>
+                        <td>{{ need.date|date:"D  d-m-y" }}</td>
+                        <td>{% if not need.start %}{% else %}{{ need.start|time:"H:i" }}{% endif %}  et
+                        {% if not need.end %}{% else %}{{ need.end|time:"H:i" }}{% endif %}
+                        </td>
                         <td>{{ need.duration_heal }}</td>
                         <td>{{ need.duration }}</td>
                     </tr>

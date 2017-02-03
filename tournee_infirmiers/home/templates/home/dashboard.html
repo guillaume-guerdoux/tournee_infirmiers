@@ -43,16 +43,7 @@
                             {% empty %}
                                 <!-- Fake data for design purposes-->
                                 <tr>
-                                    <td>14h00</td>
-                                    <td>Dupont</td>
-                                    <td>Jean</td>
-                                    <td>1, avenue des Champs-Elysées</td>
-                                </tr>
-                                <tr>
-                                    <td>14h45</td>
-                                    <td>Abitbol</td>
-                                    <td>Georges</td>
-                                    <td>3, rue de la Classe</td>
+                                    <td colspan="4">Aucun rendez-vous à afficher ! </td>
                                 </tr>
                             {% endfor %}
                         </table>
@@ -80,7 +71,7 @@
                                         <tr class="clickable-row" data-href="{% url 'patient:patient_info' need.patient.id %}">
                                             <td>{{ need.patient.first_name }} {{ patient.last_name|upper }}</td>
                                             <td>{{ need.need_string }}</td>
-                                            <td>{{ need.start_time|date:"D  d-m-Y  à  G:i" }}</td>
+                                            <td>{{ need.date|date:"D  d-m-Y" }}</td>
                                         </tr>
                                     {% empty %}
                                         <tr>
