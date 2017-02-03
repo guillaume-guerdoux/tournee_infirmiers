@@ -34,6 +34,8 @@ python3 manage.py runserver
 ```
 
 You may now access the web application in your browser at [http://localhost:8000/](http://localhost:8000/)
+If you prefer to access it on another port or another ip address, you can specify these as arguments to the `runserver` command, like this :
+`runserver 7000` if you want to access it at [http://localhost:7000/](http://localhost:7000/) or `runserver 1.2.3.4:7000` if you want to access it at [http://1.2.3.4:7000/](http://1.2.3.4:7000/)
 
 ### User login
 
@@ -50,12 +52,31 @@ Yes I know, not very safe. But you are testing on pre-generated data so that's n
 
 ## Project structure
 
+We chose to use Python as a programming language since most of us knew it (at least a bit) at the beginning of the project. 
+Also a couple libraries such as Numpy are useful for the optimization algorithm. 
+
+The framework Django was also chosen because some of us already worked on it in a precedent project. Also building a web app instead of a desktop app 
+makes the graphical user interface easier to program with the use of HTML/CSS/JS and various libraries such as Bootstrap. 
+
+For this first version of the application we suppose the nurse or the office using our app has its own server.
+It allowed more simplicity in the coding process since we have less relationships to handle in the database. 
+From this assumption we can also deduce that the amount of data will not be too big and the pre-build SQLite database from Django can be efficient.
+It also provides great speed in read and write operations which is important for our optimization algorithm (which can already take a long time to run). 
+
+###### Limits
+
+This approach has its limits and not all nurses or offices can be willing to install their own web server. 
+Hence further development steps would probably include adding relationships to the database,
+ move to a more scalable database system, and make this an online web-app usable by all offices from their browsers. 
+
 ### Django Structure 
 Since we are using Django, our project is built on various applications which have each a specific role. They are the following :
 
 #### User app
 
 This app manages the creation, login, logout and every method/class related to the patients/nurses/nurse offices. 
+Other than the classes that are linked to database tables, this app also hosts an abstract class "Person" which is used as a superclass for both "Nurse" and "Patient", 
+to avoid replicating the same fields first_name/last_name/gender/address/post_code/city/phone/birth_date. 
 
 #### Event app
 
