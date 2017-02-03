@@ -19,6 +19,20 @@
         </nav>
 
         <div class="container">
+
+            <div class = "container">
+                <div class="row">
+                    <div class="col-xs-6 col-xs-offset-3 dashboard_div">
+                        {% url 'optimizer:optimize' year=2017 month=2 day=13 as the_url %}
+                        <a href="{% url 'optimizer:optimize' year=2017 month=2 day=13 %}">
+                            <button type="button" class="btn btn-primary btn-block"><h4>Optimiser ma tournée</h4></button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <br/>
+
             <div class="row">
 
                 <!-- Main block displaying appointments -->
