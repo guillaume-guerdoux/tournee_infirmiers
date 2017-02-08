@@ -14,23 +14,18 @@ If you want more precision : go to folder evolutionary_algorithm at root '''
 
 class EvolutionaryOptimizer:
 
-    def __init__(self, nurse_nb, heal_nb,
+    def __init__(self, nurse_nb, heals,
                  time_distance_matrix, heal_duration_vector,
                  mandatory_schedules):
         self.nurse_nb = nurse_nb
-        print(self.nurse_nb)
-        self.heal_nb = heal_nb
-        print(self.heal_nb)
+        self.heals = heals
         self.time_distance_matrix = time_distance_matrix
-        print(self.time_distance_matrix)
         self.heal_duration_vector = heal_duration_vector
         print(self.heal_duration_vector)
         self.mandatory_schedules = mandatory_schedules
-        print(self.mandatory_schedules)
         self.total_distance = 0
         self.possible_combinations = 0
-        heal_values = range(self.heal_nb)
-        for paire_heal in itertools.combinations(heal_values, 2):
+        for paire_heal in itertools.combinations(self.heals, 2):
             self.total_distance += \
                 self.time_distance_matrix[paire_heal[0]][paire_heal[1]]
             self.possible_combinations += 1
@@ -53,9 +48,8 @@ class EvolutionaryOptimizer:
 
     def generate_random_population(self, population_nb):
         population = []
-        heal_values = range(self.heal_nb)
         for sample in range(population_nb):
-            temp_heal_values = list(heal_values)
+            temp_heal_values = list(self.heals)
             sample_list = self.split_randomly_list(temp_heal_values,
                                                    self.nurse_nb)
             population.append(sample_list)
