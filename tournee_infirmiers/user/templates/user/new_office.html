@@ -12,9 +12,24 @@
     {% endif %}
     </div>
 
-    <div>
-    {%if success %}Vos informations ont bien été enregistrées !{%endif%}
-    </div>
+
+    {%if success %}
+        <div>Vos informations ont bien été enregistrées !</div>
+
+        <div id="successModal" class="modal fade">
+            <div class="modal-dialog" style="margin-top: 20%;">
+                <div class="modal-content">
+                    <button type="button" class="close" data-dismiss="modal" style="margin:10px;"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+                    <div class="modal-body">
+                        <p class="text-center">Vos informations ont bien été enregistrées !</p>
+                        <div class="text-center">
+                            <a id="button_back" class="btn btn-success" href="{% url 'home:dashboard' %}" role="button">Retour à l'accueil</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {%endif%}
 
     <div>
     <a href="{% url 'user:account' %}" class="btn btn-primary btn-lg .center-block" role="button">Retour</a>
@@ -51,5 +66,11 @@
 {% endblock %}
 
 {% block javascript_child %}
-
+<script type="text/javascript">
+    {%if success %}
+    $(document).ready(function() {
+        $('#successModal').modal();
+            });
+    {% endif %}
+</script>
 {% endblock %}
