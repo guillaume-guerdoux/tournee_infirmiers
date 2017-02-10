@@ -7,7 +7,7 @@ from user.models import Nurse
 from django.http import JsonResponse
 import json
 from django.core import serializers
-from datetime import time, datetime, timedelta
+from datetime import time, datetime, timedelta, date
 from optimizer.models import EvolutionaryOptimizer
 import numpy as np
 import os
@@ -16,20 +16,22 @@ import pickle
 # Create your views here.
 
 
-def optimize(request, year, month, day):
+def optimize(request):
     # Get nurses
     nurses = Nurse.objects.all()
     nurse_nb = len(nurses)
 
     # Get heals and associate a number
-    needs = Need.objects.all().filter(date__year=year,
-                                      date__month=month,
-                                      date__day=day)
+    needs = Need.objects.all().filter(date__year=date.today().year,
+                                      date__month=date.today().month,
+                                      date__day=date.today().day)
     heals = []
     dict_heal_needs = {}
     addresses = []
     mandatory_schedules = {}
     heal_duration_vector = []
+    if len(needs)==0:
+        return HttpResponse("No need today")
     for index, need in enumerate(needs):
         print(index)
         heals.append(index)
@@ -68,19 +70,6 @@ def optimize(request, year, month, day):
             appointment.save()
             heal.appointment = appointment
             heal.save()
-
-        schedule = {
-            'nurse_id': nurses[i].id,
-            'ordered_need_ids': [dict_heal_needs[n].id for n in optimize_output[i]]
-        }
-        schedules.append(schedule)
-    '''except:
-        print("Error")
-        schedules = [{'error': True, 'nurse_id': nurses[
-            i].id, 'ordered_need_ids': []} for i in range(nurse_nb)]'''
-
-    with open(get_schedule_file_path(year, month, day), 'w') as outfile:
-        json.dump(schedules, outfile)
     return HttpResponse("Done")
 
 
