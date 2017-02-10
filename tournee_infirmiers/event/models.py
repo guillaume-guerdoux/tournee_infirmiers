@@ -34,4 +34,4 @@ class Need(models.Model):
     end = models.TimeField(null=True)
     patient = models.ForeignKey('patient.Patient', on_delete=models.CASCADE)
     duration_heal=models.DurationField()
-    appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE, null=True, blank=True)
+    appointment = models.ForeignKey(Appointment, null=True, blank=True)
