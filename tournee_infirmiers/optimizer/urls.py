@@ -5,5 +5,5 @@ from . import views
 
 app_name = 'optimizer'
 urlpatterns = [
-    url(r'^optimize/(?P<year>\d+)/(?P<month>\d+)/(?P<day>\d+)$', optimizer_views.optimize, name="optimize"),
+    url(r'^optimize/$', optimizer_views.optimize, name="optimize"),
 ]

@@ -39,17 +39,14 @@ def get_next_appointments(request):
         office = request.user.office
         for nurse in office.nurse_set.all():
             for appointment in nurse.appointment_set.all():
-                needs = appointment.need_set.all()
-                print(needs)
-                patient = needs[0].patient
+                patient = appointment.need.patient
                 appointments.append((appointment, patient))
 
     except Office.DoesNotExist:
         try:
             nurse = request.user.nurse
             for appointment in nurse.appointment_set.all():
-                needs = appointment.need_set.all()
-                patient = needs[0].patient
+                patient = appointment.need.patient
                 appointments.append((appointment, patient))
         except Nurse.DoesNotExist:
             pass
