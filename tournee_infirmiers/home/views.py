@@ -21,14 +21,6 @@ def dashboard(request, year=None, month=None, day=None, user_id=None):
     month = month if month is not None else now.month
     day = day if day is not None else now.day
 
-    try:
-        nurse_id = int(user_id) if user_id is not None else request.user.nurse.id
-        schedule = opt.get_schedule_for_nurse(nurse_id, year, month, day)
-
-    except Exception as e:
-        print("EXCEPTION : {}".format(e))
-        schedule = []
-
     appointments = get_next_appointments(request)
 
     # Filter most urgent needs : displays all needs needed between today and a week from today.
@@ -48,6 +40,7 @@ def get_next_appointments(request):
         for nurse in office.nurse_set.all():
             for appointment in nurse.appointment_set.all():
                 needs = appointment.need_set.all()
+                print(needs)
                 patient = needs[0].patient
                 appointments.append((appointment, patient))
 
@@ -61,9 +54,9 @@ def get_next_appointments(request):
         except Nurse.DoesNotExist:
             pass
 
-    appointments = sorted(appointments[:5], key=get_start_time, reverse=True)
+    appointments = sorted(appointments, key=get_start_time, reverse=True)
     return appointments
 
 
 def get_start_time(tuple_app_p):
-    return tuple_app_p[0].start_time
+    return tuple_app_p[0].start
