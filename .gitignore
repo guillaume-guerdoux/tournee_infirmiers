@@ -5,3 +5,4 @@ tournee_infirmiers/tournee_infirmiers/__pycache__/*
 *.pyc
 support
 *.sqlite3
+/tournee_infirmiers/optimizer/schedules
