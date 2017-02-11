@@ -50,6 +50,7 @@
                     <div class="table-responsive">
                         <table class="table table-stripped">
                             <tr>
+                                <th>Date</th>
                                 <th>Nom</th>
                                 <th>Prénom</th>
                                 <th colspan="2">Adresse</th>
@@ -57,7 +58,7 @@
                             {% for appointment, patient in appointments %}
                                 <tr class="clickable-row"
                                     data-href="{% url 'event:appointment_detail' appointment.id %}">
-                                    <td>{{ appointment.start_time|date:"D  d-m-y  à  G:i" }}</td>
+                                    <td>{{ appointment.start|date:"D  d-m-y" }}</td>
                                     <td>{{ patient.last_name|upper }}</td>
                                     <td>{{ patient.first_name }}</td>
                                     <td class="addresses">{{ patient.address }}
@@ -169,9 +170,10 @@
             $.ajax({
                 url: "{% url 'optimizer:optimize' %}",
                 success: function(response){
-                    if (response=="Done")
+                    if (response=="Done") {
                         $('#success-optimize').text("L'optimisation a bien été effectuée !");
-                    else
+                        window.location.reload();
+                    } else
                         $('#success-optimize').text("Vous n'avez pas de soin à effectuer aujourd'hui.");
                 }
             });
