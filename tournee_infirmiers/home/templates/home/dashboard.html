@@ -50,17 +50,17 @@
                     <div class="table-responsive">
                         <table class="table table-stripped">
                             <tr>
-                                <th>Date</th>
-                                <th>Nom</th>
-                                <th>Prénom</th>
+                                <th style="width:75px;">Date</th>
+                                <th>Infirmier en charge</th>
+                                <th>Patient</th>
                                 <th colspan="2">Adresse</th>
                             </tr>
                             {% for appointment, patient in appointments %}
                                 <tr class="clickable-row"
                                     data-href="{% url 'event:appointment_detail' appointment.id %}">
-                                    <td>{{ appointment.start|date:"D  d-m-y" }}</td>
-                                    <td>{{ patient.last_name|upper }}</td>
-                                    <td>{{ patient.first_name }}</td>
+                                    <td>{{ appointment.start|date:"d-m-y" }}</td>
+                                    <td class="nurses">{{ appointment.nurse.first_name }} {{ appointment.nurse.last_name }}</td>
+                                    <td>{{ patient.first_name }} {{ patient.last_name|upper }}</td>
                                     <td class="addresses">{{ patient.address }}
                                         <br> {{ patient.postcode }} {{ patient.city }}</td>
                                 </tr>
@@ -115,38 +115,34 @@
 
         // Initializing a map from Google Maps
         var map = null;
-        function initialize() {
-            var myOptions = {
-                zoom: 30000,
-                center: new google.maps.LatLng(2, 50),
-                mapTypeControl: true,
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},
-                navigationControl: true,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
-            map = new google.maps.Map(document.getElementById("map_canvas"),
-                myOptions);
-
-            google.maps.event.addListener(map, 'click', function () {
-                infowindow.close();
-            });
-        }
         initialize();
 
-        // Scrapping data from HTML to get addresses
+        // Scrapping data from HTML to get addresses and initializing colors array for different nurses
         var appointments = [];
+        var nurses = [];
+        var colors_to_use = [];
+        var k = 0;
+        var colors = ["red", "blue", "green", "yellow", "orange", "purple", "pink", "ltblue"];
+        var nurses_html = document.getElementsByClassName('nurses');
         var addresses = (document.getElementsByClassName('addresses'));
         for (var i = 0; i < addresses.length; i++) {
             appointments.push(addresses[i].innerText);
+            nurses.push(nurses_html[i].innerText);
+            if (i>0) {
+                if (nurses[i] != nurses[i-1] && k < 8) {
+                    k++;
+                }
+            }
+            colors_to_use.push(colors[k]);
         }
 
         // Calling Google Geocode API to get coordinates and add markers on the Google map
-        for (var i = 0; i < appointments.length; i++) {
+        $.each(colors_to_use, function(index, value) {
             $.ajax({
                 url: "https://maps.googleapis.com/maps/api/geocode/json?",
                 type: "get",
                 data: {
-                    address: appointments[i],
+                    address: appointments[index],
                     key: "AIzaSyBXBuzaBwXYfU1SeuwD1vTBLPL8J0vqv3s"
                 },
                 success: function (response) {
@@ -155,13 +151,14 @@
                         response["results"][0]["address_components"][2]["long_name"];
                     var lat = response["results"][0]["geometry"]["location"]["lat"];
                     var lng = response["results"][0]["geometry"]["location"]["lng"];
-                    addMarker(map, address, lat, lng);
+
+                    addMarker(map, address, lat, lng, value);
                 },
                 error: function (response) {
                     console.log("erreur" + response);
                 }
             })
-        }
+        });
 
     </script>
     <script>

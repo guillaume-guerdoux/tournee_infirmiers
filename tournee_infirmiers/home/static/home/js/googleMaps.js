@@ -1,6 +1,24 @@
 
 /* Source : http://www.geocodezip.com/v3_markers_normal_colored_google.html */
 
+
+function initialize() {
+    var myOptions = {
+        zoom: 30000,
+        center: new google.maps.LatLng(2, 50),
+        mapTypeControl: true,
+        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},
+        navigationControl: true,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(document.getElementById("map_canvas"),
+        myOptions);
+
+    google.maps.event.addListener(map, 'click', function () {
+        infowindow.close();
+    });
+}
+
 var icons = new Array();
 icons["red"] = new google.maps.MarkerImage("http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png",
       // This marker is 32 pixels wide by 32 pixels tall.
@@ -81,10 +99,10 @@ function createMarker(map, latlng, label, html, color) {
 }
 
 // Custom function to add a marker on the map, used here since we need to place marker in a callback function
-function addMarker(map, address, lat, lng){
+function addMarker(map, address, lat, lng, color){
     var bounds = new google.maps.LatLngBounds();
     var myLatLng = new google.maps.LatLng(lat, lng);
-    var marker = createMarker(map, myLatLng, address, address, "red");
+    var marker = createMarker(map, myLatLng, address, address, color);
     bounds.extend(myLatLng);
     map.fitBounds(bounds);
 }
