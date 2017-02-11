@@ -1,24 +1,6 @@
 
+/* Source : http://www.geocodezip.com/v3_markers_normal_colored_google.html */
 
-var map = null;
-function initialize() {
-    console.log("initializing");
-  var myOptions = {
-    zoom: 10,
-    center: new google.maps.LatLng(-33.9, 151.2),
-    mapTypeControl: true,
-    mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},
-    navigationControl: true,
-    mapTypeId: google.maps.MapTypeId.ROADMAP
-  }
-  map = new google.maps.Map(document.getElementById("map_canvas"),
-                                myOptions);
-
-  google.maps.event.addListener(map, 'click', function() {
-        infowindow.close();
-        });
-  setMarkers(map, addresses);
-}
 var icons = new Array();
 icons["red"] = new google.maps.MarkerImage("http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png",
       // This marker is 32 pixels wide by 32 pixels tall.
@@ -98,30 +80,11 @@ function createMarker(map, latlng, label, html, color) {
         });
 }
 
-/**
- * Data for the markers consisting of a name, a LatLng and a zIndex for
- * the order in which these markers should display on top of each
- * other.
- */
-var addresses = [
-  ['Bondi Beach', -33.890542, 151.274856, "red"],
-  ['Coogee Beach', -33.923036, 151.259052, "blue"],
-  ['Cronulla Beach', -34.028249, 151.157507, "green"],
-  ['Manly Beach', -33.80010128657071, 151.28747820854187, "yellow"],
-  ['Maroubra Beach', -33.950198, 151.259302, "orange"],
-  ['Fullerton Cove', -32.831712,151.918945,"purple"],
-  ['Bar Beach',-32.940403,151.768398,"pink"],
-  ['Readhead',-33.019495,151.709733,"ltblue"]
-];
-
-function setMarkers(map, locations) {
-  // Add markers to the map
-  var bounds = new google.maps.LatLngBounds();
-  for (var i = 0; i < locations.length; i++) {
-    var address = locations[i];
-    var myLatLng = new google.maps.LatLng(address[1], address[2]);
-    var marker = createMarker(map,myLatLng,address[0],address[0],address[3]);
+// Custom function to add a marker on the map, used here since we need to place marker in a callback function
+function addMarker(map, address, lat, lng){
+    var bounds = new google.maps.LatLngBounds();
+    var myLatLng = new google.maps.LatLng(lat, lng);
+    var marker = createMarker(map, myLatLng, address, address, "red");
     bounds.extend(myLatLng);
-  }
-  map.fitBounds(bounds);
+    map.fitBounds(bounds);
 }

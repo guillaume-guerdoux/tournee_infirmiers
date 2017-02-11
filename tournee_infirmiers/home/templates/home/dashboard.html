@@ -24,7 +24,7 @@
 
         <div class="container">
 
-            <div class = "container">
+            <div class="container">
                 <div class="row">
                     <div class="col-xs-6 col-xs-offset-3 dashboard_div">
                         <button type="button" class="btn btn-primary btn-block" autocomplete="off"
@@ -32,7 +32,7 @@
                             <h4>Optimiser ma tournée</h4>
                         </button>
                         <h4>
-                            <div id ="success-optimize"></div>
+                            <div id="success-optimize"></div>
                         </h4>
                     </div>
                 </div>
@@ -50,21 +50,23 @@
                     <div class="table-responsive">
                         <table class="table table-stripped">
                             <tr>
-                            <th>Nom</th>
-                            <th>Prénom</th>
-                            <th colspan="2">Adresse</th>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th colspan="2">Adresse</th>
                             </tr>
                             {% for appointment, patient in appointments %}
-                                <tr class="clickable-row" data-href="{% url 'event:appointment_detail' appointment.id %}">
+                                <tr class="clickable-row"
+                                    data-href="{% url 'event:appointment_detail' appointment.id %}">
                                     <td>{{ appointment.start_time|date:"D  d-m-y  à  G:i" }}</td>
                                     <td>{{ patient.last_name|upper }}</td>
                                     <td>{{ patient.first_name }}</td>
-                                    <td class = "addresses">{{ patient.address }} <br> {{ patient.postcode }} {{ patient.city }}</td>
+                                    <td class="addresses">{{ patient.address }}
+                                        <br> {{ patient.postcode }} {{ patient.city }}</td>
                                 </tr>
-                            {% empty %}
+                                {% empty %}
                                 <!-- Fake data for design purposes-->
                                 <tr>
-                                    <td colspan="4">Aucun rendez-vous à afficher ! </td>
+                                    <td colspan="4">Aucun rendez-vous à afficher !</td>
                                 </tr>
                             {% endfor %}
                         </table>
@@ -76,30 +78,30 @@
                 </div>
             </div>
             <div class="row">
-                    <div class="col-md-6 top-spaced">
-                        <p class="text-center">Les soins à faire cette semaine</p>
+                <div class="col-md-6 top-spaced">
+                    <p class="text-center">Les soins à faire cette semaine</p>
 
-                            <div class="table-responsive">
-                                <table class="table table-stripped">
-                                    <tr>
-                                        <th>Patient</th>
-                                        <th>Soin</th>
-                                        <th>À faire le</th>
-                                    </tr>
-                                    {% for need in needs %}
-                                        <tr class="clickable-row" data-href="{% url 'patient:patient_info' need.patient.id %}">
-                                            <td>{{ need.patient.first_name }} {{ patient.last_name|upper }}</td>
-                                            <td>{{ need.need_string }}</td>
-                                            <td>{{ need.date|date:"D  d-m-Y" }}</td>
-                                        </tr>
-                                    {% empty %}
-                                        <tr>
-                                            <td colspan="3">Pas de soin requis cette semaine !</td>
-                                        </tr>
-                                    {% endfor %}
-                                </table>
-                            </div>
+                    <div class="table-responsive">
+                        <table class="table table-stripped">
+                            <tr>
+                                <th>Patient</th>
+                                <th>Soin</th>
+                                <th>À faire le</th>
+                            </tr>
+                            {% for need in needs %}
+                                <tr class="clickable-row" data-href="{% url 'patient:patient_info' need.patient.id %}">
+                                    <td>{{ need.patient.first_name }} {{ patient.last_name|upper }}</td>
+                                    <td>{{ need.need_string }}</td>
+                                    <td>{{ need.date|date:"D  d-m-Y" }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="3">Pas de soin requis cette semaine !</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
                     </div>
+                </div>
             </div>
         </div>
 
@@ -109,34 +111,56 @@
 
 {% block javascript_child %}
     <script>
-        var appointments = (document.getElementsByClassName('addresses'))
-        var mapsAddresses = []
-        var latLng = []
-        for(var i = 0; i<appointments.length; i++){
-            mapsAddresses.push(appointments[i].innerText)
-            console.log(mapsAddresses[i])
 
-            $.ajax({
-            url: "https://maps.googleapis.com/maps/api/geocode/json?",
-            type: "get",
-            data: {
-                address : appointments[i].innerText,
-                key : "AIzaSyBXBuzaBwXYfU1SeuwD1vTBLPL8J0vqv3s"
-            },
-            success: function(response){
-                var lat = response["results"][0]["geometry"]["location"]["lat"]
-                var lng = response["results"][0]["geometry"]["location"]["lng"]
-                latLng.push([lat, lng])
-            },
-            error: function(response){
-                console.log("erreur"+response)
-            }
-        })
+        // Initializing a map from Google Maps
+        var map = null;
+        function initialize() {
+            var myOptions = {
+                zoom: 30000,
+                center: new google.maps.LatLng(2, 50),
+                mapTypeControl: true,
+                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},
+                navigationControl: true,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            map = new google.maps.Map(document.getElementById("map_canvas"),
+                myOptions);
+
+            google.maps.event.addListener(map, 'click', function () {
+                infowindow.close();
+            });
         }
-        console.log(latLng)
-        console.log(mapsAddresses)
+        initialize();
 
-        initialize()
+        // Scrapping data from HTML to get addresses
+        var appointments = [];
+        var addresses = (document.getElementsByClassName('addresses'));
+        for (var i = 0; i < addresses.length; i++) {
+            appointments.push(addresses[i].innerText);
+        }
+
+        // Calling Google Geocode API to get coordinates and add markers on the Google map
+        for (var i = 0; i < appointments.length; i++) {
+            $.ajax({
+                url: "https://maps.googleapis.com/maps/api/geocode/json?",
+                type: "get",
+                data: {
+                    address: appointments[i],
+                    key: "AIzaSyBXBuzaBwXYfU1SeuwD1vTBLPL8J0vqv3s"
+                },
+                success: function (response) {
+                    var address = response["results"][0]["address_components"][0]["long_name"] + ", " +
+                        response["results"][0]["address_components"][1]["long_name"] + " | " +
+                        response["results"][0]["address_components"][2]["long_name"];
+                    var lat = response["results"][0]["geometry"]["location"]["lat"];
+                    var lng = response["results"][0]["geometry"]["location"]["lng"];
+                    addMarker(map, address, lat, lng);
+                },
+                error: function (response) {
+                    console.log("erreur" + response);
+                }
+            })
+        }
 
     </script>
     <script>
@@ -144,7 +168,7 @@
             var $btn = $(this).button('loading');
             $.ajax({
                 url: "{% url 'optimizer:optimize' year=2017 month=2 day=13 %}",
-                success: function(){
+                success: function () {
                     $('#success-optimize').text("L'optimisation a bien été effectuée !")
                 }
             });
@@ -152,11 +176,11 @@
         });
     </script>
     <script>
-        jQuery(document).ready(function($) {
-            $(".clickable-row").hover(function() {
+        jQuery(document).ready(function ($) {
+            $(".clickable-row").hover(function () {
                 $(this).css("background-color", "#f9f9f9").css("cursor", "pointer");
             });
-            $(".clickable-row").click(function() {
+            $(".clickable-row").click(function () {
                 window.document.location = $(this).data("href");
             });
         });
