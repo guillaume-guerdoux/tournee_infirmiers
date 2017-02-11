@@ -56,6 +56,22 @@
             </div>
             <div class="form-group has-errors text-danger small">
             </div>
+            {% if field.label == 'Date de naissance' %}
+                <div class="form-group">
+                    {{ field.label }}
+                  <div class='input-group' id='datetimepicker12'>
+                    {{ field }}
+                    <span class="input-group-addon">
+                      <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                  </div>
+                </div>
+            {% else %}
+                <div class="form-group">
+                    {{field.label}}
+                    {{field}}
+                </div>
+            {% endif %}
             <div class="form-group">
                 {{field.label}}
                 {{field}}
@@ -77,6 +93,19 @@
         $(document).ready(function() {
             $('#successModal').modal();
                 });
+    {% endif %}
+</script>
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker12').datetimepicker({
+            viewMode: 'years',
+            format: 'DD/MM/YYYY'
+        });
+    });
+    {%if success %}
+    $(document).ready(function() {
+        $('#successModal').modal();
+            });
     {% endif %}
 </script>
 {% endblock %}
