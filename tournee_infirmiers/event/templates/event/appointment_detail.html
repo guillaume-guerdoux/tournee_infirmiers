@@ -19,8 +19,8 @@
                     <td>{{ appointment.nurse.first_name }} {{ appointment.nurse.last_name|upper }}</td>
                 </tr>
                 <tr>
-                    <td>Date et heure</td>
-                    <td>{{ appointment.start_time|date:"D  d-m-y  à  G:i" }}</td>
+                    <td>Date</td>
+                    <td>{{ appointment.start|date:"D  d-m-y" }}</td>
                 </tr>
             </table>
             <a href="{% url 'home:dashboard' %}" class="btn btn-primary btn-lg" role="button">Retour à l'accueil</a>

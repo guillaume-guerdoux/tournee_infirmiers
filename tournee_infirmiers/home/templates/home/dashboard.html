@@ -50,13 +50,15 @@
                     <div class="table-responsive">
                         <table class="table table-stripped">
                             <tr>
+                                <th style="width:75px;">Date</th>
                                 <th>Infirmier en charge</th>
-                                <th>Patient</th>
+                                <th>Prénom</th>
                                 <th colspan="2">Adresse</th>
                             </tr>
                             {% for appointment, patient in appointments %}
                                 <tr class="clickable-row"
                                     data-href="{% url 'event:appointment_detail' appointment.id %}">
+                                    <td>{{ appointment.start|date:"d-m-y" }}</td>
                                     <td class="nurses">{{ appointment.nurse.first_name }} {{ appointment.nurse.last_name }}</td>
                                     <td>{{ patient.first_name }} {{ patient.last_name|upper }}</td>
                                     <td class="addresses">{{ patient.address }}
@@ -131,19 +133,25 @@
         }
         initialize();
 
-        // Scrapping data from HTML to get addresses
+        // Scrapping data from HTML to get addresses and initializing colors array for different nurses
         var appointments = [];
         var nurses = [];
-        var addresses = (document.getElementsByClassName('addresses'));
+        var colors_to_use = [];
+        var k = 0;
+        var j = 0;
+        var colors = ["red", "blue", "green", "yellow", "orange", "purple", "pink", "ltblue"];
         var nurses_html = document.getElementsByClassName('nurses');
+        var addresses = (document.getElementsByClassName('addresses'));
         for (var i = 0; i < addresses.length; i++) {
             appointments.push(addresses[i].innerText);
             nurses.push(nurses_html[i].innerText);
+            if (i>0) {
+                if (nurses[i] != nurses[i-1] && k < 8) {
+                    k++;
+                }
+                colors_to_use.push(colors[k]);
+            }
         }
-
-        var k = 0;
-        var colors = ["red", "blue", "green", "yellow", "orange", "purple", "pink", "ltblue"];
-        var color = colors[0];
 
         // Calling Google Geocode API to get coordinates and add markers on the Google map
         for (var i = 0; i < appointments.length; i++) {
@@ -162,16 +170,8 @@
                     var lat = response["results"][0]["geometry"]["location"]["lat"];
                     var lng = response["results"][0]["geometry"]["location"]["lng"];
 
-                    if (i>0) {
-                        if (nurses[i] != nurses[i-1] && k < 8) {
-                            console.log(nurses[i]);
-                            k++;
-                            color = colors[k];
-                        }
-                    }
-
-                    addMarker(map, address, lat, lng, color);
-                    console.log("marqueur ajoutée");
+                    addMarker(map, address, lat, lng, colors_to_use[j]);
+                    j++;
                 },
                 error: function (response) {
                     console.log("erreur" + response);
@@ -186,9 +186,10 @@
             $.ajax({
                 url: "{% url 'optimizer:optimize' %}",
                 success: function(response){
-                    if (response=="Done")
+                    if (response=="Done") {
                         $('#success-optimize').text("L'optimisation a bien été effectuée !");
-                    else
+                        window.location.reload();
+                    } else
                         $('#success-optimize').text("Vous n'avez pas de soin à effectuer aujourd'hui.");
                 }
             });
