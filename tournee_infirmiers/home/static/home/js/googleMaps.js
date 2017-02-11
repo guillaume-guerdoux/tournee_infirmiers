@@ -1,6 +1,24 @@
 
 /* Source : http://www.geocodezip.com/v3_markers_normal_colored_google.html */
 
+
+function initialize() {
+    var myOptions = {
+        zoom: 30000,
+        center: new google.maps.LatLng(2, 50),
+        mapTypeControl: true,
+        mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},
+        navigationControl: true,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(document.getElementById("map_canvas"),
+        myOptions);
+
+    google.maps.event.addListener(map, 'click', function () {
+        infowindow.close();
+    });
+}
+
 var icons = new Array();
 icons["red"] = new google.maps.MarkerImage("http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png",
       // This marker is 32 pixels wide by 32 pixels tall.

@@ -115,22 +115,6 @@
 
         // Initializing a map from Google Maps
         var map = null;
-        function initialize() {
-            var myOptions = {
-                zoom: 30000,
-                center: new google.maps.LatLng(2, 50),
-                mapTypeControl: true,
-                mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},
-                navigationControl: true,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
-            map = new google.maps.Map(document.getElementById("map_canvas"),
-                myOptions);
-
-            google.maps.event.addListener(map, 'click', function () {
-                infowindow.close();
-            });
-        }
         initialize();
 
         // Scrapping data from HTML to get addresses and initializing colors array for different nurses
@@ -138,7 +122,6 @@
         var nurses = [];
         var colors_to_use = [];
         var k = 0;
-        var j = 0;
         var colors = ["red", "blue", "green", "yellow", "orange", "purple", "pink", "ltblue"];
         var nurses_html = document.getElementsByClassName('nurses');
         var addresses = (document.getElementsByClassName('addresses'));
@@ -149,18 +132,17 @@
                 if (nurses[i] != nurses[i-1] && k < 8) {
                     k++;
                 }
-                colors_to_use.push(colors[k]);
             }
+            colors_to_use.push(colors[k]);
         }
 
         // Calling Google Geocode API to get coordinates and add markers on the Google map
-        for (var i = 0; i < appointments.length; i++) {
-
+        $.each(colors_to_use, function(index, value) {
             $.ajax({
                 url: "https://maps.googleapis.com/maps/api/geocode/json?",
                 type: "get",
                 data: {
-                    address: appointments[i],
+                    address: appointments[index],
                     key: "AIzaSyBXBuzaBwXYfU1SeuwD1vTBLPL8J0vqv3s"
                 },
                 success: function (response) {
@@ -170,14 +152,13 @@
                     var lat = response["results"][0]["geometry"]["location"]["lat"];
                     var lng = response["results"][0]["geometry"]["location"]["lng"];
 
-                    addMarker(map, address, lat, lng, colors_to_use[j]);
-                    j++;
+                    addMarker(map, address, lat, lng, value);
                 },
                 error: function (response) {
                     console.log("erreur" + response);
                 }
             })
-        }
+        });
 
     </script>
     <script>
