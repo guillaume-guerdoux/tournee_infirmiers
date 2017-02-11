@@ -50,16 +50,15 @@
                     <div class="table-responsive">
                         <table class="table table-stripped">
                             <tr>
-                                <th>Nom</th>
-                                <th>Prénom</th>
+                                <th>Infirmier en charge</th>
+                                <th>Patient</th>
                                 <th colspan="2">Adresse</th>
                             </tr>
                             {% for appointment, patient in appointments %}
                                 <tr class="clickable-row"
                                     data-href="{% url 'event:appointment_detail' appointment.id %}">
-                                    <td>{{ appointment.start_time|date:"D  d-m-y  à  G:i" }}</td>
-                                    <td>{{ patient.last_name|upper }}</td>
-                                    <td>{{ patient.first_name }}</td>
+                                    <td class="nurses">{{ appointment.nurse.first_name }} {{ appointment.nurse.last_name }}</td>
+                                    <td>{{ patient.first_name }} {{ patient.last_name|upper }}</td>
                                     <td class="addresses">{{ patient.address }}
                                         <br> {{ patient.postcode }} {{ patient.city }}</td>
                                 </tr>
@@ -134,13 +133,21 @@
 
         // Scrapping data from HTML to get addresses
         var appointments = [];
+        var nurses = [];
         var addresses = (document.getElementsByClassName('addresses'));
+        var nurses_html = document.getElementsByClassName('nurses');
         for (var i = 0; i < addresses.length; i++) {
             appointments.push(addresses[i].innerText);
+            nurses.push(nurses_html[i].innerText);
         }
+
+        var k = 0;
+        var colors = ["red", "blue", "green", "yellow", "orange", "purple", "pink", "ltblue"];
+        var color = colors[0];
 
         // Calling Google Geocode API to get coordinates and add markers on the Google map
         for (var i = 0; i < appointments.length; i++) {
+
             $.ajax({
                 url: "https://maps.googleapis.com/maps/api/geocode/json?",
                 type: "get",
@@ -154,7 +161,17 @@
                         response["results"][0]["address_components"][2]["long_name"];
                     var lat = response["results"][0]["geometry"]["location"]["lat"];
                     var lng = response["results"][0]["geometry"]["location"]["lng"];
-                    addMarker(map, address, lat, lng);
+
+                    if (i>0) {
+                        if (nurses[i] != nurses[i-1] && k < 8) {
+                            console.log(nurses[i]);
+                            k++;
+                            color = colors[k];
+                        }
+                    }
+
+                    addMarker(map, address, lat, lng, color);
+                    console.log("marqueur ajoutée");
                 },
                 error: function (response) {
                     console.log("erreur" + response);

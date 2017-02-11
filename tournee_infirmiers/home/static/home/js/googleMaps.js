@@ -81,10 +81,10 @@ function createMarker(map, latlng, label, html, color) {
 }
 
 // Custom function to add a marker on the map, used here since we need to place marker in a callback function
-function addMarker(map, address, lat, lng){
+function addMarker(map, address, lat, lng, color){
     var bounds = new google.maps.LatLngBounds();
     var myLatLng = new google.maps.LatLng(lat, lng);
-    var marker = createMarker(map, myLatLng, address, address, "red");
+    var marker = createMarker(map, myLatLng, address, address, color);
     bounds.extend(myLatLng);
     map.fitBounds(bounds);
 }
