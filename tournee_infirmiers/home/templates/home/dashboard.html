@@ -76,6 +76,11 @@
                 </div>
                 <div id="map-container" class="col-md-6">
                     <div id="map_canvas" style="width:500px; height:400px"></div>
+                    <br/>
+                    <div class="table-responsive">
+                        <table class="table table-stripped" id="map-legend">
+                        </table>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -128,10 +133,15 @@
         for (var i = 0; i < addresses.length; i++) {
             appointments.push(addresses[i].innerText);
             nurses.push(nurses_html[i].innerText);
+            var icon = "http://www.google.com/intl/en_us/mapfiles/ms/micons/"+ colors[k] +"-dot.png";
             if (i>0) {
                 if (nurses[i] != nurses[i-1] && k < 8) {
                     k++;
+                    icon = "http://www.google.com/intl/en_us/mapfiles/ms/micons/"+ colors[k] +"-dot.png";
+                    $('#map-legend').append("<tr><td><img src="+icon+"></td><td>"+nurses[i]+"</td></tr>");
                 }
+            } else {
+                $('#map-legend').append("<tr><td><img src="+icon+"></td><td>"+nurses[0]+"</td></tr>");
             }
             colors_to_use.push(colors[k]);
         }
