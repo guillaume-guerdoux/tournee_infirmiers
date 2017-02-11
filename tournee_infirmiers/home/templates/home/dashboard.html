@@ -167,9 +167,12 @@
         $('#button-optimize').on('click', function () {
             var $btn = $(this).button('loading');
             $.ajax({
-                url: "{% url 'optimizer:optimize' year=2017 month=2 day=13 %}",
-                success: function () {
-                    $('#success-optimize').text("L'optimisation a bien été effectuée !")
+                url: "{% url 'optimizer:optimize' %}",
+                success: function(response){
+                    if (response=="Done")
+                        $('#success-optimize').text("L'optimisation a bien été effectuée !");
+                    else
+                        $('#success-optimize').text("Vous n'avez pas de soin à effectuer aujourd'hui.");
                 }
             });
             $btn.button('reset');

@@ -7,7 +7,7 @@ from user.models import Nurse
 from django.http import JsonResponse
 import json
 from django.core import serializers
-from datetime import time, datetime, timedelta
+from datetime import time, datetime, timedelta, date
 from optimizer.models import EvolutionaryOptimizer
 import numpy as np
 import os
@@ -16,20 +16,33 @@ import pickle
 # Create your views here.
 
 
-def optimize(request, year, month, day):
+def optimize(request):
+    Appointment.objects.filter(start__year=2017,
+                               start__month=2,
+                               start__day=13).delete()
+    #Appointment.objects.filter(start__year=date.today().year,
+     #                          start__month=date.today().month,
+      #                         start__day=date.today().day).delete()
+
     # Get nurses
     nurses = Nurse.objects.all()
     nurse_nb = len(nurses)
 
     # Get heals and associate a number
-    needs = Need.objects.all().filter(date__year=year,
-                                      date__month=month,
-                                      date__day=day)
+    needs = Need.objects.all().filter(date__year=2017,
+                                      date__month=2,
+                                      date__day=13)
+    #needs = Need.objects.all().filter(date__year=date.today().year,
+     #                                 date__month=date.today().month,
+      #                                date__day=date.today().day)
+
     heals = []
     dict_heal_needs = {}
     addresses = []
     mandatory_schedules = {}
     heal_duration_vector = []
+    if len(needs)==0:
+        return HttpResponse("No need today")
     for index, need in enumerate(needs):
         print(index)
         heals.append(index)
@@ -54,7 +67,6 @@ def optimize(request, year, month, day):
     print("evolutionary_optimizer created")
     optimize_output = evolutionary_optimizer.get_optimize_population()
     print("optimize_output found")
-    schedules = []
     for i in range(len(optimize_output)):
         nurse = nurses[i]
         for heal_nb in optimize_output[i]:
@@ -64,48 +76,9 @@ def optimize(request, year, month, day):
             heal_duration = heal.duration_heal
             appointment = Appointment(
                 start=heal_date,
-                duration=heal_duration, nurse=nurse)
+                duration=heal_duration, nurse=nurse, need=heal)
             appointment.save()
-            heal.appointment = appointment
-            heal.save()
-
-        schedule = {
-            'nurse_id': nurses[i].id,
-            'ordered_need_ids': [dict_heal_needs[n].id for n in optimize_output[i]]
-        }
-        schedules.append(schedule)
-    '''except:
-        print("Error")
-        schedules = [{'error': True, 'nurse_id': nurses[
-            i].id, 'ordered_need_ids': []} for i in range(nurse_nb)]'''
-
-    with open(get_schedule_file_path(year, month, day), 'w') as outfile:
-        json.dump(schedules, outfile)
     return HttpResponse("Done")
-
-
-def get_schedule_file_path(year, month, day):
-    return 'optimizer/schedules/{}_{}_{}'.format(year, month, day)
-
-
-def get_schedule_for_nurse(nurse_id, year, month, day):
-    file_path = get_schedule_file_path(year, month, day)
-    if not os.path.isfile(file_path):
-        generate_schedule_file(year, month, day)
-
-    with open(get_schedule_file_path(year, month, day), 'r') as outfile:
-        schedules = json.load(outfile)
-
-    schedule_list = None
-    for s in schedules:
-        # print(s, type(s['nurse_id']), int(nurse_id), s['nurse_id'] == int(nurse_id))
-        if s['nurse_id'] == nurse_id:
-            schedule_list = s
-
-    # print(schedule_list)
-    # print([id_need for id_need in schedule_list['ordered_need_ids']])
-    return [Need.objects.get(id=id_need) for id_need in schedule_list['ordered_need_ids']] if schedule_list is not None else []
-
 
 def get_time_distance_matrix_from_adresses(addresses):
     with open('general_matrix', 'rb') as matrix:
