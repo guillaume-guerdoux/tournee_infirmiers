@@ -26,8 +26,42 @@
 
             <div class="container">
                 <div class="row">
-                    <div class="col-xs-6 col-xs-offset-3 dashboard_div">
-                        <button type="button" class="btn btn-primary btn-block" autocomplete="off"
+                <form action="{% url 'optimizer:optimize' %}" method="post" id="optimizeForm">
+                    <div class="col-sm-5">
+                            {%csrf_token%}
+                            {% for error in form.non_field_errors %}
+                            <div class="form-group has-errors text-danger small">
+                                {{error}}
+                            </div>
+                            {% endfor %}
+                            {% for field in form %}
+                            <div class="form-group has-errors text-danger small">
+                                {{field.errors}}
+                            </div>
+                            <div class="form-group has-errors text-danger small">
+                            </div>
+                                {% if field.label == "Date de la tournée à optimiser (si laissé vide, Aujourd'hui par défaut)" %}
+                                    <div class="form-group">
+                                        {{ field.label }}
+                                      <div class='input-group' id='datetimepicker12'>
+                                        {{ field }}
+                                        <span class="input-group-addon">
+                                          <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                      </div>
+                                    </div>
+                                {% else %}
+                                    <div class="form-group">
+                                        {{field.label}}
+                                        {{field}}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                    </div>
+                    <div class="col-xs-6 col-xs-offset-1 dashboard_div">
+                        <button type="button" role="button"
+                                class="btn btn-primary btn-block"
                                 data-loading-text="Optimisation en cours..." id="button-optimize">
                             <h4>Optimiser ma tournée</h4>
                         </button>
@@ -35,6 +69,7 @@
                             <div id="success-optimize"></div>
                         </h4>
                     </div>
+                </form>
                 </div>
             </div>
 
@@ -172,16 +207,28 @@
 
     </script>
     <script>
+        $(function () {
+            $('#datetimepicker12').datetimepicker({
+                viewMode: 'years',
+                format: 'DD/MM/YYYY'
+            });
+        });
         $('#button-optimize').on('click', function () {
             var $btn = $(this).button('loading');
+            var $form = $('#optimizeForm');
             $.ajax({
-                url: "{% url 'optimizer:optimize' %}",
+                url: $form.attr('action'),
+                type: $form.attr('method'),
+                data: $form.serialize(),
                 success: function(response){
                     if (response=="Done") {
                         $('#success-optimize').text("L'optimisation a bien été effectuée !");
                         window.location.reload();
                     } else
                         $('#success-optimize').text("Vous n'avez pas de soin à effectuer aujourd'hui.");
+                },
+                error: function (response) {
+                    $('#success-optimize').text("Désolé... une erreur est survenue.");
                 }
             });
             $btn.button('reset');

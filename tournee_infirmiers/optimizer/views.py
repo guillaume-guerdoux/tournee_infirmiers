@@ -7,41 +7,42 @@ from user.models import Nurse
 from django.http import JsonResponse
 import json
 from django.core import serializers
-from datetime import time, datetime, timedelta, date
+from datetime import time, timedelta, datetime, date
 from optimizer.models import EvolutionaryOptimizer
 import numpy as np
 import os
 import pickle
+from .forms import OptimizerDateForm
 
 # Create your views here.
 
 
 def optimize(request):
-    Appointment.objects.filter(start__year=2017,
-                               start__month=2,
-                               start__day=13).delete()
-    #Appointment.objects.filter(start__year=date.today().year,
-     #                          start__month=date.today().month,
-      #                         start__day=date.today().day).delete()
+    form = OptimizerDateForm(request.POST or None)
+    if form.is_valid():
+        required_date = form.cleaned_data['date']
+    else:
+        required_date = date.today()
+
+    # delete previous appointments set for this day to avoid conflicts
+    Appointment.objects.filter(start__year=required_date.year,
+                               start__month=required_date.month,
+                               start__day=required_date.day).delete()
+    # retrieve patients needs for this day
+    needs = Need.objects.all().filter(date__year=required_date.year,
+                                      date__month=required_date.month,
+                                      date__day=required_date.day)
 
     # Get nurses
     nurses = Nurse.objects.all()
     nurse_nb = len(nurses)
-
-    # Get heals and associate a number
-    needs = Need.objects.all().filter(date__year=2017,
-                                      date__month=2,
-                                      date__day=13)
-    #needs = Need.objects.all().filter(date__year=date.today().year,
-     #                                 date__month=date.today().month,
-      #                                date__day=date.today().day)
 
     heals = []
     dict_heal_needs = {}
     addresses = []
     mandatory_schedules = {}
     heal_duration_vector = []
-    if len(needs)==0:
+    if len(needs) == 0:
         return HttpResponse("No need today")
     for index, need in enumerate(needs):
         print(index)
@@ -57,7 +58,6 @@ def optimize(request):
 
     time_distance_matrix = get_time_distance_matrix_from_adresses(addresses)
 
-    # try:
     evolutionary_optimizer = EvolutionaryOptimizer(
         nurse_nb=nurse_nb,
         heals=heals,
@@ -79,6 +79,7 @@ def optimize(request):
                 duration=heal_duration, nurse=nurse, need=heal)
             appointment.save()
     return HttpResponse("Done")
+
 
 def get_time_distance_matrix_from_adresses(addresses):
     with open('general_matrix', 'rb') as matrix:
