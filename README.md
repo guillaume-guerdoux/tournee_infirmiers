@@ -146,6 +146,11 @@ The actions that can be performed into a population include:
 * Crossing-over: given two schedules, for every nurse, we generate a new schedule by mixing the two parent schedules. This gives us a new schedule that is added to the population.
 * Selection: the schedules are compared by pairs, and the one that performs better (with regards to the fitness function) is deleted --- most of the time. Some schedules that are worse than their opponent can still randomly win with some probability; this allows the population to not converge too fast towards a mediocre solution and to keep diversity.
 
+#### Limitation : distances matrix
+For this algorithm to run properly, we need to access all distances between all patients and the office. This requires multiple calls to Google Maps API, for which we didn't purchase a professional-use API Key. We are thus limited in the number of queries we can send at the same time : a "time.sleep" is necessary for us to be able to caculate all the distances. 
+The consequence of this is that the creation and modification of this distance matrix is a very long process (about an hour). 
+A couple of ideas to improve this could be the purchase of an API Key, or setting up a CRON process that would update the distance matrix at night. 
+
 ## Timeline
 
 The project will be carried out in Agile methodology. Here is a summary of the progress so far.
