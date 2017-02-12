@@ -93,7 +93,7 @@
                             {% for appointment, patient in appointments %}
                                 <tr class="clickable-row"
                                     data-href="{% url 'event:appointment_detail' appointment.id %}">
-                                    <td>{{ appointment.start|date:"d-m-y" }}</td>
+                                    <td class="dates">{{ appointment.start|date:"d-m-y" }}</td>
                                     <td class="nurses">{{ appointment.nurse.first_name }} {{ appointment.nurse.last_name }}</td>
                                     <td>{{ patient.first_name }} {{ patient.last_name|upper }}</td>
                                     <td class="addresses">{{ patient.address }}
@@ -165,20 +165,26 @@
         var colors = ["red", "blue", "green", "yellow", "orange", "purple", "pink", "ltblue"];
         var nurses_html = document.getElementsByClassName('nurses');
         var addresses = (document.getElementsByClassName('addresses'));
+
+        var dates_html = document.getElementsByClassName('dates');
+        var first_date = dates_html[0].innerText;
+
         for (var i = 0; i < addresses.length; i++) {
-            appointments.push(addresses[i].innerText);
-            nurses.push(nurses_html[i].innerText);
-            var icon = "http://www.google.com/intl/en_us/mapfiles/ms/micons/"+ colors[k] +"-dot.png";
-            if (i>0) {
-                if (nurses[i] != nurses[i-1] && k < 8) {
-                    k++;
-                    icon = "http://www.google.com/intl/en_us/mapfiles/ms/micons/"+ colors[k] +"-dot.png";
-                    $('#map-legend').append("<tr><td><img src="+icon+"></td><td>"+nurses[i]+"</td></tr>");
+            if (dates_html[i].innerText == first_date) {
+                appointments.push(addresses[i].innerText);
+                nurses.push(nurses_html[i].innerText);
+                var icon = "http://www.google.com/intl/en_us/mapfiles/ms/micons/" + colors[k] + "-dot.png";
+                if (i > 0) {
+                    if (nurses[i] != nurses[i - 1] && k < 8) {
+                        k++;
+                        icon = "http://www.google.com/intl/en_us/mapfiles/ms/micons/" + colors[k] + "-dot.png";
+                        $('#map-legend').append("<tr><td><img src=" + icon + "></td><td>" + nurses[i] + "</td></tr>");
+                    }
+                } else {
+                    $('#map-legend').append("<tr><td><img src=" + icon + "></td><td>" + nurses[0] + "</td></tr>");
                 }
-            } else {
-                $('#map-legend').append("<tr><td><img src="+icon+"></td><td>"+nurses[0]+"</td></tr>");
+                colors_to_use.push(colors[k]);
             }
-            colors_to_use.push(colors[k]);
         }
 
         // Calling Google Geocode API to get coordinates and add markers on the Google map
