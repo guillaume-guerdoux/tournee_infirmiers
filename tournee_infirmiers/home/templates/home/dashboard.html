@@ -26,8 +26,30 @@
 
             <div class="container">
                 <div class="row">
+                <form action="{% url 'optimizer:optimize' %}" method="post" id="optimizeForm">
+                    <div class="col-sm-3">
+                            {%csrf_token%}
+                            {% for error in form.non_field_errors %}
+                            <div class="form-group has-errors text-danger small">
+                                {{error}}
+                            </div>
+                            {% endfor %}
+                            {% for field in form %}
+                            <div class="form-group has-errors text-danger small">
+                                {{field.errors}}
+                            </div>
+                            <div class="form-group has-errors text-danger small">
+                            </div>
+                            <div class="form-group">
+                                {{field.label}}
+                                {{field}}
+                            </div>
+                            {% endfor %}
+
+                    </div>
                     <div class="col-xs-6 col-xs-offset-3 dashboard_div">
-                        <button type="button" class="btn btn-primary btn-block" autocomplete="off"
+                        <button type="button" role="button"
+                                class="btn btn-primary btn-block"
                                 data-loading-text="Optimisation en cours..." id="button-optimize">
                             <h4>Optimiser ma tournée</h4>
                         </button>
@@ -35,6 +57,7 @@
                             <div id="success-optimize"></div>
                         </h4>
                     </div>
+                </form>
                 </div>
             </div>
 
@@ -174,8 +197,11 @@
     <script>
         $('#button-optimize').on('click', function () {
             var $btn = $(this).button('loading');
+            var $form = $('#optimizeForm');
             $.ajax({
-                url: "{% url 'optimizer:optimize' %}",
+                url: $form.attr('action'),
+                type: $form.attr('method'),
+                data: $form.serialize(),
                 success: function(response){
                     if (response=="Done") {
                         $('#success-optimize').text("L'optimisation a bien été effectuée !");
