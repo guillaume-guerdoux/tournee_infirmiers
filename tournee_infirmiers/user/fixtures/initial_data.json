@@ -18,6 +18,22 @@
     }
   },
   {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$24000$3LiUs0vj7uNo$FfQJ3MI4TOOtPELodNjPIvMDYuf6a5BxrDH7RPMoRZk=",
+      "last_login": "2017-02-12T15:35:03.947Z",
+      "is_superuser": false,
+      "username": "Infirmier",
+      "first_name": "",
+      "last_name": "",
+      "email": "infirme@mier.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2017-02-12T15:35:03.861Z",
+      "groups": [],
+      "user_permissions": []}},
+  {
     "model": "user.Office",
     "pk": 1,
     "fields": {
@@ -74,6 +90,23 @@
 	  "phone": "0612379978",
       "birthdate": "1990-10-12",
       "office": 1
+    }
+  },
+  {
+    "model": "user.Nurse",
+    "pk": 4,
+    "fields": {
+      "first_name": "Valentine",
+      "last_name": "Duval",
+      "sex": "2",
+	  "address": "15 rue Marc Sangnier",
+	  "postcode": "92290",
+	  "city": "Chatenay Malabry",
+	  "email": "vduval@gmail.com",
+	  "phone": "0612379978",
+      "birthdate": "1990-10-12",
+      "office": null,
+      "user": 2
     }
   }
 ]
