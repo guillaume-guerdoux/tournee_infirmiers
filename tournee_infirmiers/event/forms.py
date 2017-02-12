@@ -23,4 +23,5 @@ class AddNeedForm(forms.Form):
                             widget=forms.TimeInput(attrs={'class': 'form-control',
                                                           'placeholder': 'HH:MM:SS'}),
                             required=False)
-    duration_heal = forms.DurationField(label='Durée du soin')
+    duration_heal = forms.DurationField(label='Durée du soin',
+                                        widget=forms.TimeInput(attrs={'class': 'form-control', 'placeholder': 'HH:MM:SS'}))
