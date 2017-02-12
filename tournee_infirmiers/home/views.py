@@ -4,6 +4,7 @@ import optimizer.views as opt
 from datetime import datetime, timedelta
 from user.models import Office, Nurse
 from event.models import Need
+from optimizer.forms import OptimizerDateForm
 
 
 # Create your views here.
@@ -21,6 +22,8 @@ def dashboard(request, year=None, month=None, day=None, user_id=None):
     month = month if month is not None else now.month
     day = day if day is not None else now.day
 
+    form = OptimizerDateForm(None)
+
     appointments = get_next_appointments(request)
 
     # Filter most urgent needs : displays all needs needed between today and a week from today.
@@ -28,7 +31,9 @@ def dashboard(request, year=None, month=None, day=None, user_id=None):
         date__gte=datetime.today()).exclude(date__gte=datetime.today() + timedelta(days=7))
 
     # print(year, month, day, nurse_id, schedule)
-    return render(request, 'home/dashboard.html', {"appointments": appointments, "needs": most_urgent_needs})
+    return render(request, 'home/dashboard.html', {"appointments": appointments,
+                                                   "needs": most_urgent_needs,
+                                                   "form": form})
 
 
 # Get the next appointments to display on the dashboards
@@ -38,20 +43,22 @@ def get_next_appointments(request):
     try:
         office = request.user.office
         for nurse in office.nurse_set.all():
-            for appointment in nurse.appointment_set.all():
+            for appointment in nurse.appointment_set.filter(
+                    start__gte=datetime.today()).exclude(start__gte=datetime.today() + timedelta(days=7)):
                 patient = appointment.need.patient
                 appointments.append((appointment, patient))
 
     except Office.DoesNotExist:
         try:
             nurse = request.user.nurse
-            for appointment in nurse.appointment_set.all():
+            for appointment in nurse.appointment_set.filter(
+                    start__gte=datetime.today()).exclude(start__gte=datetime.today() + timedelta(days=7)):
                 patient = appointment.need.patient
                 appointments.append((appointment, patient))
         except Nurse.DoesNotExist:
             pass
 
-    appointments = sorted(appointments, key=get_start_time, reverse=True)
+    appointments = sorted(appointments, key=get_start_time)
     return appointments
 
 

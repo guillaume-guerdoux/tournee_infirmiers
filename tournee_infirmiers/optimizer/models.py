@@ -29,6 +29,10 @@ class EvolutionaryOptimizer:
             self.total_distance += \
                 self.time_distance_matrix[paire_heal[0]][paire_heal[1]]
             self.possible_combinations += 1
+        # If there is only one need, the "possible combinations
+        if self.possible_combinations == 0 and len(self.heals) == 1:
+            self.possible_combinations = 1
+            self.total_distance = 1
 
     def split_randomly_list(self, list_to_split, split_parts):
         new_list = []

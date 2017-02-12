@@ -2,7 +2,9 @@
 
 ## Introduction
 
-This repository hosts a student project which aims to help nurses who have to visit patients at their home. It consists of a web application where a nurse can login, build the list of their patients, write down the day they have to visit them (and for what kind of care) and if need be, time constraints related to them. The program will then calculate the quickest way to visit every patient in the day and return an itinerary.
+This repository hosts a student project which aims to help nurses who have to visit patients at their home.
+It consists of a web application where a nurse / nurse office can login, build the list of their patients, write down the day they have to visit them (and for what kind of care) and if need be, time constraints related to them.
+The program will then calculate for an office the different groups of patients associated to each nurse so that they don't have to visit patients located far away from each other.
 
 ## Language and packages used
 
@@ -92,7 +94,7 @@ This app manages the availability of nurses (checking time constraints, etc).
 
 #### Optimizer app
 
-This app hosts the algorithm part of our program to build the most efficient itinerary between appointments.
+This app hosts the algorithm part of our program to build the most efficient groups of patients associated with each nurse.
 
 #### Home app
 
@@ -110,7 +112,8 @@ The first page will be the home page (currently at localhost:8000). From there, 
 
 *Important: we consider that the nurse office will be the "superuser" and will sign up their nurses (who won't have to register by themselves). That means there are two different kinds of user that may log in*
 
-Once logged in, you access a dashboard with synthetic elements such as the list of your next appointments and the itinerary on Google Maps. Besides, different links allow users to go the different parts of the web application.
+Once logged in, you access a dashboard with synthetic elements such as the list of your next appointments and addresses on Google Maps (with colors associated to each nurses).
+Besides, different links allow users to go the different parts of the web application.
 
 You may access the page to add a need to a patient (meaning, the patient needs a treatment on a certain day) so it can be taken into account by the algorithm.
 
@@ -165,8 +168,13 @@ Sprint 4 | 10th February | The application is working : a user can trigger the o
 ## Contact information
 
 Renaud Dahl : renaud.dahl@student.ecp.fr
+
 Paul de Nonancourt : paul.de-nonancourt@student.ecp.fr
+
 Amaury Duval : amaury.duval@student.ecp.fr
+
 Guillaume Guerdoux : guillaume.guerdoux@student.ecp.fr
+
 Alice Lasseigne : alice.lasseigne@student.ecp.fr
+
 Grégoire Locqueville : gregoire.locqueville@student.ecp.fr
