@@ -104,9 +104,9 @@ class EvolutionaryOptimizer:
                         self.time_distance_matrix[paire[0]][paire[1]]
             else:
                 no_heal_for_a_nurse += 1
-        cost = 5*(no_heal_for_a_nurse/self.nurse_nb) + \
-            100*schedules_respect_nb/self.possible_combinations + \
-            1*total_distance_covered/self.total_distance
+        cost = 25*(no_heal_for_a_nurse/self.nurse_nb) + \
+            70*schedules_respect_nb/self.possible_combinations + \
+            10*total_distance_covered/self.total_distance
         return(float(cost.__round__(2)))
 
     def mutation(self, sample):
