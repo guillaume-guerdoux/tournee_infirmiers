@@ -14,8 +14,15 @@ We are using Python 3.5.2 with Django 1.9.9. We are building our interface with 
 
 ### Installation
 
-To run the project as it is currently developed, you first have to install Python 3.5. The next step is to install Django 1.9.9 using pip by entering the command `pip install django==1.9.9`
-The optimization algorithm requires the Python Numpy library, which you will also have to install : `pip install numpy`.
+To run the project as it is currently developed, you first have to install Python 3.5. The next step is to install Django 1.9.9 using pip by entering the command :
+```bash
+pip install django==1.9.9
+```
+The optimization algorithm requires the Python Numpy library, and the API calls to Google Maps require the "requests" module, which you will also have to install if you don't already have them:
+ ```bash
+pip install numpy
+pip install requests
+```
 You might just want to try the application without having to enter manually all your data. If it is the case we have prepared a couple data fixtures you can load, by entering the command
 ```bash
 python3 manage.py loaddata initial_data
