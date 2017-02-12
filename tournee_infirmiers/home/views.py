@@ -43,20 +43,22 @@ def get_next_appointments(request):
     try:
         office = request.user.office
         for nurse in office.nurse_set.all():
-            for appointment in nurse.appointment_set.all():
+            for appointment in nurse.appointment_set.filter(
+                    start__gte=datetime.today()).exclude(start__gte=datetime.today() + timedelta(days=7)):
                 patient = appointment.need.patient
                 appointments.append((appointment, patient))
 
     except Office.DoesNotExist:
         try:
             nurse = request.user.nurse
-            for appointment in nurse.appointment_set.all():
+            for appointment in nurse.appointment_set.filter(
+                    start__gte=datetime.today()).exclude(start__gte=datetime.today() + timedelta(days=7)):
                 patient = appointment.need.patient
                 appointments.append((appointment, patient))
         except Nurse.DoesNotExist:
             pass
 
-    appointments = sorted(appointments, key=get_start_time, reverse=True)
+    appointments = sorted(appointments, key=get_start_time)
     return appointments
 
 
