@@ -4,7 +4,7 @@ from patient.models import Patient
 from event.models import Need
 from event.models import Appointment
 from user.models import Nurse
-from datetime import time, timedelta
+from datetime import time, timedelta, datetime, date
 from optimizer.models import EvolutionaryOptimizer
 import pickle
 import time
