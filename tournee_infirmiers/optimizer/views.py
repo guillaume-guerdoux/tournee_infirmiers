@@ -1,17 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import redirect
 from django.http import HttpResponse
 from patient.models import Patient
 from event.models import Need
 from event.models import Appointment
 from user.models import Nurse
-from django.http import JsonResponse
-import json
-from django.core import serializers
 from datetime import time, timedelta, datetime, date
 from optimizer.models import EvolutionaryOptimizer
-import numpy as np
-import os
 import pickle
+import time
+import requests
+import pprint
 from .forms import OptimizerDateForm
 
 # Create your views here.
@@ -115,3 +113,42 @@ def get_time_distance_matrix_from_adresses(addresses):
         matrix.append(line)
 
     return matrix
+
+
+def create_distance_matrix(request):  # origins is a list of strings 'adresse + code postal + ville'
+
+    patients = Patient.objects.all()
+
+    all_addresses = []
+    for patient in patients:
+        all_addresses.append("{} {} {}".format(
+            patient.address, patient.postcode, patient.city))
+    print(all_addresses)
+    distance_matrix = []
+    n = len(all_addresses)
+
+    for i in range(n):
+        row = []
+        for j in range(n):
+            time.sleep(5)  # not exceed the API query limit
+            address1 = all_addresses[i]
+            address2 = all_addresses[j]
+            url = 'http://maps.googleapis.com/maps/api/distancematrix/json?' \
+                  'origins={0}&' \
+                  'destinations={1}&' \
+                  'mode=driving&' \
+                  'language=en-EN&' \
+                  'sensor=false'.format(address1, address2)
+            resp = requests.get(url)
+            resp_json = resp.json()
+            pprint.pprint(resp_json)
+            for element in resp_json["rows"]:
+                for value in element['elements']:
+                    row.append(value["duration"]['value'])
+        distance_matrix.append(row)
+
+    with open('../general_matrix', 'wb') as matrix:
+        pickler_matrix = pickle.Pickler(matrix)
+        pickler_matrix.dump(distance_matrix)
+
+    return redirect('/patient/list/?matrix_generated=true')
