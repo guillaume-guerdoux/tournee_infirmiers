@@ -1,0 +1,112 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$24000$6EjgdqkKeVmj$y9mzRG2fJFspezzmqjNxrOEblbv3PvxoyJhozy6N/mU=",
+      "last_login": "2017-02-03T11:00:35.471Z",
+      "is_superuser": false,
+      "username": "Cabinet",
+      "first_name": "",
+      "last_name": "",
+      "email": "cabinet.detest@essai.fr",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2017-02-03T11:00:35.385Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$24000$3LiUs0vj7uNo$FfQJ3MI4TOOtPELodNjPIvMDYuf6a5BxrDH7RPMoRZk=",
+      "last_login": "2017-02-12T15:35:03.947Z",
+      "is_superuser": false,
+      "username": "Infirmier",
+      "first_name": "",
+      "last_name": "",
+      "email": "infirme@mier.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2017-02-12T15:35:03.861Z",
+      "groups": [],
+      "user_permissions": []}},
+  {
+    "model": "user.Office",
+    "pk": 1,
+    "fields": {
+      "address": "10 rue des Tournelles",
+	  "postcode": "92290",
+	  "city": "Chatenay Malabry",
+      "geographical_area": 20,
+      "user": 1
+    }
+  },
+  {
+    "model": "user.Nurse",
+    "pk": 1,
+    "fields": {
+      "first_name": "Patrick",
+      "last_name": "Dupond",
+      "sex": "1",
+	  "address": "5 rue Colbert",
+	  "postcode": "92290",
+	  "city": "Chatenay Malabry",
+	  "email": "pdupond@gmail.com",
+	  "phone": "0697865432",
+      "birthdate": "1975-10-23",
+      "office": 1
+    }
+  },
+  {
+    "model": "user.Nurse",
+    "pk": 2,
+    "fields": {
+      "first_name": "Claire",
+      "last_name": "Seveau",
+      "sex": "2",
+	  "address": "18 rue Guynemer",
+	  "postcode": "92290",
+	  "city": "Chatenay Malabry",
+	  "email": "cseveau@gmail.com",
+	  "phone": "0617779978",
+      "birthdate": "1987-11-03",
+      "office": 1
+    }
+  },
+  {
+    "model": "user.Nurse",
+    "pk": 3,
+    "fields": {
+      "first_name": "Valentine",
+      "last_name": "Duval",
+      "sex": "2",
+	  "address": "15 rue Marc Sangnier",
+	  "postcode": "92290",
+	  "city": "Chatenay Malabry",
+	  "email": "vduval@gmail.com",
+	  "phone": "0612379978",
+      "birthdate": "1990-10-12",
+      "office": 1
+    }
+  },
+  {
+    "model": "user.Nurse",
+    "pk": 4,
+    "fields": {
+      "first_name": "Valentine",
+      "last_name": "Duval",
+      "sex": "2",
+	  "address": "15 rue Marc Sangnier",
+	  "postcode": "92290",
+	  "city": "Chatenay Malabry",
+	  "email": "vduval@gmail.com",
+	  "phone": "0612379978",
+      "birthdate": "1990-10-12",
+      "office": null,
+      "user": 2
+    }
+  }
+]

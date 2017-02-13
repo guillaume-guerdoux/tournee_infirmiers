@@ -14,21 +14,25 @@ If you want more precision : go to folder evolutionary_algorithm at root '''
 
 class EvolutionaryOptimizer:
 
-    def __init__(self, nurse_nb, heal_nb,
+    def __init__(self, nurse_nb, heals,
                  time_distance_matrix, heal_duration_vector,
                  mandatory_schedules):
         self.nurse_nb = nurse_nb
-        self.heal_nb = heal_nb
+        self.heals = heals
         self.time_distance_matrix = time_distance_matrix
         self.heal_duration_vector = heal_duration_vector
+        print(self.heal_duration_vector)
         self.mandatory_schedules = mandatory_schedules
         self.total_distance = 0
         self.possible_combinations = 0
-        heal_values = range(self.heal_nb)
-        for paire_heal in itertools.combinations(heal_values, 2):
+        for paire_heal in itertools.combinations(self.heals, 2):
             self.total_distance += \
                 self.time_distance_matrix[paire_heal[0]][paire_heal[1]]
             self.possible_combinations += 1
+        # If there is only one need, the "possible combinations
+        if self.possible_combinations == 0 and len(self.heals) == 1:
+            self.possible_combinations = 1
+            self.total_distance = 1
 
     def split_randomly_list(self, list_to_split, split_parts):
         new_list = []
@@ -48,9 +52,8 @@ class EvolutionaryOptimizer:
 
     def generate_random_population(self, population_nb):
         population = []
-        heal_values = range(self.heal_nb)
         for sample in range(population_nb):
-            temp_heal_values = list(heal_values)
+            temp_heal_values = list(self.heals)
             sample_list = self.split_randomly_list(temp_heal_values,
                                                    self.nurse_nb)
             population.append(sample_list)
@@ -105,9 +108,9 @@ class EvolutionaryOptimizer:
                         self.time_distance_matrix[paire[0]][paire[1]]
             else:
                 no_heal_for_a_nurse += 1
-        cost = 5*(no_heal_for_a_nurse/self.nurse_nb) + \
-            100*schedules_respect_nb/self.possible_combinations + \
-            1*total_distance_covered/self.total_distance
+        cost = 25*(no_heal_for_a_nurse/self.nurse_nb) + \
+            70*schedules_respect_nb/self.possible_combinations + \
+            10*total_distance_covered/self.total_distance
         return(float(cost.__round__(2)))
 
     def mutation(self, sample):
@@ -199,7 +202,9 @@ class EvolutionaryOptimizer:
         i = 0
         stop = False
         while not stop and i < 10:
+            print(i)
             population = self.population_evolution(10000)[0]
+            print(population)
             # print(population)
             stop = True
             for nurse in population:

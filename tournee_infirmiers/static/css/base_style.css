@@ -41,3 +41,12 @@ ul
 {
 list-style-type: none;
 }
+
+/* ------------------- Simple top spacing -------------- */
+.top-spaced {
+	margin-top: 50px;
+}
+
+.dashboard_div {
+	margin-top: 25px;
+}

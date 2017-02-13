@@ -5,8 +5,6 @@
     "fields": {
       "need_string": "XXX",
       "date": "2017-02-13",
-      "start": "19:30:00",
-      "end": "20:30:00",
 	  "patient": "1",
       "duration_heal": "00:30:00"
     }
@@ -17,8 +15,6 @@
     "fields": {
         "need_string": "XXX",
         "date": "2017-02-13",
-        "start": "08:00:00",
-        "end": "09:00:00",
 	  "patient": "2",
       "duration_heal": "00:30:00"
     }
@@ -29,8 +25,6 @@
     "fields": {
         "need_string": "XXX",
         "date": "2017-02-13",
-        "start": "10:00:00",
-        "end": "11:00:00",
 	  "patient": "3",
       "duration_heal": "00:30:00"
     }
@@ -51,8 +45,6 @@
     "fields": {
       "need_string": "XXX",
       "date": "2017-02-13",
-      "start": "08:30:00",
-      "end": "09:30:00",
 	  "patient": "5",
       "duration_heal": "00:30:00"
     }
@@ -73,8 +65,6 @@
     "fields": {
       "need_string": "XXX",
       "date": "2017-02-13",
-      "start": "09:45:00",
-      "end": "10:00:00",
 	  "patient": "7",
       "duration_heal": "00:30:00"
     }
@@ -85,8 +75,6 @@
     "fields": {
       "need_string": "XXX",
       "date": "2017-02-13",
-      "start": "10:30:00",
-      "end": "11:30:00",
 	  "patient": "8",
       "duration_heal": "00:30:00"
     }
@@ -107,8 +95,6 @@
     "fields": {
       "need_string": "XXX",
       "date": "2017-02-13",
-      "start": "19:00:00",
-      "end": "20:30:00",
 	  "patient": "10",
       "duration_heal": "00:30:00"
     }

@@ -18,6 +18,21 @@
         Le patient a bien été modifié !
     {%endif%}
     </div>
+    {% if success or success_edit %}
+        <div id="successModal" class="modal fade">
+            <div class="modal-dialog" style="margin-top: 20%;">
+                <div class="modal-content">
+                    <button type="button" class="close" data-dismiss="modal" style="margin:10px;"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+                    <div class="modal-body">
+                        <p class="text-center">Vos informations ont bien été enregistrées !</p>
+                        <div class="text-center">
+                            <a id="button_back" class="btn btn-success" href="{% url 'patient:patient_list' %}" role="button">Retour à la liste des patients</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 
     {% if creation %}
 
@@ -41,10 +56,22 @@
             </div>
             <div class="form-group has-errors text-danger small">
             </div>
-            <div class="form-group">
-                {{field.label}}
-                {{field}}
-            </div>
+            {% if field.label == 'Date de naissance' %}
+                <div class="form-group">
+                    {{ field.label }}
+                  <div class='input-group' id='datetimepicker9'>
+                    {{ field }}
+                    <span class="input-group-addon">
+                      <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                  </div>
+                </div>
+            {% else %}
+                <div class="form-group">
+                    {{field.label}}
+                    {{field}}
+                </div>
+            {% endif %}
             {% endfor %}
             <input class="btn btn-default" type="submit" value="Enregistrer"/>
             <input type="hidden" name="next" value="{{ next }}"/>
@@ -57,5 +84,17 @@
 {% endblock %}
 
 {% block javascript_child %}
-
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker9').datetimepicker({
+            viewMode: 'years',
+            format: 'DD/MM/YYYY'
+        });
+    });
+    {%if success or success_edit %}
+        $(document).ready(function() {
+            $('#successModal').modal();
+                });
+    {% endif %}
+</script>
 {% endblock %}

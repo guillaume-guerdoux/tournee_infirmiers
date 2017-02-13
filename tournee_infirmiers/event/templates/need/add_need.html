@@ -12,7 +12,7 @@
     {%if success %}La demande de traitement a bien été enregistrée !{%endif%}
 
     <div>
-    <a href="{% url 'patient:patient_list' %}" class="btn btn-primary btn-lg .center-block" role="button">Retour</a>
+    <a href="{% url 'patient:patient_info' current_patient.id %}" class="btn btn-primary btn-lg .center-block" role="button">Retour</a>
     </div>
 
     <form method="post">

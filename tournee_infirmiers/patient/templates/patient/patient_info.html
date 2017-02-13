@@ -2,6 +2,19 @@
 {% load staticfiles %}
 {% block patient_content %}
 
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse" id="nav-patient">
+                <ul class="nav navbar-nav">
+                    <li><a href="{% url 'home:dashboard' %}">Mon tableau de bord</a></li>
+                    <li><a href="{% url 'availability:manage_availability' %}">Mes horaires</a></li>
+                    <li class="active"><a href="{% url 'patient:patient_list' %}">Mes patients<span class="sr-only">(current)</span></a></li>
+                    <li><a href="{% url 'user:account' %}">Mon compte</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
     <div class="container-fluid">
         <h2 class="col-xs-6 col-xs-offset-3">Informations du patient</h2>
         <div class="col-xs-6 col-xs-offset-3">
@@ -39,13 +52,40 @@
                     <td>{{ patient.information }}</td>
                 </tr>
             </table>
+
+            <h2>Besoins du patient</h2>
+            <table class="table table-striped">
+                <tr>
+                    <th>Intitulé du soin</th>
+                    <th>Date du soin</th>
+                    <th>Entre</th>
+                    <th>Durée du soin</th>
+                </tr>
+                {% for need in needs %}
+                    <tr>
+                        <td>{{ need.need_string }}</td>
+                        <td>{{ need.date|date:"D  d-m-y" }}</td>
+                        <td>{% if not need.start %}{% else %}{{ need.start|time:"H:i" }}{% endif %}
+                            {% if not need.start and not need.end %}Sans contrainte{% else %} et {% endif %}
+                        {% if not need.end %}{% else %}{{ need.end|time:"H:i" }}{% endif %}
+                        </td>
+                        <td>{{ need.duration_heal }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                    <td colspan="4">Pas de besoin renseigné pour ce patient !</td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+
             <a href="{% url 'patient:patient_list' %}" class="btn btn-primary btn-lg" role="button">Retour à la liste</a>
             <a href="{% url 'patient:edit_patient' patient.id %}" class="btn btn-warning btn-lg" role="button">Modifier les informations</a>
             <a class="btn btn-danger btn-lg .center-block"
                role="button" data-toggle="modal" data-target="#deletionWarningModal">
                 Supprimer le patient
             </a>
-            <a href="{{ patient.id }}/add_need" class="btn btn-success btn-lg .center-block" role="button">Ajouter un besoin</a>
+            <a href="{% url 'event:add_need' patient.id %}" class="btn btn-success btn-lg .center-block" role="button">Ajouter un besoin</a>
         </div>
     </div>
 

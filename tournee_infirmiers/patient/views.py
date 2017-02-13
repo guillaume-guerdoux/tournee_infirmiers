@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import PatientForm
 from . import models
+from event.models import Need
 from datetime import date
 
 
@@ -31,6 +32,7 @@ def patient_info(request, id_patient):
     # Need to fetch in from the database once we have a way of creating it.
     try:
         patient = models.Patient.objects.get(id=id_patient)
+        needs = Need.objects.filter(patient_id=id_patient)
     except models.Patient.DoesNotExist:
         # Pour l'instant si le patient n'existe pas on en crée un fictif pour tester la vue
         patient = models.Patient()
@@ -47,8 +49,9 @@ def patient_info(request, id_patient):
                               " pour vous donner une idée de l'aspect de cette page." \
                               " Si vous voyez ce patient cela veut dire " \
                               "qu'il n'y en a aucun d'enregistré dans votre base de données."
+        needs = []
 
-    return render(request, 'patient/patient_info.html', {'patient': patient})
+    return render(request, 'patient/patient_info.html', {'patient': patient, 'needs': needs})
 
 
 def patient_list(request):

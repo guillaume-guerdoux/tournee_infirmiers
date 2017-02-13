@@ -21,16 +21,60 @@
     <section class="container-fluid">
     <h1>Liste de mes patients</h1>
         <a href="{% url 'patient:new_patient' %}" class="btn btn-primary btn-lg .center-block" role="button">Ajouter un patient</a>
+    {% if request.GET.matrix_generated == 'true' %}
+        <p style="margin: 20px;">La matrice des adresses des patients a bien été mise à jour !</p>
+    {% else %}
+        <a href="{% url 'optimizer:create_matrix' %}" id="updateDistanceButton" class="btn btn-danger btn-lg .center-block" role="button">Mettre à jour les distances</a>
+        <p style="margin: 20px;">
+            INFORMATION : pour optimiser la tournée, l'application se base sur les distances et temps de trajet entre les différents patients. <br>
+        Pour qu'un patient soit pris en compte par l'algorithme d'optimisation, il faut dont mettre à jour ces distances ; mais c'est une opération qui prend beaucoup de temps. <br>
+        Nous vous conseillons donc de mettre à jour ces distances quand vous en avez le temps, le soir par exemple.
+        Nous travaillons à la mise en place d'une solution moins contraignante.
+        </p>
+    {% endif %}
     <ul class="list-group">
     {% for patient in patients %}
-        <a href="/patient/{{ patient.id }}" class="list-group-item">{{ patient.first_name }} {{ patient.last_name|upper }}</a>
+        <a href="{% url 'patient:patient_info' patient.id %}" class="list-group-item">{{ patient.first_name }} {{ patient.last_name|upper }}</a>
     {%  endfor %}
     </ul>
     </section>
-
 </div>
+
+    <div id="updateMatrixModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">close</span></button>
+                    <h4 id="modalTitleEdit" class="modal-title center">Mise à jour des distances entre patients</h4>
+                </div>
+                <div id="modalBodyEdit" class="modal-body">
+                    <div> Attention, l'opération de mise à jour des distances entre patients peut prendre un certain temps.
+                        Nous vous conseillons plutôt de lancer cette mise à jour le soir, vous trouverez la liste mise à jour en revenant.</div>
+                    <div class="row" style="margin-top:10px;">
+                        <div class= "col-lg-6 center">
+                            <a href="{% url 'optimizer:create_matrix' %}" id="button_update_matrix"
+                            class="btn btn-danger" role="button">Lancer la mise à jour</a>
+                        </div>
+                        <div class= "col-lg-6 center">
+                            <button id="button_cancel"
+                            class="btn btn-success" data-dismiss="modal">Attendre</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 {% endblock %}
 
 {% block javascript_child %}
-
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#updateDistanceButton').click(function(event) {
+                event.preventDefault();
+                $('#updateMatrixModal').modal()
+            });
+        });
+    </script>
 {% endblock %}
