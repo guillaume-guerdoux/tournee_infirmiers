@@ -23,6 +23,11 @@ The optimization algorithm requires the Python Numpy library, and the API calls 
 pip install numpy
 pip install requests
 ```
+Otherwise, you can install the packages thanks to requirements:
+```bash
+pip install -r requirements.txt
+```
+
 You might just want to try the application without having to enter manually all your data. If it is the case we have prepared a couple data fixtures you can load, by entering the command
 ```bash
 python3 manage.py loaddata initial_data
