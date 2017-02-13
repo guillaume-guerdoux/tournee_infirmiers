@@ -130,19 +130,19 @@ class EvolutionaryOptimizerTests(unittest.TestCase):
     def test_fitness_function_total_distance_covered_max(self):
         sample = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [], []]
         self.assertEqual(self.evolutionary_optimizer.fitness_function(sample),
-                         5.22)
+                         13.22)
 
     def test_fitness_function_overlapping_one_overlapping(self):
         sample = [[0, 1, 4], [3, 2, 5], [6, 7, 8, 9]]
         self.assertEqual(self.evolutionary_optimizer.fitness_function(sample),
-                         0.49)
+                         2.49)
 
     def test_fitness_function_overlapping_two_overlapping(self):
         sample = [[0, 1, 4, 9], [3, 2, 5], [6, 7, 8]]
         self.assertEqual(self.evolutionary_optimizer.fitness_function(sample),
-                         0.71)
+                         4.71)
 
     def test_fitness_function_overlapping_three_overlapping(self):
         sample = [[0, 1, 4, 9], [3, 2, 7], [6, 5, 8]]
         self.assertEqual(self.evolutionary_optimizer.fitness_function(sample),
-                         0.93)
+                         6.93)
