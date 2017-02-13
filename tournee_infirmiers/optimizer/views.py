@@ -147,7 +147,7 @@ def create_distance_matrix(request):  # origins is a list of strings 'adresse + 
                     row.append(value["duration"]['value'])
         distance_matrix.append(row)
 
-    with open('../general_matrix', 'wb') as matrix:
+    with open('general_matrix', 'wb') as matrix:
         pickler_matrix = pickle.Pickler(matrix)
         pickler_matrix.dump(distance_matrix)
 
